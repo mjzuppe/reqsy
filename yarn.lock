@@ -28,10 +28,10 @@
   resolved "https://registry.yarnpkg.com/@discoveryjs/json-ext/-/json-ext-0.5.7.tgz#1d572bfbbe14b7704e0ba0f39b74815b84870d70"
   integrity sha512-dBVuXR082gk3jsFp7Rd/JI4kytwGHecnCoTtXFb7DB6CNHp4rg5k1bhg0nWdLGLnOV71lmDzGQaLMy8iPLY0pw==
 
-"@figma/plugin-typings@^1.50.0":
-  version "1.57.1"
-  resolved "https://registry.yarnpkg.com/@figma/plugin-typings/-/plugin-typings-1.57.1.tgz#85d3881f6a002df5f72620cd0a04816a03853341"
-  integrity sha512-kwiuApuqgkIPbFKey459VspenqXlBcBoMTnTZdQ/Hk2N71BTOZ0cM5Xq3zbPW/bEQOYtGDpweWxcXYHLo19HxQ==
+"@figma/plugin-typings@^1.72.0":
+  version "1.72.0"
+  resolved "https://registry.yarnpkg.com/@figma/plugin-typings/-/plugin-typings-1.72.0.tgz#a6cba4940e324d8842a5b9455e576ddda0335fbd"
+  integrity sha512-SRW8qQOLf/QOtgP7OsUfw4oD6Z+tbenLR2PgNXGSh2SJohcnucIEEc7An5Wd5qTl35xfC4TmZE0YpTGMknVpgw==
 
 "@jridgewell/gen-mapping@^0.3.0":
   version "0.3.2"
@@ -93,6 +93,11 @@
   dependencies:
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
+
+"@stitches/react@1.2.8":
+  version "1.2.8"
+  resolved "https://registry.yarnpkg.com/@stitches/react/-/react-1.2.8.tgz#954f8008be8d9c65c4e58efa0937f32388ce3a38"
+  integrity sha512-9g9dWI4gsSVe8bNLlb+lMkBYsnIKCZTmvqvDG+Avnn69XfmHZKiaMrx7cgTaddq7aTPPmXiTsbFcUy0xgI4+wA==
 
 "@types/eslint-scope@^3.7.3":
   version "3.7.4"
@@ -911,6 +916,14 @@ fastq@^1.6.0:
   dependencies:
     reusify "^1.0.4"
 
+figma-ui-kit@^0.3.1:
+  version "0.3.1"
+  resolved "https://registry.yarnpkg.com/figma-ui-kit/-/figma-ui-kit-0.3.1.tgz#eaa8121200290842af80f40d82537d86cde25874"
+  integrity sha512-ZyLpT/wd0DtK6R0g5pIq+q73p7tZd4//SP3YIiwiadNuGd7m483wHwlU/XdPDdqC8aLkanMRUiLPUqi2UugoaQ==
+  dependencies:
+    "@stitches/react" "1.2.8"
+    hex-rgb "5.0.0"
+
 filesize@^8.0.6:
   version "8.0.7"
   resolved "https://registry.yarnpkg.com/filesize/-/filesize-8.0.7.tgz#695e70d80f4e47012c132d57a059e80c6b580bd8"
@@ -1085,6 +1098,16 @@ he@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/he/-/he-1.2.0.tgz#84ae65fa7eafb165fddb61566ae14baf05664f0f"
   integrity sha512-F/1DnUGPopORZi0ni+CvrCgHQ5FyEAHRLSApuYWMmrbSwoN2Mn/7k+Gl38gJnR7yyDZk6WLXwiGod1JOWNDKGw==
+
+hex-rgb@5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/hex-rgb/-/hex-rgb-5.0.0.tgz#e2c9eb6a37498d66c5a350a221ed4c2c7d1a92d6"
+  integrity sha512-NQO+lgVUCtHxZ792FodgW0zflK+ozS9X9dwGp9XvvmPlH7pyxd588cn24TD3rmPm/N0AIRXF10Otah8yKqGw4w==
+
+hook-shell-script-webpack-plugin@^0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/hook-shell-script-webpack-plugin/-/hook-shell-script-webpack-plugin-0.3.0.tgz#e8cc9dc1bc68120a1b6d90578a04d1cc1a50eaac"
+  integrity sha512-AMYvSijm53f7Fpyu/BZm+MzrTFT4v1jsYAR4Z5fADHawWiXCOeYXLm4rz0/D+nYsx/tzGn6zkY5b4IEnVqRtqw==
 
 html-minifier-terser@^6.0.2:
   version "6.1.0"

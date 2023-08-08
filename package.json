@@ -1,7 +1,7 @@
 {
-  "name": "figma-plugin-react-template",
+  "name": "figreq",
   "version": "1.0.0",
-  "description": "This plugin template uses Typescript. If you are familiar with Javascript, Typescript will look very familiar. In fact, valid Javascript code is already valid Typescript code.",
+  "description": "PRD and requirements documentation management for Figma",
   "license": "ISC",
   "scripts": {
     "build": "webpack --mode=production",
@@ -9,14 +9,16 @@
     "prettier:format": "prettier --write '**/*.{js,jsx,ts,tsx,css,json}' "
   },
   "dependencies": {
+    "@figma/plugin-typings": "^1.72.0",
+    "figma-ui-kit": "^0.3.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "@figma/plugin-typings": "^1.50.0",
     "@types/react": "^18.0.17",
     "@types/react-dom": "^18.0.6",
     "css-loader": "^6.7.1",
+    "hook-shell-script-webpack-plugin": "^0.3.0",
     "html-webpack-plugin": "^5.5.0",
     "husky": "^8.0.1",
     "lint-staged": "^13.0.3",

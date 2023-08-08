@@ -1,8 +1,11 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const InlineChunkHtmlPlugin = require('react-dev-utils/InlineChunkHtmlPlugin');
 const path = require('path');
+const HookShellScriptPlugin = require('hook-shell-script-webpack-plugin');
+
 
 module.exports = (env, argv) => ({
+  
   mode: argv.mode === 'production' ? 'production' : 'development',
 
   // This is necessary because Figma's 'eval' works differently than normal eval
@@ -23,6 +26,8 @@ module.exports = (env, argv) => ({
 
       // Allows you to use "<%= require('./file.svg') %>" in your HTML code to get a data URI
       { test: /\.(png|jpg|gif|webp|svg)$/, loader: 'url-loader' },
+      // To use the figma-ui-kit
+      { test: /\.m?js/, resolve: { fullySpecified: false, }, }
     ],
   },
 
@@ -43,5 +48,9 @@ module.exports = (env, argv) => ({
       cache: false,
     }),
     new InlineChunkHtmlPlugin(HtmlWebpackPlugin, [/ui/]),
+    new HookShellScriptPlugin({
+      // run a single command
+      afterEmit: ['touch -m manifest.json']
+    })
   ],
 });
