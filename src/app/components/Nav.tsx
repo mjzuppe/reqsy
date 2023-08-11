@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 
-import { IconToggleButton, IconLibrary32, IconInfo32, IconAdjust32, IconStyles32, IconPlus32, IconLinkLinked32 } from "figma-ui-kit";
+import { IconToggleButton, IconLibrary32, IconInfo32, IconAdjust32,IconLinkLinked32 } from "figma-ui-kit";
 
 export const Nav = (props) => {
     const [currentView, nextView] = useState<string>('inspector');

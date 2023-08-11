@@ -17,14 +17,14 @@ function App() {
   const [actionView, setActionView] = useState<string>('library');
   // const textbox = React.useRef<HTMLInputElement>(undefined);
 
-  const saveData = (e) => {
-    e.preventDefault();
+  // const saveData = (e) => {
+  //   e.preventDefault();
 
-    // const testForm:any = document.getElementById("TestForm");
-    // const {value} = testForm.elements[0];
-    // parent.postMessage({ pluginMessage: { type: 'cancel' } }, '*');
-    // 
-  }
+  //   const testForm:any = document.getElementById("TestForm");
+  //   const {value} = testForm.elements[0];
+  //   parent.postMessage({ pluginMessage: { type: 'cancel' } }, '*');
+    
+  // }
 
   // const countRef = React.useCallback((element: HTMLInputElement) => {
   //   if (element) element.value = '5';
@@ -51,9 +51,10 @@ function App() {
   }, []);
 
   return (
-    <div id="primary-container" className="figma-light">
+    <div id="primary-container" className="figma-dark">
       <Header setView={setActionView}/>
       <Action currentView={actionView} />
+      
       {/* <div id="action-container">
 
       <Section title="Store Data">
