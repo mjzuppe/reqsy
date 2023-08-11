@@ -14,7 +14,7 @@ import { Footer } from './Footer';
 import { Action } from './Action';
 
 function App() {
-  const [actionView, setActionView] = useState<string>('library');
+  const [actionView, setActionView] = useState<string>('settings');
   // const textbox = React.useRef<HTMLInputElement>(undefined);
 
   // const saveData = (e) => {
