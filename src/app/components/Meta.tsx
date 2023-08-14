@@ -1,9 +1,6 @@
 import React, { useState } from "react";
-// UI
-import { SearchTextbox, SegmentedControl, SegmentedControlOption, IconToggleButton, IconPlus32, IconMinus32, IconLayerComponent16, IconLayerFrame16, IconEllipsis32, IconButton, Tabs } from "figma-ui-kit";
-import { LeftMenu } from "../util/ui/left-menu";
-import { TagIcon16 } from "../util/ui/svg";
 import { Submenu } from "../util/ui/submenu";
+import { SearchTextbox } from "figma-ui-kit";
 // Componenets
 import { Tags } from "./Tags";
 import { Variables } from "./Variables";

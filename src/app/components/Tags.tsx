@@ -14,9 +14,9 @@ export const Tags = () => {
             </div>
             <div className="items-list">
                 {tags.map((tag, i) =>
-                    <div style={{padding: "5px 0 5px"}} className="items-list-item items-border-bottom">
+                    <div key={`tags-items-${i}`} style={{padding: "5px 0 5px"}} className="items-list-item items-border-bottom">
                         <div style={{display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center"}} className="items-list-item">
-                                <div style={{marginLeft: "15px"}}>{tag}</div>
+                                <div style={{marginLeft: "10px"}}>{tag}</div>
                             <div style={{ display: "flex", justifyContent: "flex-end" }}>
                             <LeftMenu marginLeft={"-9%"} onClick={(e)=> console.log("TARGET:", e)} options={["rename","delete"]} trigger={<IconButton><IconEllipsis32/></IconButton>}/>
                             </div>
