@@ -1,5 +1,5 @@
 import React from "react";
-import {  Textbox, SegmentedControlOption, Dropdown } from "figma-ui-kit";
+import {  Textbox, SegmentedControlOption, Dropdown, IconCode16 } from "figma-ui-kit";
 
 export const Behaviors = () => {
     const HTMLoptions: Array<SegmentedControlOption> = [
@@ -39,7 +39,7 @@ export const Behaviors = () => {
 
 
     const actionFields = [
-        { label: "On Load" },
+        { label: "On Load", icon: <IconCode16 /> },
         { label: "On Hover" },
         { label: "On Focus" },
         { label: "On Blur" },
@@ -95,7 +95,7 @@ export const Behaviors = () => {
                     <div key={`ref-items${i}`} className="items-list-item ">
                         <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", width: "100%" }} className="items-list-item">
                             <div style={{ marginLeft: "5px", display: "flex", justifyContent: "flex-start", alignItems: "center", width: "100%" }}>
-                                <div style={{ width: "35%" }}>{field.label}</div>
+                                <div style={{ width: "35%", display: "flex" }}>{field.label}<div style={{marginLeft: "5px"}}> {field.icon || ""}</div></div>
                                 <Textbox placeholder="enter value" value={null} />
                             </div>
 
