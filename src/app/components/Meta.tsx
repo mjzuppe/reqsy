@@ -4,11 +4,12 @@ import { SearchTextbox } from "figma-ui-kit";
 // Componenets
 import { Tags } from "./Tags";
 import { Variables } from "./Variables";
+import { Issues } from "./Issues";
 
 export const Meta = () => {
     const [currentView, setCurrentView] = useState("Variables");
     const submenuClickHandler = (e) => setCurrentView(e);
-    const view:any = {"Tags": <Tags />, "Variables": <Variables />}[currentView || "Tags"];
+    const view:any = {"Tags": <Tags />, "Variables": <Variables />, "Issues": <Issues/>}[currentView || "Tags"];
 
     return (
         <div id="action-container">
@@ -16,7 +17,7 @@ export const Meta = () => {
                 <p><strong>Meta.</strong> Do more things like this.</p>
             </div>
             <div className="action-container-subnav">
-                <Submenu onClick={submenuClickHandler} options={["Tags", 'Variables']}/>
+                <Submenu onClick={submenuClickHandler} options={["Tags", 'Variables', 'Issues']}/>
             </div>
             <div className="action-container-search">
                 <SearchTextbox value={""} placeholder="search names" />
