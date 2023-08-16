@@ -1,21 +1,48 @@
 // import rectangles from "../app/functions/write/rectangles";
-import {rectangles} from "../app/functions/write";
+// import {loadall} from "../app/functions/read";
+// import { rectangles } from "../app/functions/write";
+import {init} from "../app/functions/read";
 
 figma.showUI(__html__);
 figma.ui.resize(300, 400); // set the size of the plugin UI height: 400, width: 300
-figma.ui.onmessage = (msg) => {
-  console.log(figma.currentPage.selection);
-  const node = figma.currentPage.selection[0];
+figma.on("documentchange",(event:any) => {
+  const {documentChanges} = event;
+  console.log("DOC CHANGE", documentChanges);
+  if (!documentChanges) return;
+  const removed = documentChanges.filter((e:any)=>e.type === "DELETE");
+  const created = documentChanges.filter((e:any)=>e.type === "CREATE");
+  // get .id and update
+})
+figma.ui.onmessage = ({func, data}) => {
+  // console.log("MST", msg)
+  // figma.root.setPluginData("test", "hi mom!");
+  // const stored = figma.root.getPluginData('test');
+  // console.log("stored", stored);
+  // const node = figma.currentPage.selection[0];
   // node.setPluginData('pizza', 'scicilian');
-  const stored = node.getPluginData('pizza');
-  console.log("retrieved", stored);
-  if (msg.type === 'create-rectangles') {
-    switch (msg.type) {
-      case 'create-rectangles':
-        rectangles(msg);
-        break;
-    };
+  // const stored = node.getPluginData('pizza');
+  // console.log("retrieved", stored);
+  switch (func) {
+    case 'init':
+      figma.ui.postMessage(init());
+      // break;
+    case 'read':
+      break;
+    case 'write':
+      break;
+    default:
+      // throw Error('Unknown command');
+      break; 
 
-  figma.closePlugin();
-};
+
+    // case 'create-rectangles':
+    //   rectangles(msg);
+    //   break;
+    // case 'loadall': 
+    //   loadall();
+    //   break;
+  };
+
+  // figma.closePlugin();
+
 };

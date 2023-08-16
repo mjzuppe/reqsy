@@ -1,6 +1,7 @@
 // from: https://github.com/nirsky/figma-plugin-react-template
 
 import React, {useState} from 'react';
+import { dispatch } from '../functions/utils';
 
 // import logo from '../assets/logo.svg';
 import '../styles/theme.css';
@@ -14,7 +15,8 @@ import { Footer } from './Footer';
 import { Action } from './Action';
 
 function App() {
-  const [actionView, setActionView] = useState<string>('inspector');
+  const [actionView, setActionView] = useState<string>('settings');
+  const [data, setData] = useState<any>(undefined);
   // const textbox = React.useRef<HTMLInputElement>(undefined);
 
   // const saveData = (e) => {
@@ -41,19 +43,22 @@ function App() {
   // };
 
   React.useEffect(() => {
+    dispatch({func: 'init', data: {hi: "mom"}});
+    // parent.postMessage({ pluginMessage: { function: 'loadall' } }, '*');
     // This is how we read messages sent from the plugin controller
     window.onmessage = (event) => {
-      const { type, message } = event.data.pluginMessage;
-      if (type === 'create-rectangles') {
-        console.log(`Figma Says: ${message}`);
-      }
+      setData(event.data.pluginMessage)
     };
+
+    
   }, []);
+
 
   return (
     <div id="primary-container" className="figma-dark">
       <Header setView={setActionView}/>
-      <Action currentView={actionView} />
+      <Action data={data} currentView={actionView} />
+
       
       {/* <div id="action-container">
 
