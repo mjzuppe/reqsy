@@ -14,6 +14,7 @@ figma.on("documentchange",(event:any) => {
   // get .id and update
 })
 figma.ui.onmessage = ({func, data}) => {
+  console.log("");
   // console.log("MST", msg)
   // figma.root.setPluginData("test", "hi mom!");
   // const stored = figma.root.getPluginData('test');
