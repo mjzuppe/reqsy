@@ -1,7 +1,8 @@
 // import rectangles from "../app/functions/write/rectangles";
 // import {loadall} from "../app/functions/read";
 // import { rectangles } from "../app/functions/write";
-import {init} from "../app/functions/read";
+
+import {readRoot} from "../app/functions/read";
 
 figma.showUI(__html__);
 figma.ui.resize(300, 400); // set the size of the plugin UI height: 400, width: 300
@@ -14,7 +15,6 @@ figma.on("documentchange",(event:any) => {
   // get .id and update
 })
 figma.ui.onmessage = ({func, data}) => {
-  console.log("");
   // console.log("MST", msg)
   // figma.root.setPluginData("test", "hi mom!");
   // const stored = figma.root.getPluginData('test');
@@ -25,8 +25,9 @@ figma.ui.onmessage = ({func, data}) => {
   // console.log("retrieved", stored);
   switch (func) {
     case 'init':
-      figma.ui.postMessage(init());
-      // break;
+      const r = readRoot(figma);
+      figma.ui.postMessage({'root': r});
+      break;
     case 'read':
       break;
     case 'write':
@@ -34,8 +35,6 @@ figma.ui.onmessage = ({func, data}) => {
     default:
       // throw Error('Unknown command');
       break; 
-
-
     // case 'create-rectangles':
     //   rectangles(msg);
     //   break;

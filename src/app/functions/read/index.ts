@@ -1,3 +1,4 @@
-import init from './init';
+import readRoot from './root';
+import readRootModel from './rootModel';
 
-export {init};
+export {readRoot, readRootModel}

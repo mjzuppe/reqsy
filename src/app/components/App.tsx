@@ -44,9 +44,11 @@ function App() {
 
   React.useEffect(() => {
     dispatch({func: 'init', data: {hi: "mom"}});
+    parent.postMessage({ pluginMessage: { function: 'init' } }, '*')
     // parent.postMessage({ pluginMessage: { function: 'loadall' } }, '*');
     // This is how we read messages sent from the plugin controller
     window.onmessage = (event) => {
+      console.log("EVENT", event.data.pluginMessage)
       setData(event.data.pluginMessage)
     };
 
