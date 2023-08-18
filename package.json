@@ -4,18 +4,18 @@
   "description": "PRD and requirements documentation management for Figma",
   "license": "ISC",
   "scripts": {
-    "build": "webpack --mode=production",
+    "build": "webpack --mode=production --target=es6",
     "build:watch": "webpack --mode=development --watch",
     "prettier:format": "prettier --write '**/*.{js,jsx,ts,tsx,css,json}' "
   },
   "dependencies": {
     "@figma/plugin-typings": "^1.72.0",
     "figma-ui-kit": "^0.3.1",
-    "joi": "^17.9.2",
     "rc-menu": "^9.11.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-menu-list": "^7.2.2"
+    "react-menu-list": "^7.2.2",
+    "yup": "^1.2.0"
   },
   "devDependencies": {
     "@types/react": "^18.0.17",

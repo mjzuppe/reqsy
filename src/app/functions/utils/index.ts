@@ -1,3 +1,3 @@
-import dispatch from "./dispatch";
+import controller from "./controller";
 
-export {dispatch};
+export {controller};

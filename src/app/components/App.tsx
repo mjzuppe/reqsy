@@ -1,7 +1,7 @@
 // from: https://github.com/nirsky/figma-plugin-react-template
 
 import React, {useState} from 'react';
-import { dispatch } from '../functions/utils';
+import { controller } from '../functions/utils';
 
 // import logo from '../assets/logo.svg';
 import '../styles/theme.css';
@@ -17,39 +17,18 @@ import { Action } from './Action';
 function App() {
   const [actionView, setActionView] = useState<string>('settings');
   const [data, setData] = useState<any>(undefined);
-  // const textbox = React.useRef<HTMLInputElement>(undefined);
-
-  // const saveData = (e) => {
-  //   e.preventDefault();
-
-  //   const testForm:any = document.getElementById("TestForm");
-  //   const {value} = testForm.elements[0];
-  //   parent.postMessage({ pluginMessage: { type: 'cancel' } }, '*');
-    
-  // }
-
-  // const countRef = React.useCallback((element: HTMLInputElement) => {
-  //   if (element) element.value = '5';
-  //   textbox.current = element;
-  // }, []);
-
-  // const onCreate = () => {
-  //   const count = parseInt(textbox.current.value, 10);
-  //   parent.postMessage({ pluginMessage: { type: 'create-rectangles', count } }, '*');
-  // };
-
-  // const onCancel = () => {
-  //   parent.postMessage({ pluginMessage: { type: 'cancel' } }, '*');
-  // };
-
   React.useEffect(() => {
-    dispatch({func: 'init', data: {hi: "mom"}});
-    parent.postMessage({ pluginMessage: { function: 'init' } }, '*')
-    // parent.postMessage({ pluginMessage: { function: 'loadall' } }, '*');
+    controller({func: 'init', data: {}});
+    // controller({func: 'write', data: {model: "user", key: "rara", value: {hi: "mom"}}}); // Write to model - if model === 'selection' will write to selection;
     // This is how we read messages sent from the plugin controller
     window.onmessage = (event) => {
-      console.log("EVENT", event.data.pluginMessage)
-      setData(event.data.pluginMessage)
+      // Listen to data sent from the plugin controller
+      if (event.data?.pluginMessage && event.data.pluginMessage.echo) console.log(event.data.pluginMessage.echo); // FOR TESTING
+      else if (event.data?.pluginMessage && event.data.pluginMessage.state) {
+        const {state} = event.data.pluginMessage;
+        if (state.root) setData(state.root);
+        else if (state.model) setData({...data, ...state.model});
+      }
     };
 
     
@@ -60,22 +39,6 @@ function App() {
     <div id="primary-container" className="figma-dark">
       <Header setView={setActionView}/>
       <Action data={data} currentView={actionView} />
-
-      
-      {/* <div id="action-container">
-
-      <Section title="Store Data">
-      <form id="TestForm" onSubmit={saveData}>
-      <Textbox onInput={(e) => setValue(e.target.value)} value={value} placeholder="Enter text here" />
-      <Button typeof='submit'>Submit</Button>
-      </form>
-
-      </Section>
-      <Section title="Load Data">
-        <Text>{"hi mom!"}</Text>
-        </Section>
-
-      </div> */}
       <Footer/>
     </div>
   );

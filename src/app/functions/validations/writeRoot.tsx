@@ -1,19 +1,19 @@
-import Joi from "joi";
+import { object } from 'yup';
 
 const rootSchema = {
-    user: Joi.object({}),
-    library: Joi.object({}),
-    apis: Joi.object({}),
-    tags: Joi.object({}),
-    variables: Joi.object({}),
-    issues: Joi.object({}),
+    user: object({
+        // name: string().required(),
+      }),
+    library: object({}),
+    apis: object({}),
+    tags: object({}),
+    variables: object({}),
+    issues: object({}),
 };
 
-const validateRootInput = (key: string, input:any) => {
-    // if (!Object.keys(rootSchema).includes(key)) throw new Error(`Invalid root key: ${key}`);
-    // const {error, value} = rootSchema[key].validate(input);
-    // if (error) throw new Error(`Invalid root input: ${error}`);
-    // No return, throw error only
+const validateRootInput = async (key: string, input:any) => {
+    if (!Object.keys(rootSchema).includes(key)) throw new Error(`Invalid root key: ${key}`);
+    await rootSchema[key].validate(input).catch((err) => {throw new Error(`Invalid root input: ${err}`)});
 };
 
 export {validateRootInput};

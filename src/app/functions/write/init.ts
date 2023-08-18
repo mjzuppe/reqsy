@@ -1,4 +1,5 @@
-import { initRootModel } from './index';
+import {writeRoot} from '.';
+const initRootModel = (figma:any, model: string) => writeRoot(figma, model, model === 'init'? `{"created": "${ String(Date.now())}"}` : '{}');
 
 const initRoot = () => {
     initRootModel(figma, 'init');
@@ -10,4 +11,4 @@ const initRoot = () => {
     initRootModel(figma,'issue');
 }
 
-export default initRoot
+export {initRoot, initRootModel}

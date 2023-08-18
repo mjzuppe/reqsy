@@ -1,5 +1,9 @@
 import { initRoot } from "../write";
-import { readRootModel } from ".";
+
+const readSelection = (figma: any) => {
+    const node = figma.currentPage.selection[0];
+    return node.getPluginData('pizza');
+}
 
 const readRoot = (figma:any) => {
     const initialized = figma.root.getPluginData('init');
@@ -10,4 +14,9 @@ const readRoot = (figma:any) => {
     return root;
 };
 
-export default readRoot;
+const readRootModel = (figma: any, model: string) => {
+    const value = figma.root.getPluginData(model);
+    return value ? JSON.parse(value) : null;
+};
+
+export { readSelection, readRoot, readRootModel};

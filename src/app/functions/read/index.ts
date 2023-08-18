@@ -1,4 +1,3 @@
-import readRoot from './root';
-import readRootModel from './rootModel';
+import {readSelection, readRoot, readRootModel} from './core';
 
-export {readRoot, readRootModel}
+export {readRoot, readRootModel, readSelection}
