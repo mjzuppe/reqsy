@@ -6,10 +6,11 @@ import { Tags } from "./Tags";
 import { Variables } from "./Variables";
 import { Issues } from "./Issues";
 
-export const Meta = () => {
-    const [currentView, setCurrentView] = useState("Variables");
+export const Meta = (props: {data: any}) => {
+    const {data} = props;
+    const [currentView, setCurrentView] = useState("Tags");
     const submenuClickHandler = (e) => setCurrentView(e);
-    const view:any = {"Tags": <Tags />, "Variables": <Variables />, "Issues": <Issues/>}[currentView || "Tags"];
+    const view:any = {"Tags": <Tags data={data} />, "Variables": <Variables />, "Issues": <Issues/>}[currentView || "Tags"];
 
     return (
         <div id="action-container">

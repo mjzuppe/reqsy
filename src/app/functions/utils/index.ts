@@ -1,3 +1,4 @@
 import controller from "./controller";
+import generateReqsyId from "./id";
 
-export {controller};
+export {controller, generateReqsyId};

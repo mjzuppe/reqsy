@@ -152,8 +152,16 @@
     padding: 10px;
   }
 
+.left-menu-option-warning {
+    padding: 10px;
+}
+
 .left-menu-option:hover {
     background-color: #0d99ff;
+}
+
+.left-menu-option-warning:hover {
+    background-color: #ff0d31;
 }
 
 .flex-center {
@@ -168,4 +176,33 @@
     outline: none;
     resize: none;
     background: transparent;
+}
+
+.text-input {
+    width: 100%;
+    background: transparent;
+    padding: 5px;
+    border-radius: 2px;
+}
+
+.text-input:focus {
+    border: 2px solid #0d99ff;
+}
+
+.text-input-warning {
+    width: 100%;
+    background: transparent;
+    padding: 5px;
+    border-radius: 2px;
+}
+
+.text-input-warning:focus {
+    border: 2px solid #ff0d31;
+}
+
+.text-input-readonly {
+    width: 100%;
+    background: transparent;
+    padding: 5px;
+    border-radius: 2px;
 }

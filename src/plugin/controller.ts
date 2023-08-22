@@ -1,4 +1,4 @@
-import {readRoot} from "../app/functions/read";
+import {readRoot, readRootModel} from "../app/functions/read";
 import { writeRootModel, writeSelection } from "../app/functions/write";
 import { readSelection } from "../app/functions/read";
 
@@ -24,7 +24,7 @@ figma.on("selectionchange", () => {
   }
 })
 
-figma.ui.onmessage = ({func, data}) => {
+figma.ui.onmessage = async ({func, data}) => {
   switch (func) {
     case 'init':
       const r = readRoot(figma);
@@ -33,8 +33,17 @@ figma.ui.onmessage = ({func, data}) => {
     case 'read':
       break;
     case 'write':
-      if (data.model === 'selection') writeSelection(figma, data.key, data.value);
-      else writeRootModel(figma, data.model, data.key, data.value);
+      if (data.model === 'selection') {
+        writeSelection(figma, data.key, data.value);
+        // TODO load into UI
+      }
+      else {
+        await writeRootModel(figma, data.model, data.key, data.value);
+        const r = await readRootModel(figma, data.model);
+        let payload = {};
+        payload[data.model] = r;
+        figma.ui.postMessage({state: {model: payload}});
+      }
       break;
     default:
       throw new Error(`Unknown command ${func}`);

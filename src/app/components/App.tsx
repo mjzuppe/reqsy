@@ -15,7 +15,7 @@ import { Footer } from './Footer';
 import { Action } from './Action';
 
 function App() {
-  const [actionView, setActionView] = useState<string>('settings');
+  const [actionView, setActionView] = useState<string>('meta');
   const [data, setData] = useState<any>(undefined);
   React.useEffect(() => {
     controller({func: 'init', data: {}});

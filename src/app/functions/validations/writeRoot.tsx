@@ -1,19 +1,20 @@
-import { object } from 'yup';
+import { string, object } from 'yup';
 
 const rootSchema = {
     user: object({
-        // name: string().required(),
+        name: string().required(),
+        
       }),
     library: object({}),
-    apis: object({}),
-    tags: object({}),
-    variables: object({}),
-    issues: object({}),
+    api: object({}),
+    tag: object({label: string().required()}).noUnknown(true),
+    variable: object({}),
+    issue: object({}),
 };
 
 const validateRootInput = async (key: string, input:any) => {
     if (!Object.keys(rootSchema).includes(key)) throw new Error(`Invalid root key: ${key}`);
-    await rootSchema[key].validate(input).catch((err) => {throw new Error(`Invalid root input: ${err}`)});
+    await rootSchema[key].validate(input, { strict: true }).catch((err) => {throw new Error(`Invalid root input: ${err}`)});
 };
 
 export {validateRootInput};

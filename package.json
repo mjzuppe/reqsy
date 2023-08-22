@@ -1,6 +1,6 @@
 {
   "name": "figreq",
-  "version": "1.0.0",
+  "version": "0.5.0",
   "description": "PRD and requirements documentation management for Figma",
   "license": "ISC",
   "scripts": {
@@ -11,6 +11,7 @@
   "dependencies": {
     "@figma/plugin-typings": "^1.72.0",
     "figma-ui-kit": "^0.3.1",
+    "nanoid": "^4.0.2",
     "rc-menu": "^9.11.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
