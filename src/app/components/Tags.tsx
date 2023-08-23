@@ -22,7 +22,7 @@ export const Tags = (props) => {
         await setNewTagOpen(true);
         document.getElementById(`tags-items-new-tag`).focus();
     }
-    const clickHandlerSubmitNew = async (e) => {
+    const clickHandlerNewOrUpdate = async (e) => {
         if (e.target.value.trim() === "") return setNewTagOpen(false);
         const parseKey = async () => {
             if (e.target.id === 'tags-items-new-tag') return await generateReqsyId();
@@ -33,9 +33,10 @@ export const Tags = (props) => {
         await setNewTagOpen(false);
     };
 
-    const clickHandlerDelete = async (e) => {
-
+    const clickHandlerDelete = async (tag:string) => {
+        await controller({func: "delete", data: {model: "tag", key: tag}});
     }
+    
     const invalidTags = (current: string) => Object.values(tagsObject).map((tagData:any)=> tagData.label).filter((tagLabel:string) => tagLabel !== current);
 
     return (
@@ -51,7 +52,7 @@ export const Tags = (props) => {
                     <div style={{display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center"}} className="items-list-item">
                             {/* <div style={{marginLeft: "10px"}}><Textbox maxLength onChange={handleNewTagLabel} placeholder={"enter tag..."} value={newTagLabel} /></div> */}
                              <div style={{marginLeft: "10px"}}>
-                                <TextInput invalidlist={invalidTags("")} id="tags-items-new-tag" placeholder="enter tag..." maxLength={16} onblur={clickHandlerSubmitNew} />
+                                <TextInput invalidlist={invalidTags("")} id="tags-items-new-tag" placeholder="enter tag..." maxLength={16} onblur={clickHandlerNewOrUpdate} />
                              </div>
                         <div style={{ display: "flex", justifyContent: "flex-end" }}>
                         <IconButton onClick={dropNewTag}><IconMinus32/></IconButton>
@@ -63,10 +64,10 @@ export const Tags = (props) => {
                 {tagsKeys.map((tag, i) =>
                     <div key={`tags-items-${tag}`} style={{padding: "5px 0 5px"}} className="items-list-item items-border-bottom">
                         <div style={{display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center"}} className="items-list-item">
-                        <TextInput dblclick invalidlist={invalidTags(tagsObject[tag].label)} placeholder="enter tag..." style={{marginLeft: "10px"}} maxLength={16} onblur={clickHandlerSubmitNew} defaultValue={tagsObject[tag].label} id={tag}  />
+                        <TextInput dblclick invalidlist={invalidTags(tagsObject[tag].label)} placeholder="enter tag..." style={{marginLeft: "10px"}} maxLength={16} onblur={clickHandlerNewOrUpdate} defaultValue={tagsObject[tag].label} id={tag}  />
                                 {/* <div style={{marginLeft: "10px"}}>{tagsObject[tag].label}</div> */}
                             <div style={{ display: "flex", justifyContent: "flex-end" }}>
-                            <LeftMenu danger marginLeft={"-9%"} onClick={clickHandlerDelete} options={["delete?"]} trigger={<IconButton><IconMinus32/></IconButton>}/>
+                            <LeftMenu danger marginLeft={"-28px"} onClick={(e:any)=>clickHandlerDelete(tag)} options={["delete?"]} trigger={<IconButton><IconMinus32/></IconButton>}/>
                             </div>
                               
                         </div>

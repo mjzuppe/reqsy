@@ -124,6 +124,7 @@
 
 .left-menu-container {
     display: flex;
+    position: relative;
 }
 
 .left-menu-listener {
@@ -143,7 +144,6 @@
     color: #fff;
     max-width: 150px;
     z-index: 300;
-    margin-right: 15px;
     cursor: cursor;
     position: absolute;
 }
