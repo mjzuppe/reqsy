@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 // components
-import { IconPlus32, IconToggleButton, IconButton, IconEllipsis32, IconMinus32, Textbox } from "figma-ui-kit";
+import { IconPlus32, IconToggleButton, IconButton, IconMinus32, } from "figma-ui-kit";
 import { LeftMenu } from "../util/ui/left-menu";
 import { TextInput } from "../util/ui/text-input";
 // data
@@ -8,9 +8,11 @@ import { controller, generateReqsyId } from "../functions/utils";
 
 
 export const Tags = (props) => {
-    const {data} = props;
+    const {data, search} = props;
     const tagsObject = data.tag;
     const tagsKeys = Object.keys(tagsObject).reverse(); 
+    const tagsFiltered = search? tagsKeys.filter((key:string)=> tagsObject[key].label.toLowerCase().includes(search.toLowerCase())) : tagsKeys;
+
     const [newTagOpen, setNewTagOpen] = useState(false);
     // TODO handle delete
     // TODO handle rename
@@ -61,7 +63,7 @@ export const Tags = (props) => {
                     </div>
                 </div>
                 }
-                {tagsKeys.map((tag, i) =>
+                {tagsFiltered.map((tag, i) =>
                     <div key={`tags-items-${tag}`} style={{padding: "5px 0 5px"}} className="items-list-item items-border-bottom">
                         <div style={{display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center"}} className="items-list-item">
                         <TextInput dblclick invalidlist={invalidTags(tagsObject[tag].label)} placeholder="enter tag..." style={{marginLeft: "10px"}} maxLength={16} onblur={clickHandlerNewOrUpdate} defaultValue={tagsObject[tag].label} id={tag}  />

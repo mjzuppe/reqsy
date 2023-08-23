@@ -9,8 +9,10 @@ import { Issues } from "./Issues";
 export const Meta = (props: {data: any}) => {
     const {data} = props;
     const [currentView, setCurrentView] = useState("Tags");
+    const [search, setSearch] = useState("");
     const submenuClickHandler = (e) => setCurrentView(e);
-    const view:any = {"Tags": <Tags data={data} />, "Variables": <Variables />, "Issues": <Issues/>}[currentView || "Tags"];
+    const handleSearch = (e) => setSearch(e.target.value);
+    const view:any = {"Tags": <Tags data={data} search={currentView === "Tags"? search : ""} />, "Variables": <Variables />, "Issues": <Issues/>}[currentView || "Tags"];
 
     return (
         <div id="action-container">
@@ -21,7 +23,7 @@ export const Meta = (props: {data: any}) => {
                 <Submenu onClick={submenuClickHandler} options={["Tags", 'Variables', 'Issues']}/>
             </div>
             <div className="action-container-search">
-                <SearchTextbox value={""} placeholder="search names" />
+                <SearchTextbox onInput={handleSearch} value={search} clearOnEscapeKeyDown placeholder="search names" />
             </div>
             <div className="action-container-subcontainer"> 
                 {view}
