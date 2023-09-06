@@ -8,7 +8,7 @@ import { Issues } from "./Issues";
 
 export const Meta = (props: {data: any}) => {
     const {data} = props;
-    const [currentView, setCurrentView] = useState("Tags");
+    const [currentView, setCurrentView] = useState("Variables");
     const [search, setSearch] = useState("");
     const submenuClickHandler = (e) => setCurrentView(e);
     const handleSearch = (e) => setSearch(e.target.value);
