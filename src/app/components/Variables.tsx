@@ -1,15 +1,23 @@
 import React, { useState } from "react";
-import { IconPlus32, Dropdown, IconToggleButton, IconButton, IconEllipsis32, IconMinus32, Textbox } from "figma-ui-kit";
+import { IconPlus32, Dropdown, IconToggleButton, IconButton, IconEllipsis32, IconMinus32, Textbox, IconControlChevronDown8 } from "figma-ui-kit";
 // import { TagIcon16 } from "../util/ui/svg";
 import { LeftMenu } from "../util/ui/left-menu";
 import { PlusMinusToggle } from "../util/ui/plusminus";
 import { TextInput } from "../util/ui/text-input";
 
-export const Variables = () => {
+export const Variables = (props) => {
+    // Display Boilerplate
+    const { data, search } = props;
+    const variableObject = data.variable;
+    console.log("Variable Object", variableObject)
+    const variableKeys = Object.keys(variableObject).reverse();
+    const variableFiltered = search ? variableKeys.filter((key: string) => variableObject[key].label.toLowerCase().includes(search.toLowerCase())) : variableKeys;
+
+    const [newVariableOpen, setNewVariableOpen] = useState(false);
+
     const clickHandlerAdd = (i) => setExpanded([...expanded, i]);
     const clickHandlerRemove = (i) => setExpanded(expanded.filter((e) => e !== i));
 
-    const [newVariableOpen, setNewVariableOpen] = useState(false);
     const [expanded, setExpanded] = useState([]);
     const handleExpand = (i: number) => {
         if (expanded.includes(i)) setExpanded(expanded.filter((e) => e !== i));
@@ -23,7 +31,7 @@ export const Variables = () => {
     const clickHandlerNewOrUpdate = async (e) => {
         // if (e.target.value.trim() === "") return setNewTagOpen(false);
         // const parseKey = async () => {
-        //     if (e.target.id === 'tags-items-new-tag') return await generateReqsyId();
+        //     if (e.target.id === 'variable-items-new-tag') return await generateReqsyId();
         //     else return e.target.id;
         // }
         // const key = await parseKey();
@@ -50,8 +58,18 @@ export const Variables = () => {
                         </div>
                         <div className={`items-list-item-expanded ${expanded.includes(i) ? "" : "hide"}`} style={{ padding: "5px 0 5px" }}  >
                             <div style={{ paddingLeft: "7px", alignItems: "center", width: "100%", display: "flex", justifyContent: "space-between"}}>
-                                <div className="flex-center" title="source component">
-                                    <Dropdown placeholder="type" style={{  width: "80px" }} onChange={() => { }} options={typeOptions} value={'boolean'} />
+                                <div 
+                                // className="select" 
+                                >
+                                    {/* <select >
+                                        <option className="select-option" value="string">string</option>
+                                        <option className="select-option" value="boolean">boolean</option>
+                                        <option className="select-option" value="number">number</option>
+                                        <option className="select-option" value="object">object</option>
+                                        <option className="select-option" value="array">array</option>
+                                    </select> */}
+                                
+                                    <Dropdown value={"boolean"} placeholder="type" style={{  width: "80px" }} onChange={() => { }} options={typeOptions} defaultValue={'boolean'} />
                                 </div>
                                 <div>
                                     <TextInput invalidlist={[]} placeholder="validation/notes" style={{ marginLeft: "2px", width: "160px" }} maxLength={32} onblur={clickHandlerNewOrUpdate} defaultValue={""} id={variable.id} />

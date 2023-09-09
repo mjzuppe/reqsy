@@ -18,7 +18,7 @@ export const Tags = (props) => {
         setNewTagOpen(false);
     };
 
-    const clickHandlerAdd = async (i) => {
+    const clickHandlerAdd = async () => {
         await setNewTagOpen(true);
         document.getElementById(`tags-items-new-tag`).focus();
     }
@@ -42,7 +42,7 @@ export const Tags = (props) => {
     return (
         <>
             <div style={{ display: "flex", justifyContent: "flex-end" }}>
-                <IconToggleButton onClick={() => clickHandlerAdd(1)} value={null}>
+                <IconToggleButton onClick={clickHandlerAdd} value={null}>
                     <IconPlus32 />
                 </IconToggleButton>
             </div>

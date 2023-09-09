@@ -12,12 +12,12 @@ export const Meta = (props: {data: any}) => {
     const [search, setSearch] = useState("");
     const submenuClickHandler = (e) => setCurrentView(e);
     const handleSearch = (e) => setSearch(e.target.value);
-    const view:any = {"Tags": <Tags data={data} search={currentView === "Tags"? search : ""} />, "Variables": <Variables />, "Issues": <Issues/>}[currentView || "Tags"];
+    const view:any = {"Tags": <Tags data={data} search={currentView === "Tags"? search : ""} />, "Variables": <Variables data={data} search={currentView === "Variables"? search : ""} />, "Issues": <Issues/>}[currentView || "Tags"];
 
     return (
         <div id="action-container">
              <div className="action-container-content">
-                <p><strong>Meta.</strong> Do more things like this.</p>
+                <p><strong>Meta.</strong> Organize and map data.</p>
             </div>
             <div className="action-container-subnav">
                 <Submenu onClick={submenuClickHandler} options={["Tags", 'Variables', 'Issues']}/>
