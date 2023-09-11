@@ -5,6 +5,7 @@ import { LeftMenu } from "../util/ui/left-menu";
 import { TextInput } from "../util/ui/text-input";
 // data
 import { controller, generateReqsyId } from "../functions/utils";
+import { PlusMinusToggle } from "../util/ui/plusminus";
 
 
 export const Tags = (props) => {
@@ -22,8 +23,8 @@ export const Tags = (props) => {
         await setNewTagOpen(true);
         document.getElementById(`tags-items-new-tag`).focus();
     }
-    const clickHandlerNewOrUpdate = async (e) => {
-        if (e.target.value.trim() === "") return setNewTagOpen(false);
+    const clickHandlerNewOrUpdate = async (e:any) => {
+        if (e.target.value.trim() === "" && newTagOpen) return setNewTagOpen(false);
         const parseKey = async () => {
             if (e.target.id === 'tags-items-new-tag') return await generateReqsyId();
             else return e.target.id;
@@ -42,9 +43,7 @@ export const Tags = (props) => {
     return (
         <>
             <div style={{ display: "flex", justifyContent: "flex-end" }}>
-                <IconToggleButton onClick={clickHandlerAdd} value={null}>
-                    <IconPlus32 />
-                </IconToggleButton>
+                <PlusMinusToggle value={!newTagOpen} onClick={clickHandlerAdd} />
             </div>
             <div className="items-list">
                 {newTagOpen &&

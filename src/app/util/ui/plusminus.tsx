@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import { IconPlus32, IconToggleButton, IconMinus32, } from "figma-ui-kit";
 
-export const PlusMinusToggle = (props: { onClick: (e: any) => any, plus?: boolean }) => {
-    const [isPlus, setIsPlus] = useState(props.plus ?? true);
+export const PlusMinusToggle = (props: { onClick: (e: any) => any, defaultValue?: boolean, value?: boolean }) => {
+    const [toggledValue, setToggledValue] = useState(props.defaultValue ?? true);
     const clickHandler = () => { 
-        setIsPlus(!isPlus);
-        props.onClick(isPlus);
+        setToggledValue(!toggledValue);
+        props.onClick(toggledValue);
     };
 
     return (
-        isPlus ?
+        (props.value ?? toggledValue) ?
             <div>
                 <IconToggleButton onClick={clickHandler} value={null}>
                     <IconPlus32 />

@@ -206,3 +206,9 @@
     padding: 5px;
     border-radius: 2px;
 }
+
+.select select {
+    background: transparent;
+    font-size: 1em;
+    padding: 5px;
+}

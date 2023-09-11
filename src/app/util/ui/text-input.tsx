@@ -12,7 +12,7 @@ export const TextInput = (props: TextInput) => {
     const [dblClicked, setDblClicked] = useState(false);
     const [warning, setWarning] = useState(false);
     const elementRef = useRef(null);
-    const defaultValue = props.value || props.defaultValue;
+    const defaultValue = props.value || props.defaultValue || "";
 
     const blurInput = async (e) => {
         if (e.key === "Enter") {
@@ -49,5 +49,5 @@ export const TextInput = (props: TextInput) => {
         onblur(e);
     }
 
-    return <input {...rest} ref={elementRef} onBlur={handleBlur} readOnly={dblclick && !dblClicked} onDoubleClick={handleDblClick} onKeyDown={blurInput} className={`${!dblClicked ? "text-input-readonly" : `text-input${warning ? '-warning' : ''}`}`} />
+    return <input defaultValue={defaultValue} {...rest} ref={elementRef} onBlur={handleBlur} readOnly={dblclick && !dblClicked} onDoubleClick={handleDblClick} onKeyDown={blurInput} className={`${!dblClicked ? "text-input-readonly" : `text-input${warning ? '-warning' : ''}`}`} />
 }
