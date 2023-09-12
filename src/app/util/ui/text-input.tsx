@@ -26,7 +26,7 @@ export const TextInput = (props: TextInput) => {
         }
     };
 
-    const handleDblClick = (e) => {
+    const handleDblClick = () => {
         if (!dblClicked) {
             setDblClicked(true);
 
