@@ -4,14 +4,14 @@ import { Meta } from './Meta';
 import { Library } from './Library';
 import { Settings } from './Settings';
 
-export const Action = (props: {currentView: string, data: any}) => {
-    const {data} = props;
+export const Action = (props: {currentView: string, db: any, selectionData: any}) => {
+    const {db, selectionData} = props;
     const {currentView} = props;
-    const view:any = {"inspector": <Inspector />, "meta": <Meta data={data} />, "library": <Library/>, "settings": <Settings/> }[currentView || "inspector"];
+    const view:any = {"inspector": <Inspector selectionData={selectionData} />, "meta": <Meta data={db} />, "library": <Library/>, "settings": <Settings/> }[currentView || "inspector"];
 
     return (
         <div id="action-container">
-            {data ? view : "Loading..."}
+            {db ? view : "Loading..."}
         </div>
     )
 }

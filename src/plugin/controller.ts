@@ -25,11 +25,13 @@ figma.on("documentchange", (event: any) => {
   }
 
 })
+
 figma.on("selectionchange", () => {
   if (figma.currentPage.selection.length === 1) {
     const r = readSelection(figma);
-    figma.ui.postMessage({ echo: r });
+    figma.ui.postMessage({ selection: r });
   }
+  else figma.ui.postMessage({ selection: undefined });
 })
 
 figma.ui.onmessage = async ({ func, data }) => {

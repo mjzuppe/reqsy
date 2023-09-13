@@ -10,7 +10,7 @@ import { Behaviors } from "./Behaviors";
 
 
 
-const InspectorItem = (props) => {
+const InspectorItem = (props: {title: string}) => {
     const { title } = props;
     const [expanded, setExpanded] = useState(false);
     const clickHandler = () => setExpanded(!expanded);
@@ -43,19 +43,17 @@ const InspectorItem = (props) => {
     )
 }
 
-export const Inspector = () => {
-    return (
+export const Inspector = (props: {selectionData}) => {
+    const {selectionData} = props;
+    return !selectionData ? <div>Nothing selected</div> : (
         <div id="action-container">
-            {/* <div className="action-container-content">
-                <p><strong>Inspector.</strong> Do more things like this.</p>
-            </div> */}
             <div style={{ justifyContent: "space-between" }} className="action-container-content">
                 <div style={{ fontWeight: "bold", fontSize: "1.5em", display: "flex", alignItems: "center" }}>Signup <IconLockLocked32/></div>
                 <div style={{ display: "flex" }}>
                     <div style={{ display: "flex", alignItems: "center"}}>
                         {["signup", "bobba", "x0239"].map((e, i) => <div style={{ padding: "3px", borderRadius: "4px", backgroundColor: "rgba(256, 256, 256, 0.2)", marginLeft: "5px" }} key={e + i}>{e}</div>)}
                     </div>
-                    <LeftMenu marginLeft={"-15%"} onClick={(e) => console.log("TARGET:", e)} options={["lock/unlock", "copy", "paste", "delete..."]} trigger={<IconButton><IconEllipsis32 /></IconButton>} />
+                    <LeftMenu marginLeft={"-15%"} onClick={(e) => console.log("TARGET:", e)} options={["delete?"]} trigger={<IconButton><IconEllipsis32 /></IconButton>} />
                 </div>
             </div>
 
