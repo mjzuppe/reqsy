@@ -8,7 +8,7 @@ import { Issues } from "./Issues";
 
 export const Meta = (props: {data: any}) => {
     const {data} = props;
-    const [currentView, setCurrentView] = useState("Variables");
+    const [currentView, setCurrentView] = useState("Tags");
     const [search, setSearch] = useState("");
     const submenuClickHandler = (e) => setCurrentView(e);
     const handleSearch = (e) => setSearch(e.target.value);
@@ -20,7 +20,7 @@ export const Meta = (props: {data: any}) => {
                 <p><strong>Meta.</strong> Organize and map data.</p>
             </div>
             <div className="action-container-subnav">
-                <Submenu onClick={submenuClickHandler} options={["Tags", 'Variables', 'Issues']}/>
+                <Submenu onClick={submenuClickHandler} options={["Tags", 'Variables']}/>
             </div>
             <div className="action-container-search">
                 <SearchTextbox onInput={handleSearch} value={search} clearOnEscapeKeyDown placeholder="search names" />
