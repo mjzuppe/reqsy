@@ -45,8 +45,9 @@ const InspectorItem = (props: {title: string}) => {
 
 export const Inspector = (props: {selectionData}) => {
     const {selectionData} = props;
-    return !selectionData ? <div>Nothing selected</div> : (
+    return selectionData === undefined ? <div>Nothing selected</div> : !selectionData? <div>Component not registered</div> : (
         <div id="action-container">
+    
             <div style={{ justifyContent: "space-between" }} className="action-container-content">
                 <div style={{ fontWeight: "bold", fontSize: "1.5em", display: "flex", alignItems: "center" }}>Signup <IconLockLocked32/></div>
                 <div style={{ display: "flex" }}>
