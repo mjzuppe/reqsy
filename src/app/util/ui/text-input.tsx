@@ -13,6 +13,7 @@ export const TextInput = (props: TextInput) => {
     const [warning, setWarning] = useState(false);
     const elementRef = useRef(null);
     const defaultValue = props.value || props.defaultValue || "";
+    const invalids = invalidlist || [];
 
     const blurInput = async (e) => {
         if (e.key === "Enter") {
@@ -41,7 +42,7 @@ export const TextInput = (props: TextInput) => {
             await setDblClicked(false);
             await elementRef.current.blur();
         }
-        if (invalidlist.includes(e.target.value)) {
+        if (invalids.includes(e.target.value)) {
             await setWarning(true);
             return e.target.focus();
         }

@@ -7,7 +7,7 @@ import { Settings } from './Settings';
 export const Action = (props: {currentView: string, db: any, selectionData: any}) => {
     const {db, selectionData} = props;
     const {currentView} = props;
-    const view:any = {"inspector": <Inspector selectionData={selectionData} />, "meta": <Meta data={db} />, "library": <Library/>, "settings": <Settings/> }[currentView || "inspector"];
+    const view:any = {"inspector": <Inspector db={db} selectionData={selectionData} />, "meta": <Meta data={db} />, "library": <Library db={db} />, "settings": <Settings/> }[currentView || "inspector"];
 
     return (
         <div id="action-container">

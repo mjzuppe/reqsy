@@ -80,7 +80,7 @@ export const Behaviors = () => {
                         <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", width: "100%" }} className="items-list-item">
                             <div style={{ marginLeft: "5px", display: "flex", justifyContent: "flex-start", alignItems: "center", width: "100%" }}>
                                 <div style={{ width: "35%" }}>{field.label}</div>
-                                <Textbox placeholder="enter value" value={null} />
+                                <Textbox placeholder="enter value" value={''} />
                             </div>
 
 
@@ -96,7 +96,7 @@ export const Behaviors = () => {
                         <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", width: "100%" }} className="items-list-item">
                             <div style={{ marginLeft: "5px", display: "flex", justifyContent: "flex-start", alignItems: "center", width: "100%" }}>
                                 <div style={{ width: "35%", display: "flex" }}>{field.label}<div style={{marginLeft: "5px"}}> {field.icon || ""}</div></div>
-                                <Textbox placeholder="enter value" value={null} />
+                                <Textbox placeholder="enter value" value={''} />
                             </div>
 
 
@@ -110,7 +110,7 @@ export const Behaviors = () => {
                     <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", width: "100%" }} className="items-list-item">
                         <div style={{ marginLeft: "5px", display: "flex", justifyContent: "flex-start", alignItems: "center", width: "100%" }}>
                             <div style={{ width: "35%" }}>{field.label}</div>
-                            <Textbox placeholder="enter value" value={null} />
+                            <Textbox placeholder="enter value" value={''} />
                         </div>
 
 

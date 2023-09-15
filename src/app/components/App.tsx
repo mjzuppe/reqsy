@@ -35,6 +35,7 @@ function App() {
         const {state} = event.data.pluginMessage;
         if (state.root) setDb(state.root);
         else if (state.model) setDb({...db, ...state.model});
+        setLastUpdated(Date.now()); // Required to force re-render
       }
     };
 

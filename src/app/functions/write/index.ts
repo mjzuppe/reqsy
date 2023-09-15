@@ -1,4 +1,4 @@
-import {initRoot, initRootModel} from "./init";
+import {initRoot, initRootModel, initSelection} from "./init";
 import {writeRoot, writeSelection, writeRootModel} from "./core";
 
-export {initRoot, writeRoot, writeSelection, initRootModel, writeRootModel };
+export {initRoot, writeRoot, writeSelection, initRootModel, writeRootModel, initSelection };
