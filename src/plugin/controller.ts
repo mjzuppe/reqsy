@@ -1,6 +1,6 @@
-import { readRoot, readRootModel } from "../app/functions/read";
+import { readRoot, readRootModel, readUser } from "../app/functions/read";
 import { initSelection, writeRootModel, writeSelection } from "../app/functions/write";
-import { readSelection } from "../app/functions/read";
+import { readSelection, readSelectionId } from "../app/functions/read";
 import { deleteSelection, deleteRootModel } from "../app/functions/delete";
 
 const reloadRoot = async (data: { model: string }) => {
@@ -12,16 +12,27 @@ const reloadRoot = async (data: { model: string }) => {
 
 figma.showUI(__html__);
 figma.ui.resize(300, 400); // set the size of the plugin UI height: 400, width: 300
-figma.on("documentchange", (event: any) => {
+figma.on("documentchange", async (event: any) => {
   const { documentChanges } = event;
   if (!documentChanges) return;
   const removed = documentChanges.filter((e: any) => e.type === "DELETE");
   const created = documentChanges.filter((e: any) => e.type === "CREATE");
+  let library = await readRootModel(figma, 'library');
   if (removed) {
-    // TODO get .id and make inactive in library
+    for (const component of removed) {
+      if (library[component.id] !== undefined) {
+        await writeRootModel(figma, 'library', component.id, {...library[component.id], active:false});
+      }
+    }
+    await reloadRoot({model: 'library'});
   }
   else if (created) {
-    // TODO get .id and make active in library if exists
+    for (const component of created) {
+      if (library[component.id] !== undefined) {
+        await writeRootModel(figma, 'library', component.id, {...library[component.id], active:true});
+      }
+    }
+    await reloadRoot({model: 'library'});
   }
 
 })
@@ -43,14 +54,21 @@ figma.ui.onmessage = async ({ func, data }) => {
     case 'init':
       if (data.model === 'selection') {
         const root = readRoot(figma);
-        await initSelection(figma, root);
         const r = await readSelection(figma);
+        const selectionId = await readSelectionId(figma);
+        await initSelection(figma, selectionId, root);
         figma.ui.postMessage({ selection: r });
         await reloadRoot({model: 'library'});
       }
       else {
-        const r = readRoot(figma);
-        figma.ui.postMessage({ state: { root: r } });
+        const u:any = await readUser(figma);
+        const r:any = readRoot(figma);
+        let payload:any = r;
+        // TODO Check Admin Auth Status
+        if (r.user && r.user[u.id] === undefined) {
+          payload.user = { ...r.user, [u.id]: {name: u.name, photoUrl: u.photoUrl, color: u.color} };
+        }
+        figma.ui.postMessage({ state: { root: payload } });
       }
       break;
     case 'read':

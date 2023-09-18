@@ -9,7 +9,7 @@ export const Library = (props: { db: any }) => {
     const clickHandlerAdd = (i) => setExpanded([...expanded, i]);
     const clickHandlerRemove = (i) => setExpanded(expanded.filter((e) => e !== i));
     const library = db?.library || {};
-    const libraryKeys = Object.keys(library);
+    const libraryKeys = Object.keys(library).filter((key:any)=> library[key].active) ;
     return (
         <div id="action-container">
             <div className="action-container-content">

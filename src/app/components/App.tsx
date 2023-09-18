@@ -21,8 +21,6 @@ function App() {
   const [selectionData, setSelectionData] = useState<any>(undefined);
   React.useEffect(() => {
     controller({func: 'init', data: {}});
-    // controller({func: 'write', data: {model: "user", key: "rara", value: {hi: "mom"}}}); // Write to model - if model === 'selection' will write to selection;
-    // This is how we read messages sent from the plugin controller
     window.onmessage = (event) => {
       // Listen to data sent from the plugin controller
       if (!event.data?.pluginMessage) return;

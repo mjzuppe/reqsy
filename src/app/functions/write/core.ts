@@ -20,7 +20,8 @@ const writeSelection = async (figma:any, key:string, value: any, syncData?:{id:s
             label: label,
             tags: syncData.tags,
             type: syncData.type,
-            location: syncData.location
+            location: syncData.location,
+            active: true
         };
         await writeRoot(figma, 'library', JSON.stringify(table));
     }

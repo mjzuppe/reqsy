@@ -70,7 +70,7 @@ const NotRegisteredView = (props: {db: any}) => {
 export const Inspector = (props: {selectionData:any, db: any}) => {
     const {selectionData, db} = props;
     const label = selectionData?.label;
-    return selectionData === undefined ? <NoSelectionView/> : selectionData.init === null? <NotRegisteredView db={db} /> : (
+    return selectionData === undefined ? <NoSelectionView/> : selectionData.init === ''? <NotRegisteredView db={db} /> : (
         <div id="action-container">
             <div style={{ justifyContent: "space-between" }} className="action-container-content">
                 <div style={{ fontWeight: "bold", fontSize: "1.3em", display: "flex", alignItems: "center" }}>{label || ""}
