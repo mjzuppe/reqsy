@@ -1,4 +1,4 @@
-import { readRoot, readRootModel, readUser } from "../app/functions/read";
+import { readRoot, readRootModel, readSelectionName, readUser } from "../app/functions/read";
 import { initSelection, writeRootModel, writeSelection } from "../app/functions/write";
 import { readSelection, readSelectionId } from "../app/functions/read";
 import { deleteSelection, deleteRootModel } from "../app/functions/delete";
@@ -56,7 +56,8 @@ figma.ui.onmessage = async ({ func, data }) => {
         const root = readRoot(figma);
         const r = await readSelection(figma);
         const selectionId = await readSelectionId(figma);
-        await initSelection(figma, selectionId, root);
+        const selectionName = await readSelectionName(figma);
+        await initSelection(figma, selectionId, selectionName, root);
         figma.ui.postMessage({ selection: r });
         await reloadRoot({model: 'library'});
       }

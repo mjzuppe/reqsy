@@ -1,10 +1,11 @@
 import {writeRoot, writeSelection} from '.';
 const initRootModel = (figma:any, model: string) => writeRoot(figma, model, model === 'init'? `{"created": "${ String(Date.now())}"}` : '{}');
 
-const initSelection = async (figma:any, id: string, root?:any) => {
+const initSelection = async (figma:any, id: string, name: string, root?:any) => {
+    const label = name || "New Component";
     writeSelection(figma, 'init', {created: String(Date.now())});
     writeSelection(figma, 'id', id);
-    await writeSelection(figma, 'label', "New Component", {id, label: "New Component", tags: [], type: null, location: null, root});
+    await writeSelection(figma, 'label', label, {id, label, tags: [], type: null, location: null, root});
     writeSelection(figma, 'tag', []);
     writeSelection(figma, 'link', "");
     writeSelection(figma, 'condition', []);

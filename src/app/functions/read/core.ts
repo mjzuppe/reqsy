@@ -11,6 +11,11 @@ const readSelectionId = (figma:any) => {
     return node.id;
 }
 
+const readSelectionName = (figma:any) => {
+    const node = figma.currentPage.selection[0];
+    return node.name;
+}
+
 const readSelection = (figma: any) => {
     const models = ['init', 'id', 'label', 'tag', 'link', 'condition', 'behavior', 'note'];
     let selection = {};
@@ -36,4 +41,4 @@ const readRootModel = (figma: any, model: string) => {
 
 
 
-export { readSelection, readRoot, readRootModel, readSelectionId};
+export { readSelection, readRoot, readRootModel, readSelectionId, readSelectionName};
