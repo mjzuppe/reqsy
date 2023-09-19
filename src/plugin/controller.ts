@@ -2,6 +2,7 @@ import { readRoot, readRootModel, readSelectionName, readUser } from "../app/fun
 import { initSelection, writeRootModel, writeSelection } from "../app/functions/write";
 import { readSelection, readSelectionId } from "../app/functions/read";
 import { deleteSelection, deleteRootModel } from "../app/functions/delete";
+import { getNodeById } from "../app/functions/ui";
 
 const reloadRoot = async (data: { model: string }) => {
   const r = await readRootModel(figma, data.model);
@@ -71,6 +72,10 @@ figma.ui.onmessage = async ({ func, data }) => {
         }
         figma.ui.postMessage({ state: { root: payload } });
       }
+      break;
+    case 'get':
+      if (!data.key) throw new Error('failure to select, key required');
+      else getNodeById(figma, data.key);
       break;
     case 'read':
       break;

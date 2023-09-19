@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { SearchTextbox, IconToggleButton, IconPlus32, IconMinus32, IconLayerComponent16, IconLayerFrame16, IconEllipsis32, IconButton } from "figma-ui-kit";
 import { LeftMenu } from "../util/ui/left-menu";
 import { TagIcon16 } from "../util/ui/svg";
+import { getNodeById } from "../functions/ui";
+import { controller } from "../functions/utils";
 
 export const Library = (props: { db: any }) => {
     const { db } = props;
@@ -10,6 +12,10 @@ export const Library = (props: { db: any }) => {
     const clickHandlerRemove = (i) => setExpanded(expanded.filter((e) => e !== i));
     const library = db?.library || {};
     const libraryKeys = Object.keys(library).filter((key:any)=> library[key].active) ;
+    const handleSelect = (e) => {
+        const key = e.target.id.split("library-item-key-")[1];
+        controller({ func: 'get', data: { key } });
+    }
     return (
         <div id="action-container">
             <div className="action-container-content">
@@ -26,7 +32,7 @@ export const Library = (props: { db: any }) => {
                             return(
                                 <div key={`library-item-${key}`} className="items-list-item items-border-bottom">
                         <div className="items-list-item-alwaysdisplay">
-                            <div className="label">{label}</div>
+                            <div id={`library-item-key-${key}`} onClick={handleSelect} className="label">{label}</div>
                             {
                                 !expanded.includes(1) ?
                                     <div>
