@@ -11,11 +11,11 @@ import { controller } from "../functions/utils";
 
 
 
-const InspectorItem = (props: {title: string, selectionData: any}) => {
-    const { title, selectionData } = props;
+const InspectorItem = (props: {title: string, selectionData: any, db: any}) => {
+    const { title, selectionData, db } = props;
     const [expanded, setExpanded] = useState(false);
     const clickHandler = () => setExpanded(!expanded);
-    const view = { "Condition": <Condition />, "General": <General selectionData={selectionData} />, "Notes": <Notes />, "Behaviors": <Behaviors/> }[title || "Template"]
+    const view = { "Condition": <Condition />, "General": <General selectionData={selectionData} db={db} />, "Notes": <Notes />, "Behaviors": <Behaviors/> }[title || "Template"]
     return (
         <div className={`items-list-item ${title !== 'Notes' && "items-border-bottom"}`}>
             <div className="items-list-item-alwaysdisplay">
@@ -52,7 +52,6 @@ const NoSelectionView = () => <div id="action-container">
 </div>
 
 const NotRegisteredView = (props: {db: any}) => {
-    const {db} = props;
     const handleRegisterComponent = async () => {
         await controller({func: 'init', data: {model: 'selection'}});
     };
@@ -86,10 +85,10 @@ export const Inspector = (props: {selectionData:any, db: any}) => {
 
             <div className="action-container-subcontainer">
                 <div className="items-list">
-                    <InspectorItem title="General" selectionData={selectionData} />
-                    <InspectorItem title="Condition" selectionData={selectionData} />
-                    <InspectorItem title="Behaviors" selectionData={selectionData} />
-                    <InspectorItem title="Notes" selectionData={selectionData} />
+                    <InspectorItem title="General" selectionData={selectionData} db={db} />
+                    <InspectorItem title="Condition" selectionData={selectionData} db={db}/>
+                    <InspectorItem title="Behaviors" selectionData={selectionData} db={db}/>
+                    <InspectorItem title="Notes" selectionData={selectionData} db={db}/>
                 </div>
             </div>
         </div>
