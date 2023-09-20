@@ -12,7 +12,6 @@ export const General = (props: { selectionData: any, db: any }) => {
     const tagsObject = db.tag || {};
     const libraryObject = db.library || {};
     const options: Array<TextboxAutocompleteOption> = Object.keys(tagsObject).map((key: string) => ({ value: key, label: tagsObject[key].label }))
-    console.log("options", options)
     const { label, tag } = selectionData;
     const [currentTag, setCurrentTag] = useState(tag || []);
 

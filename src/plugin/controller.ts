@@ -12,7 +12,7 @@ const reloadRoot = async (data: { model: string }) => {
 }
 
 figma.showUI(__html__);
-figma.ui.resize(300, 400); // set the size of the plugin UI height: 400, width: 300
+figma.ui.resize(300, 400); // set the size of the plugin UI height: 400, width: 3
 figma.on("documentchange", async (event: any) => {
   const { documentChanges } = event;
   if (!documentChanges) return;
@@ -64,7 +64,7 @@ figma.ui.onmessage = async ({ func, data }) => {
       }
       else {
         const u:any = await readUser(figma);
-        const r:any = readRoot(figma);
+        const r:any = await readRoot(figma);
         let payload:any = r;
         // TODO Check Admin Auth Status
         if (r.user && r.user[u.id] === undefined) {

@@ -21,7 +21,7 @@ function App() {
   const [selectionData, setSelectionData] = useState<any>(undefined);
   React.useEffect(() => {
     controller({func: 'init', data: {}});
-    window.onmessage = (event) => {
+    window.onmessage = async (event) => {
       // Listen to data sent from the plugin controller
       if (!event.data?.pluginMessage) return;
       else if (event.data.pluginMessage.echo) console.log(event.data.pluginMessage.echo); // FOR TESTING
@@ -31,15 +31,14 @@ function App() {
       }
       else if (event.data?.pluginMessage && event.data.pluginMessage.state) {
         const {state} = event.data.pluginMessage;
-        if (state.root) setDb(state.root);
-        else if (state.model) setDb({...db, ...state.model});
+        if (state.root) await setDb(()=> (state.root));
+        else if (state.model) await setDb((prevState:any)=>({...prevState, ...state.model}));
         setLastUpdated(Date.now()); // Required to force re-render
       }
     };
 
-    
-  }, []);
 
+  }, []);
 
   return (
     <div key={lastUpdated} id="primary-container" className="figma-dark">

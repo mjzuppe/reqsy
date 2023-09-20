@@ -2,7 +2,6 @@ import React from "react";
 
 const Select = (props: { id: string, options: { value: any, label: string }[], defaultValue: any, placeholder?:string }) => {
     const { id, options, defaultValue, placeholder, ...rest } = props;
-    console.log("OPTIONS", options)
     return (
         <div className="select">
             <select {...rest} placeholder={placeholder} defaultValue={defaultValue || null} id={id}>
