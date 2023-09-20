@@ -1,4 +1,4 @@
-import { readRoot, readRootModel, readSelectionName, readUser } from "../app/functions/read";
+import { readRoot, readRootLibraryOne, readRootModel, readSelectionName, readUser } from "../app/functions/read";
 import { initSelection, writeRootModel, writeSelection } from "../app/functions/write";
 import { readSelection, readSelectionId } from "../app/functions/read";
 import { deleteSelection, deleteRootModel } from "../app/functions/delete";
@@ -81,10 +81,12 @@ figma.ui.onmessage = async ({ func, data }) => {
       break;
     case 'write':
       if (data.model === 'selection') {
-        // const root = readRoot(figma); TODO Ensure label is valid
-        await writeSelection(figma, data.key, data.value);
-        const r = await readSelection(figma);
-        figma.ui.postMessage({ selection: r });
+        const root = readRoot(figma);
+        const selectionId = await readSelectionId(figma);
+        const syncData = await readRootLibraryOne(figma, selectionId);
+        await writeSelection(figma, data.key, data.value, {id: selectionId, root, ...syncData});
+        const selectionMutated = await readSelection(figma);
+        figma.ui.postMessage({ selection: selectionMutated });
         if (['label', 'tag'].includes(data.key)) {
           await reloadRoot({model: 'library'});
         }

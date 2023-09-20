@@ -72,7 +72,7 @@ export const Behaviors = () => {
         <div style={{ width: "100%" }}>
             <div style={{display: "flex", alignItems: "center", justifyContent: "flex-start", width: "100%"}}>
             <div style={{ width: "35%", marginLeft: "5px" }}>HTML Element</div>
-                <div style={{marginLeft: "5px"}}><Dropdown options={HTMLoptions} value={"show all"} onClick={()=>{}}/></div>
+                {/* <div style={{marginLeft: "5px"}}><Dropdown options={HTMLoptions} value={"show all"} onChange={()=>{}}/></div> */}
             </div>
             <div className="items-border-bottom">
                 {dataFields.map((field, i) =>
@@ -80,7 +80,7 @@ export const Behaviors = () => {
                         <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", width: "100%" }} className="items-list-item">
                             <div style={{ marginLeft: "5px", display: "flex", justifyContent: "flex-start", alignItems: "center", width: "100%" }}>
                                 <div style={{ width: "35%" }}>{field.label}</div>
-                                <Textbox placeholder="enter value" value={''} />
+                                <Textbox onChange={()=>{}} placeholder="enter value" value={''} />
                             </div>
 
 
@@ -96,7 +96,7 @@ export const Behaviors = () => {
                         <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", width: "100%" }} className="items-list-item">
                             <div style={{ marginLeft: "5px", display: "flex", justifyContent: "flex-start", alignItems: "center", width: "100%" }}>
                                 <div style={{ width: "35%", display: "flex" }}>{field.label}<div style={{marginLeft: "5px"}}> {field.icon || ""}</div></div>
-                                <Textbox placeholder="enter value" value={''} />
+                                <Textbox onChange={()=>{}} placeholder="enter value" value={''} />
                             </div>
 
 
@@ -110,7 +110,7 @@ export const Behaviors = () => {
                     <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", width: "100%" }} className="items-list-item">
                         <div style={{ marginLeft: "5px", display: "flex", justifyContent: "flex-start", alignItems: "center", width: "100%" }}>
                             <div style={{ width: "35%" }}>{field.label}</div>
-                            <Textbox placeholder="enter value" value={''} />
+                            <Textbox onChange={()=>{}} placeholder="enter value" value={''} />
                         </div>
 
 

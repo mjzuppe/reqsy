@@ -39,6 +39,10 @@ const readRootModel = (figma: any, model: string) => {
     return value ? JSON.parse(value) : {};
 };
 
+const readRootLibraryOne = async (figma: any, id: string) => {
+    const library = await readRootModel(figma, 'library');
+    return library[id];
+}
 
 
-export { readSelection, readRoot, readRootModel, readSelectionId, readSelectionName};
+export { readSelection, readRoot, readRootModel, readRootLibraryOne, readSelectionId, readSelectionName};

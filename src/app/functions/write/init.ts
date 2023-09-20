@@ -5,7 +5,7 @@ const initSelection = async (figma:any, id: string, name: string, root?:any) => 
     const label = name || "New Component";
     writeSelection(figma, 'init', {created: String(Date.now())});
     writeSelection(figma, 'id', id);
-    await writeSelection(figma, 'label', label, {id, label, tags: [], type: null, location: null, root});
+    await writeSelection(figma, 'label', label, {id, label, tag: [], type: null, location: null, root});
     writeSelection(figma, 'tag', []);
     writeSelection(figma, 'link', "");
     writeSelection(figma, 'condition', []);

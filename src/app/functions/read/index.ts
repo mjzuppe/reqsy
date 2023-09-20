@@ -1,4 +1,4 @@
-import {readSelection, readSelectionId, readSelectionName, readRoot, readRootModel} from './core';
+import {readSelection, readSelectionId, readSelectionName, readRoot, readRootModel, readRootLibraryOne} from './core';
 import {readUser} from './user';
 
-export {readRoot, readRootModel, readSelection, readUser, readSelectionId, readSelectionName}
+export {readRoot, readRootModel, readSelection, readUser, readSelectionId, readSelectionName, readRootLibraryOne}

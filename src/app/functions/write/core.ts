@@ -1,7 +1,7 @@
 import {validateRootInput} from "../validations";
 
 const writeRoot = (figma:any, key:string, value: string) => figma.root.setPluginData(key, value);
-const writeSelection = async (figma:any, key:string, value: any, syncData?:{id:string, label: string, tags: string[], type: string, location: string, root:any}) => {
+const writeSelection = async (figma:any, key:string, value: any, syncData?:{id:string, label: string, tag: string[], type: string, location: string, root:any}) => {
     const node = figma.currentPage.selection[0];
     if (["label", "tags"].includes(key)) {
         if (!syncData) throw new Error(`syncData to store in db required for this parameter ${key}`);
@@ -18,7 +18,7 @@ const writeSelection = async (figma:any, key:string, value: any, syncData?:{id:s
         let table = JSON.parse(figma.root.getPluginData('library'));
         table[syncData.id] = {
             label: label,
-            tags: syncData.tags,
+            tag: syncData.tag,
             type: syncData.type,
             location: syncData.location,
             active: true
