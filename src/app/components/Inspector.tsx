@@ -15,7 +15,7 @@ const InspectorItem = (props: {title: string, selectionData: any, db: any}) => {
     const { title, selectionData, db } = props;
     const [expanded, setExpanded] = useState(false);
     const clickHandler = () => setExpanded(!expanded);
-    const view = { "Condition": <Condition />, "General": <General selectionData={selectionData} db={db} />, "Notes": <Notes />, "Behaviors": <Behaviors/> }[title || "Template"]
+    const view = { "Condition": <Condition selectionData={selectionData} db={db} />, "General": <General selectionData={selectionData} db={db} />, "Notes": <Notes />, "Behaviors": <Behaviors/> }[title || "Template"]
     return (
         <div className={`items-list-item ${title !== 'Notes' && "items-border-bottom"}`}>
             <div className="items-list-item-alwaysdisplay">
