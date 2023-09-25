@@ -1,4 +1,5 @@
 import { initRoot } from "../write";
+import {Node} from 'figma-types/types/node'
 
 const readSelectionModel = (figma: any, key: string) => {
     const node = figma.currentPage.selection[0];
@@ -6,9 +7,16 @@ const readSelectionModel = (figma: any, key: string) => {
     return r ? JSON.parse(r) : "";
 }
 
-const readSelectionId = (figma:any) => {
-    const node = figma.currentPage.selection[0];
+const readSelectionId = (figma:any) => { // TODO Obsolete
+    const node: Node = figma.currentPage.selection[0];
     return node.id;
+}
+
+const readSelectionData = (figma:any) => {
+    const node: Node = figma.currentPage.selection[0];
+    const {name, type, id} = node;
+    const parent:any = figma.currentPage.selection[0].parent.name; // .parent not in typings?
+    return {name, type, id, parent};
 }
 
 const readSelectionName = (figma:any) => {
@@ -16,7 +24,7 @@ const readSelectionName = (figma:any) => {
     return node.name;
 }
 
-const readSelection = (figma: any) => {
+const readSelection = (figma: any) => { // TODO Obsolete
     const models = ['init', 'id', 'label', 'tag', 'link', 'condition', 'behavior', 'note'];
     let selection = {};
     models.forEach(model => { selection[model] = readSelectionModel(figma, model)});
@@ -45,4 +53,4 @@ const readRootLibraryOne = async (figma: any, id: string) => {
 }
 
 
-export { readSelection, readRoot, readRootModel, readRootLibraryOne, readSelectionId, readSelectionName};
+export { readSelection, readRoot, readRootModel, readRootLibraryOne, readSelectionId, readSelectionData, readSelectionName};

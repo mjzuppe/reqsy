@@ -1168,6 +1168,11 @@ fastq@^1.6.0:
   dependencies:
     reusify "^1.0.4"
 
+figma-types@^0.4.0:
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/figma-types/-/figma-types-0.4.0.tgz#ac766ac8fec7efb7035823142d41fafa70eeb490"
+  integrity sha512-JXMudQJHMAWVxU6Sbzoo61BSr2GEW5u41maYFJaO8MRWfncc7+e1m4g5+uCzAthaO+NxOtAkKjDzAc+MF/bO0Q==
+
 figma-ui-kit@^0.3.1:
   version "0.3.1"
   resolved "https://registry.yarnpkg.com/figma-ui-kit/-/figma-ui-kit-0.3.1.tgz#eaa8121200290842af80f40d82537d86cde25874"

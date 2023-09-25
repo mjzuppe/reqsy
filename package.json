@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@figma/plugin-typings": "^1.72.0",
+    "figma-types": "^0.4.0",
     "figma-ui-kit": "^0.3.1",
     "nanoid": "^4.0.2",
     "rc-menu": "^9.11.1",
