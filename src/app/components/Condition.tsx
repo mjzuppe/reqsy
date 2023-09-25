@@ -1,41 +1,90 @@
-import React, {useState, useRef} from "react";
-import { TextboxAutocomplete,  TextboxAutocompleteOption, IconEllipsis32, IconButton, Button } from "figma-ui-kit";
+import React, { useState, useRef } from "react";
+import { TextboxAutocomplete, TextboxAutocompleteOption, IconEllipsis32, IconButton, Button } from "figma-ui-kit";
 import { LeftMenu } from "../util/ui/left-menu";
 import { TextInput } from "../util/ui/text-input";
-import {Select} from "../util/ui/select";
+import { Select } from "../util/ui/select";
+import { controller, generateReqsyId } from "../functions/utils";
 
-export const Condition = (props: {db: any, selectionData: any}) => {
+export const Condition = (props: { db: any, selectionData: any }) => {
     const { db, selectionData } = props;
     const allConditions = selectionData.condition;
-    const options: any = allConditions.map((c: {id:string, label:string}) => ({ value: c.id, label: c.label }));
+    console.log("CONDITIONS:", allConditions)
+    const options: any = allConditions.map((c: { id: string, label: string }) => ({ value: c.id, label: c.label }));
 
-    const [condition, setCondition] = useState(allConditions.length? allConditions[0].value : "");
-    const [createEditCondition, setCreateEditCondition] = useState(false);
+    const [selectCondition, setSelectCondition] = useState(allConditions.length ? allConditions[0].value : "");
+    const [textCondition, setTextCondition] = useState("");
+    const [createConditionState, setCreateConditionState] = useState(!allConditions.length);
+    const [editConditionState, setEditConditionState] = useState(false);
 
-    const handleConditionValueChange = (e: any) => {
-        setCondition(e);
-    };
+
+
     const handleConditionChange = async (e: any) => {
-        console.log(e.target.value);
+        if (e.target.value.trim() === "") {
+            setCreateConditionState(false);
+            setEditConditionState(false);
+            return;
+        }
+        const label = e.target.value.trim();
+
+        let id = "default";
+        if (editConditionState) id = selectCondition;
+        else if (createConditionState && allConditions.length) id = await generateReqsyId();
+        let payload = allConditions;
+        if (editConditionState) {
+            payload = [{id, label}, ...allConditions.filter((c: any) => c.id !== id)];
+        }
+        else payload = [{id, label}, ...allConditions];
+        await controller({ func: "write", data: { model: 'selection', key: 'condition', value: payload } })
+        setCreateConditionState(false);
+        setEditConditionState(false);
     }
+
     const handleButtonClick = () => {
-        setCreateEditCondition(true);
+        setCreateConditionState(true);
+        setEditConditionState(false);
         setTimeout(() => {
-            document.getElementById("condition-create").focus();
+            document.getElementById("condition-text-input").focus();
         }, 100);
-   
     }
+
+    const handleMenu = (func:string) => {
+        switch(func){
+            case "create":
+                setCreateConditionState(true);
+                setEditConditionState(true);
+                setTimeout(() => {
+                    document.getElementById("condition-text-input").focus();
+                }, 100);
+                break;
+            case "edit":
+                setCreateConditionState(false);
+                setEditConditionState(true);
+                setTextCondition(allConditions.filter((c: any) => c.id === selectCondition)[0].label);
+                setTimeout(() => {
+                    document.getElementById("condition-text-input").focus();
+                }, 100);
+                break;
+            case "delete":
+                break;
+            
+        }
+    }
+
+    const view = (createConditionState || editConditionState) ?
+        <TextInput defaultValue={textCondition} invalidlist={allConditions.map((c: any) => c.label)} id={"condition-text-input"} placeholder="Enter a condition" onblur={handleConditionChange} />
+        :
+        !allConditions.length ? <Button onClick={handleButtonClick} style={{ marginLeft: "5px", fontSize: "10px", height: "20px", lineHeight: "10px" }}>Create...</Button>
+            :
+            <Select id="condition-selection" defaultValue={selectCondition} options={options} onChange={(e)=>setSelectCondition(e.target.value)} />
+
 
     return (
-   
-            <div style={{  width: "100%", display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "flex-start", paddingBottom: "10px"}}>
-            {
-                createEditCondition ? <TextInput id={"condition-create"} placeholder="Enter a condition" onblur={handleConditionChange} /> : !allConditions.length? <Button onClick={handleButtonClick} style={{marginLeft: "5px", fontSize: "10px", height: "20px", lineHeight: "10px"}}>Create...</Button> : <Select id="condition-selection"  defaultValue={""} options={options} />
-            }
-            {/* <TextboxAutocomplete  placeholder="choose an item..." onBlur={handleConditionChange} onValueInput={handleConditionValueChange} options={options} value={condition} /> */}
-                <LeftMenu marginLeft={"-7%"} onClick={(e)=> console.log("TARGET:", e)} options={["delete"]} trigger={<IconButton><IconEllipsis32/></IconButton>}/>
-            </div>
 
-      
+        <div style={{ width: "100%", display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "flex-start", paddingBottom: "10px" }}>
+            {view}
+            <LeftMenu marginLeft={"-7%"} onClick={handleMenu} options={["create", "edit", "delete"]} trigger={<IconButton><IconEllipsis32 /></IconButton>} />
+        </div>
+
+
     )
 }

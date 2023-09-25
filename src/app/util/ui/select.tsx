@@ -1,6 +1,13 @@
-import React from "react";
+import React, {DetailedHTMLProps} from "react";
+interface SelectInput extends DetailedHTMLProps<React.InputHTMLAttributes<HTMLSelectElement>, HTMLSelectElement> {
+    id:string,
+    options: { value: any, label: string }[],
+    defaultValue: any,
+    placeholder?:string
 
-const Select = (props: { id: string, options: { value: any, label: string }[], defaultValue: any, placeholder?:string }) => {
+}
+
+const Select = (props: SelectInput) => {
     const { id, options, defaultValue, placeholder, ...rest } = props;
     return (
         <div className="select">
