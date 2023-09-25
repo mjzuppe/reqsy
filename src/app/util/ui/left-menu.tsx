@@ -17,7 +17,7 @@ export const LeftMenu = (props:any) => {
                     <div className="left-menu-listener" onClick={expandHandler} />
                 <div style={{marginLeft}} className="left-menu">
                         {options.map((option, i) =>
-                                <div id={option} onClick={clickHandler} key={i} className={`left-menu-option${danger && "-warning"}`}>
+                                <div id={option} onClick={clickHandler} key={i} className={`left-menu-option${danger? "-warning" : ""}`}>
                                 {option}
                             </div>
                         )

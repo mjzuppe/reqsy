@@ -13,10 +13,8 @@ export const Condition = (props: { db: any, selectionData: any }) => {
 
     const [selectCondition, setSelectCondition] = useState(allConditions.length ? allConditions[0].value : "");
     const [textCondition, setTextCondition] = useState("");
-    const [createConditionState, setCreateConditionState] = useState(!allConditions.length);
+    const [createConditionState, setCreateConditionState] = useState(false);
     const [editConditionState, setEditConditionState] = useState(false);
-
-
 
     const handleConditionChange = async (e: any) => {
         if (e.target.value.trim() === "") {
@@ -28,12 +26,14 @@ export const Condition = (props: { db: any, selectionData: any }) => {
 
         let id = "default";
         if (editConditionState) id = selectCondition;
-        else if (createConditionState && allConditions.length) id = await generateReqsyId();
+        else if (createConditionState) id = await generateReqsyId();
         let payload = allConditions;
         if (editConditionState) {
             payload = [{id, label}, ...allConditions.filter((c: any) => c.id !== id)];
         }
-        else payload = [{id, label}, ...allConditions];
+        else payload = [...allConditions, {id, label}];
+        if (payload.length === 1) payload = [{id: "default", label: "default"}, ...payload];
+        if (id !== selectCondition) setSelectCondition(id);
         await controller({ func: "write", data: { model: 'selection', key: 'condition', value: payload } })
         setCreateConditionState(false);
         setEditConditionState(false);
@@ -51,7 +51,7 @@ export const Condition = (props: { db: any, selectionData: any }) => {
         switch(func){
             case "create":
                 setCreateConditionState(true);
-                setEditConditionState(true);
+                setEditConditionState(false);
                 setTimeout(() => {
                     document.getElementById("condition-text-input").focus();
                 }, 100);
@@ -82,7 +82,8 @@ export const Condition = (props: { db: any, selectionData: any }) => {
 
         <div style={{ width: "100%", display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "flex-start", paddingBottom: "10px" }}>
             {view}
-            <LeftMenu marginLeft={"-7%"} onClick={handleMenu} options={["create", "edit", "delete"]} trigger={<IconButton><IconEllipsis32 /></IconButton>} />
+            {allConditions.length && <LeftMenu marginLeft={"-20px"} onClick={handleMenu} options={["create", "edit", "delete"]} trigger={<IconButton><IconEllipsis32 /></IconButton>} />}
+           
         </div>
 
 
