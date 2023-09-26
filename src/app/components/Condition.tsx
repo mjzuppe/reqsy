@@ -5,8 +5,8 @@ import { TextInput } from "../util/ui/text-input";
 import { Select } from "../util/ui/select";
 import { controller, generateReqsyId } from "../functions/utils";
 
-export const Condition = (props: { db: any, selectionData: any }) => {
-    const { db, selectionData } = props;
+export const Condition = (props: { db: any, selectionData: any, currentView: (e:any) => any ) => {
+    const { db, selectionData, currentView } = props;
     const allConditions = selectionData.condition;
     console.log("CONDITIONS:", allConditions)
     const options: any = allConditions.map((c: { id: string, label: string }) => ({ value: c.id, label: c.label }));
@@ -47,6 +47,12 @@ export const Condition = (props: { db: any, selectionData: any }) => {
         }, 100);
     }
 
+    const handleSelectChange = async (e: any) => {
+
+        setSelectCondition(e.target.value);
+        currentView(e.target.options[e.target.selectedIndex].text || "default" );
+    }
+
     const handleMenu = (func:string) => {
         switch(func){
             case "create":
@@ -75,7 +81,7 @@ export const Condition = (props: { db: any, selectionData: any }) => {
         :
         !allConditions.length ? <Button onClick={handleButtonClick} style={{ marginLeft: "5px", fontSize: "10px", height: "20px", lineHeight: "10px" }}>Create...</Button>
             :
-            <Select id="condition-selection" defaultValue={selectCondition} options={options} onChange={(e)=>setSelectCondition(e.target.value)} />
+            <Select id="condition-selection" defaultValue={selectCondition} options={options} onChange={handleSelectChange} />
 
 
     return (

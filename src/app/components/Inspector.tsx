@@ -11,11 +11,11 @@ import { controller } from "../functions/utils";
 
 
 
-const InspectorItem = (props: {title: string, selectionData: any, db: any}) => {
-    const { title, selectionData, db } = props;
+const InspectorItem = (props: {title: string, selectionData: any, db: any, currentView?: (e:string)=>any}) => {
+    const { title, selectionData, db, currentView } = props;
     const [expanded, setExpanded] = useState(false);
     const clickHandler = () => setExpanded(!expanded);
-    const view = { "Condition": <Condition selectionData={selectionData} db={db} />, "General": <General selectionData={selectionData} db={db} />, "Notes": <Notes />, "Behaviors": <Behaviors/> }[title || "Template"]
+    const view = { "Condition": <Condition currentView={currentView} selectionData={selectionData} db={db} />, "General": <General selectionData={selectionData} db={db} />, "Notes": <Notes />, "Behaviors": <Behaviors/> }[title || "Template"]
     const badgeCount = { "Condition": selectionData.condition.length, "General": selectionData.tag.length, "Notes": 0, "Behaviors": 0 }[title || "Template"]
     return (
         <div className={`items-list-item ${title !== 'Notes' && "items-border-bottom"}`}>
@@ -72,10 +72,12 @@ const NotRegisteredView = (props: {db: any}) => {
 export const Inspector = (props: {selectionData:any, db: any}) => {
     const {selectionData, db} = props;
     const label = selectionData?.label;
+    const [conditionView, setConditionView] = useState("default");
+
     return selectionData === undefined ? <NoSelectionView/> : selectionData.init === ''? <NotRegisteredView db={db} /> : (
         <div id="action-container">
             <div style={{ justifyContent: "space-between" }} className="action-container-content">
-                <div style={{ fontWeight: "bold", fontSize: "1.3em", display: "flex", alignItems: "center" }}>{label || ""}
+                <div style={{ fontWeight: "bold", fontSize: "1.3em", display: "flex", alignItems: "center" }}>{label || ""}{conditionView === "default"? "" : ` / ${conditionView}`}
                 {/* <IconLockLocked32/> */}
                 </div>
                 <div style={{ display: "flex" }}>
@@ -89,7 +91,7 @@ export const Inspector = (props: {selectionData:any, db: any}) => {
             <div className="action-container-subcontainer">
                 <div className="items-list">
                     <InspectorItem title="General" selectionData={selectionData} db={db} />
-                    <InspectorItem title="Condition" selectionData={selectionData} db={db}/>
+                    <InspectorItem title="Condition" selectionData={selectionData} db={db} currentView={setConditionView}/>
                     <InspectorItem title="Behaviors" selectionData={selectionData} db={db}/>
                     <InspectorItem title="Notes" selectionData={selectionData} db={db}/>
                 </div>
