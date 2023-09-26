@@ -16,10 +16,13 @@ const InspectorItem = (props: {title: string, selectionData: any, db: any}) => {
     const [expanded, setExpanded] = useState(false);
     const clickHandler = () => setExpanded(!expanded);
     const view = { "Condition": <Condition selectionData={selectionData} db={db} />, "General": <General selectionData={selectionData} db={db} />, "Notes": <Notes />, "Behaviors": <Behaviors/> }[title || "Template"]
+    const badgeCount = { "Condition": selectionData.condition.length, "General": selectionData.tag.length, "Notes": 0, "Behaviors": 0 }[title || "Template"]
     return (
         <div className={`items-list-item ${title !== 'Notes' && "items-border-bottom"}`}>
             <div className="items-list-item-alwaysdisplay">
-                <div style={{display: "flex"}}><div className="label">{title}</div><div style={{backgroundColor: "#0d99ff", borderRadius: "15px", padding: "0 5px 0 5px", marginLeft: "10px", textAlign: "center"}}>28</div></div>
+                <div style={{display: "flex"}}><div className="label">{title}</div>
+                {badgeCount? <div style={{backgroundColor: "#0d99ff", borderRadius: "15px", padding: "0 5px 0 5px", marginLeft: "10px", textAlign: "center"}}>{badgeCount}</div> : <div/>}
+                </div>
 
                 {
                     !expanded ?
