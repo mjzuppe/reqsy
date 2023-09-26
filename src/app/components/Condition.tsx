@@ -5,10 +5,9 @@ import { TextInput } from "../util/ui/text-input";
 import { Select } from "../util/ui/select";
 import { controller, generateReqsyId } from "../functions/utils";
 
-export const Condition = (props: { db: any, selectionData: any, currentView: (e:any) => any ) => {
-    const { db, selectionData, currentView } = props;
+export const Condition = (props: { db: any, selectionData: any, currentView: (e:any) => any }) => {
+    const { selectionData, currentView } = props;
     const allConditions = selectionData.condition;
-    console.log("CONDITIONS:", allConditions)
     const options: any = allConditions.map((c: { id: string, label: string }) => ({ value: c.id, label: c.label }));
 
     const [selectCondition, setSelectCondition] = useState(allConditions.length ? allConditions[0].value : "");
@@ -48,7 +47,6 @@ export const Condition = (props: { db: any, selectionData: any, currentView: (e:
     }
 
     const handleSelectChange = async (e: any) => {
-
         setSelectCondition(e.target.value);
         currentView(e.target.options[e.target.selectedIndex].text || "default" );
     }
@@ -71,8 +69,8 @@ export const Condition = (props: { db: any, selectionData: any, currentView: (e:
                 }, 100);
                 break;
             case "delete":
+                // TODO Handle delete of condition and assocaited data
                 break;
-            
         }
     }
 

@@ -11,11 +11,11 @@ import { controller } from "../functions/utils";
 
 
 
-const InspectorItem = (props: {title: string, selectionData: any, db: any, currentView?: (e:string)=>any}) => {
-    const { title, selectionData, db, currentView } = props;
+const InspectorItem = (props: {title: string, selectionData: any, db: any, currentViewValue?: string, currentView?: (e:string)=>any}) => {
+    const { title, selectionData, db, currentView, currentViewValue } = props;
     const [expanded, setExpanded] = useState(false);
     const clickHandler = () => setExpanded(!expanded);
-    const view = { "Condition": <Condition currentView={currentView} selectionData={selectionData} db={db} />, "General": <General selectionData={selectionData} db={db} />, "Notes": <Notes />, "Behaviors": <Behaviors/> }[title || "Template"]
+    const view = { "Condition": <Condition currentView={currentView} selectionData={selectionData} db={db} />, "General": <General selectionData={selectionData} db={db} />, "Notes": <Notes selectionData={selectionData} currentViewValue={currentViewValue} />, "Behaviors": <Behaviors/> }[title || "Template"]
     const badgeCount = { "Condition": selectionData.condition.length, "General": selectionData.tag.length, "Notes": 0, "Behaviors": 0 }[title || "Template"]
     return (
         <div className={`items-list-item ${title !== 'Notes' && "items-border-bottom"}`}>
@@ -92,8 +92,8 @@ export const Inspector = (props: {selectionData:any, db: any}) => {
                 <div className="items-list">
                     <InspectorItem title="General" selectionData={selectionData} db={db} />
                     <InspectorItem title="Condition" selectionData={selectionData} db={db} currentView={setConditionView}/>
-                    <InspectorItem title="Behaviors" selectionData={selectionData} db={db}/>
-                    <InspectorItem title="Notes" selectionData={selectionData} db={db}/>
+                    <InspectorItem title="Behaviors" selectionData={selectionData} db={db} />
+                    <InspectorItem title="Notes" selectionData={selectionData} db={db} currentViewValue={conditionView}/>
                 </div>
             </div>
         </div>
