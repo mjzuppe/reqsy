@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 // components
-import { IconPlus32, IconMinus32, IconToggleButton, IconButton, IconEllipsis32, IconLockLocked32, Button } from "figma-ui-kit";
+import { IconPlus32, IconMinus32, IconToggleButton, IconButton, IconEllipsis32, IconLockLocked32, Button, Link } from "figma-ui-kit";
 import { LeftMenu } from "../util/ui/left-menu";
 import { Condition } from "./Condition";
 import { General } from "./General";
@@ -8,6 +8,7 @@ import { Notes } from "./Notes";
 import { Behaviors } from "./Behaviors";
 // data
 import { controller } from "../functions/utils";
+import { Select } from "../util/ui/select";
 
 
 
@@ -55,6 +56,13 @@ const NoSelectionView = () => <div id="action-container">
 </div>
 
 const NotRegisteredView = (props: {db: any}) => {
+    const [linkView, setLinkView] = useState(false);
+    return linkView? <LinkToComponentView setLinkView={(e:any)=>setLinkView(e)} db={props.db} /> : <RegisterOrLinkView setLinkView={(e:any)=>setLinkView(e)} db={props.db} />
+    
+}
+
+const RegisterOrLinkView = (props: {db: any, setLinkView: (any)=>any}) => {
+    const handleLinkViewClick = () => props.setLinkView(true);
     const handleRegisterComponent = async () => {
         await controller({func: 'init', data: {model: 'selection'}});
     };
@@ -62,7 +70,36 @@ const NotRegisteredView = (props: {db: any}) => {
     <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", height: "100%", width: "100%"}} className="action-container-content">
         <div style={{fontWeight: "bold", fontSize: "1.5em", padding: "5px"}}>No data to display</div>
         <div style={{padding: "5px"}}><Button onClick={handleRegisterComponent} style={{width: "180px"}}>Register as new component</Button></div>
-        <div style={{padding: "5px"}}><Button disabled style={{width: "180px"}}>Link to library component</Button></div>
+        <div style={{padding: "5px"}}><Button onClick={handleLinkViewClick} style={{width: "180px"}}>Link to library component</Button></div>
+    </div>
+</div>
+)
+}
+
+const LinkToComponentView = (props: {db: any, setLinkView: (any) => any}) => {
+    const {db, setLinkView} = props;
+    const options = Object.keys(db.library).map((e:any) => ({label: db.library[e].label, value: e}));
+
+    const handleLinkComponent = async () => {
+        const e:any = document.getElementById("inspector-link-choose-origin");
+        const selectedLabel = e.options[e.selectedIndex].value;
+        await controller({func: 'init', data: {model: 'selection'}});
+        await controller({func: 'write', data: {model: 'selection', key: 'link', value: selectedLabel}});
+        // TODO HERE! Not storing link in slection or db
+    }
+
+    return(<div id="action-container">
+    <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", height: "100%", width: "100%"}} className="action-container-content">
+        <div style={{fontWeight: "bold", fontSize: "1.5em", padding: "5px"}}>Link To Library Component</div>
+
+        <div style={{display: "flex", flexDirection: "column", alignItems: "center", marginTop: "10px"}}>
+            <Select defaultValue={Object.keys(db.library)[0]} id={"inspector-link-choose-origin"} options={options} />
+            <div style={{margin: "10px", display: "flex", flexDirection: "row"}}>
+            <Button style={{ marginLeft: "5px", fontSize: "10px", height: "20px", lineHeight: "10px" }}  onClick={handleLinkComponent}>submit</Button>
+            <Button style={{ marginLeft: "5px", fontSize: "10px", height: "20px", lineHeight: "10px" }} onClick={()=>setLinkView(false)} secondary>cancel</Button>
+            </div>
+        </div>
+        {/* <div style={{padding: "5px"}}><Button style={{width: "180px"}}>Link to library component</Button></div> */}
     </div>
 </div>
 )
