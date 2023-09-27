@@ -8,7 +8,6 @@ const writeSelection = async (figma:any, key:string, value: any, syncData?:{id:s
         let label = key === "label" ? value : syncData.label;
         let tag = key === "tag" ? value : syncData.tag;
         let link = key === "link" ? value : syncData.link;
-        //TODO missing tag
         if (key === "label") {
             const invalidLabels = Object.values(syncData.root.library).map((item:any) => item.label);
             let index = 0;
@@ -17,6 +16,9 @@ const writeSelection = async (figma:any, key:string, value: any, syncData?:{id:s
                label = `${value} (${index})`;
             }
             await node.setPluginData(key, JSON.stringify(label));
+        }
+        else {
+            await node.setPluginData(key, JSON.stringify(value));
         }
         let table = JSON.parse(figma.root.getPluginData('library'));
         table[syncData.id] = {
