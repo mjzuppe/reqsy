@@ -44,7 +44,7 @@ figma.on("selectionchange", () => {
 
 figma.on("selectionchange", async () => {
   if (figma.currentPage.selection.length === 1) {
-    const r = readSelection(figma);
+    const r = await readSelection(figma);
     // TODO if selection data not equal to library, then resync before proceeding
     figma.ui.postMessage({ selection: r });
   }
@@ -80,11 +80,11 @@ figma.ui.onmessage = async ({ func, data }) => {
       else getNodeById(figma, data.key);
       break;
     case 'read':
-      if (data.model === 'selection') {
-        if (!data.key) throw new Error('failure to select, key required');
-        console.log("RUNNING!")
-        return await readElementOne(figma, data.key);
-      }
+      // if (data.model === 'selection') {
+      //   if (!data.key) throw new Error('failure to select, key required');
+      //   return await readElementOne(figma, data.key);
+      // }
+      break;
     case 'write':
       if (data.model === 'selection') {
         const root = readRoot(figma);

@@ -1,6 +1,8 @@
 import { initRoot } from "../write";
 import {Node} from 'figma-types/types/node'
 
+const selectionModels = ['init', 'id', 'label', 'tag', 'link', 'condition', 'behavior', 'note'];
+
 const readSelectionModel = (figma: any, key: string) => {
     const node = figma.currentPage.selection[0];
     const r = node.getPluginData(key);
@@ -15,7 +17,7 @@ const readSelectionId = (figma:any) => { // TODO Obsolete
 const readSelectionData = (figma:any) => {
     const node: Node = figma.currentPage.selection[0];
     const {name, type, id} = node;
-    const parent:any = figma.currentPage.selection[0].parent.name; // .parent not in typings?
+    const parent:any = figma.currentPage.selection[0].parent.name; // .parent not in typings
     return {name, type, id, parent};
 }
 
@@ -24,18 +26,19 @@ const readSelectionName = (figma:any) => {
     return node.name;
 }
 
-const readSelection = (figma: any) => { // TODO Obsolete
-    const models = ['init', 'id', 'label', 'tag', 'link', 'condition', 'behavior', 'note'];
-    let selection = {};
-    models.forEach(model => { selection[model] = readSelectionModel(figma, model)});
+const readSelection = async (figma: any) => { // TODO Obsolete
+    let selection = {link: ""};
+    selectionModels.forEach(model => { selection[model] = readSelectionModel(figma, model)});
+    if (selection.link) selection["linkData"] = await readElementOne(figma, selection.link);
     console.log("SELECTION::", selection);
     return selection;
 }
 
 const readElementOne = async (figma: any, id: string) => {
-    const value = figma.getNodeById(id);
-    console.log("ELEMENT FOUND::", value);
-    return value ? JSON.parse(value) : {};
+    const node = await figma.getNodeById(id);
+    let selection = {};
+    selectionModels.forEach(model => { selection[model] = JSON.parse(node.getPluginData(model))})
+    return selection;
 }
 
 const readRoot = (figma:any) => {

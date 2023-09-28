@@ -109,9 +109,9 @@ export const Inspector = (props: {selectionData:any, db: any}) => {
     const {selectionData, db} = props;
     const label = selectionData?.label;
     const [conditionView, setConditionView] = useState("default");
-    console.log("LINK DATA::", selectionData?.link || undefined)
-    //const linkedData = selectionData?.link? await controller({func: 'read', data: {model: 'selection', key: selectionData.link }}) : {}; // TODO retrieve get 
-    const sourceData =  selectionData;
+
+    //const linkedData = selectionData?.link? await controller({func: 'read', data: {model: 'selection', key: selectionData.link }}) : {}; 
+    const sourceData =  selectionData?.link? selectionData.linkData : selectionData;
 
     return selectionData === undefined ? <NoSelectionView/> : selectionData.init === ''? <NotRegisteredView db={db} /> : (
         <div id="action-container">
