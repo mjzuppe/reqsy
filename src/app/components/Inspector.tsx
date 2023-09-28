@@ -18,7 +18,7 @@ const InspectorItem = (props: {title: string, selectionData: any, db: any, disab
     const [expanded, setExpanded] = useState(false);
     const clickHandler = () => setExpanded(!expanded);
     const view = { "Condition": <Condition disabled={disabled} currentView={currentView} selectionData={selectionData} db={db} />, "General": <General selectionData={selectionData} db={db} />, "Notes": <Notes disabled={disabled} selectionData={selectionData} currentViewValue={currentViewValue} />, "Behaviors": <Behaviors /> }[title || "Template"]
-    const badgeCount = { "Condition": selectionData.condition.length, "General": selectionData.tag.length, "Notes": 0, "Behaviors": 0 }[title || "Template"]
+    const badgeCount = { "Condition": selectionData.condition.length, "General": selectionData.tag.length, "Notes": selectionData.note.filter((n:any) => n.id === currentViewValue).length, "Behaviors": 0 }[title || "Template"]
     return (
         <div className={`items-list-item ${title !== 'Notes' && "items-border-bottom"}`}>
             <div className="items-list-item-alwaysdisplay">
