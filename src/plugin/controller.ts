@@ -1,4 +1,4 @@
-import { readRoot, readRootLibraryOne, readRootModel, readSelectionData, readSelectionName, readUser } from "../app/functions/read";
+import { readElementOne, readRoot, readRootLibraryOne, readRootModel, readSelectionData, readSelectionName, readUser } from "../app/functions/read";
 import { initSelection, writeRootModel, writeSelection } from "../app/functions/write";
 import { readSelection, readSelectionId } from "../app/functions/read";
 import { deleteSelection, deleteRootModel } from "../app/functions/delete";
@@ -80,7 +80,11 @@ figma.ui.onmessage = async ({ func, data }) => {
       else getNodeById(figma, data.key);
       break;
     case 'read':
-      break;
+      if (data.model === 'selection') {
+        if (!data.key) throw new Error('failure to select, key required');
+        console.log("RUNNING!")
+        return await readElementOne(figma, data.key);
+      }
     case 'write':
       if (data.model === 'selection') {
         const root = readRoot(figma);

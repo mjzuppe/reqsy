@@ -32,6 +32,12 @@ const readSelection = (figma: any) => { // TODO Obsolete
     return selection;
 }
 
+const readElementOne = async (figma: any, id: string) => {
+    const value = figma.getNodeById(id);
+    console.log("ELEMENT FOUND::", value);
+    return value ? JSON.parse(value) : {};
+}
+
 const readRoot = (figma:any) => {
     const initialized = figma.root.getPluginData('init');
     if (!initialized) initRoot();
@@ -53,4 +59,4 @@ const readRootLibraryOne = async (figma: any, id: string) => {
 }
 
 
-export { readSelection, readRoot, readRootModel, readRootLibraryOne, readSelectionId, readSelectionData, readSelectionName};
+export { readSelection, readElementOne, readRoot, readRootModel, readRootLibraryOne, readSelectionId, readSelectionData, readSelectionName};

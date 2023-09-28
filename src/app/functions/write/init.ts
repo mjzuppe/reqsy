@@ -6,9 +6,9 @@ const initSelection = async (figma:any, id: string, name: string, type:string, l
     writeSelection(figma, 'init', {created: String(Date.now())});
     writeSelection(figma, 'id', id);
     await writeSelection(figma, 'label', label, {id, label, tag: [], type, location, root});
-    writeSelection(figma, 'tag', []);
+    writeSelection(figma, 'tag', [], {id, label, tag: [], type, location, root});
     writeSelection(figma, 'note', []);
-    writeSelection(figma, 'link', "");
+    writeSelection(figma, 'link', "", {id, label, tag: [], type, location, root});
     writeSelection(figma, 'condition', []);
     writeSelection(figma, 'behavior', []);
 }

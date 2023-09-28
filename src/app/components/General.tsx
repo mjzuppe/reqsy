@@ -6,6 +6,7 @@ import { TagIcon16 } from "../util/ui/svg";
 // data
 import { controller } from "../functions/utils";
 
+
 export const General = (props: { selectionData: any, db: any }) => {
     const { selectionData, db } = props;
     const tagsObject = db.tag || {};
@@ -13,6 +14,7 @@ export const General = (props: { selectionData: any, db: any }) => {
     const options: Array<TextboxAutocompleteOption> = Object.keys(tagsObject).map((key: string) => ({ value: key, label: tagsObject[key].label }))
     const { label, tag } = selectionData;
     const [currentTag, setCurrentTag] = useState(tag || []);
+
 
     const invalidLabels = (current: string) => Object.values(libraryObject).map((libData: any) => libData.label).filter((libLabel: string) => libLabel !== current);
 

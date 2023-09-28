@@ -12,6 +12,7 @@ import { Select } from "../util/ui/select";
 
 
 
+
 const InspectorItem = (props: {title: string, selectionData: any, db: any, currentViewValue?: string, currentView?: (e:string)=>any}) => {
     const { title, selectionData, db, currentView, currentViewValue } = props;
     const [expanded, setExpanded] = useState(false);
@@ -85,7 +86,6 @@ const LinkToComponentView = (props: {db: any, setLinkView: (any) => any}) => {
         const selectedLabel = e.options[e.selectedIndex].value;
         await controller({func: 'init', data: {model: 'selection'}});
         await controller({func: 'write', data: {model: 'selection', key: 'link', value: selectedLabel}});
-        // TODO HERE! Not storing link in slection or db
     }
 
     return(<div id="action-container">
@@ -99,7 +99,6 @@ const LinkToComponentView = (props: {db: any, setLinkView: (any) => any}) => {
             <Button style={{ marginLeft: "5px", fontSize: "10px", height: "20px", lineHeight: "10px" }} onClick={()=>setLinkView(false)} secondary>cancel</Button>
             </div>
         </div>
-        {/* <div style={{padding: "5px"}}><Button style={{width: "180px"}}>Link to library component</Button></div> */}
     </div>
 </div>
 )
@@ -110,6 +109,9 @@ export const Inspector = (props: {selectionData:any, db: any}) => {
     const {selectionData, db} = props;
     const label = selectionData?.label;
     const [conditionView, setConditionView] = useState("default");
+    console.log("LINK DATA::", selectionData?.link || undefined)
+    //const linkedData = selectionData?.link? await controller({func: 'read', data: {model: 'selection', key: selectionData.link }}) : {}; // TODO retrieve get 
+    const sourceData =  selectionData;
 
     return selectionData === undefined ? <NoSelectionView/> : selectionData.init === ''? <NotRegisteredView db={db} /> : (
         <div id="action-container">
@@ -118,19 +120,19 @@ export const Inspector = (props: {selectionData:any, db: any}) => {
                 {/* <IconLockLocked32/> */}
                 </div>
                 <div style={{ display: "flex" }}>
-                    {/* <div style={{ display: "flex", alignItems: "center"}}>
-                        {["signup", "bobba", "x0239"].map((e, i) => <div style={{ padding: "3px", borderRadius: "4px", backgroundColor: "rgba(256, 256, 256, 0.2)", marginLeft: "5px" }} key={e + i}>{e}</div>)}
-                    </div> */}
+                    <div style={{ display: "flex", alignItems: "center"}}>
+                     {/* {linkedData && <div style={{ padding: "3px", borderRadius: "4px", backgroundColor: "rgba(256, 256, 256, 0.2)", marginLeft: "5px" }}>{selectionData.label}</div>} */}
+                    </div>
                     <LeftMenu marginLeft={"-15%"} onClick={(e) => console.log("TARGET:", e)} options={["delete?"]} trigger={<IconButton><IconEllipsis32 /></IconButton>} />
                 </div>
             </div>
 
             <div className="action-container-subcontainer">
                 <div className="items-list">
-                    <InspectorItem title="General" selectionData={selectionData} db={db} />
-                    <InspectorItem title="Condition" selectionData={selectionData} db={db} currentView={setConditionView}/>
-                    <InspectorItem title="Behaviors" selectionData={selectionData} db={db} />
-                    <InspectorItem title="Notes" selectionData={selectionData} db={db} currentViewValue={conditionView}/>
+                    <InspectorItem title="General" selectionData={sourceData} db={db} />
+                    <InspectorItem title="Condition" selectionData={sourceData} db={db} currentView={setConditionView}/>
+                    <InspectorItem title="Behaviors" selectionData={sourceData} db={db} />
+                    <InspectorItem title="Notes" selectionData={sourceData} db={db} currentViewValue={conditionView}/>
                 </div>
             </div>
         </div>
