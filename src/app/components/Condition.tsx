@@ -5,8 +5,8 @@ import { TextInput } from "../util/ui/text-input";
 import { Select } from "../util/ui/select";
 import { controller, generateReqsyId } from "../functions/utils";
 
-export const Condition = (props: { db: any, selectionData: any, currentView: (e:any) => any }) => {
-    const { selectionData, currentView } = props;
+export const Condition = (props: { db: any, disabled?: boolean, selectionData: any, currentView: (e:any) => any }) => {
+    const { selectionData, currentView, disabled } = props;
     const allConditions = selectionData.condition;
     const options: any = allConditions.map((c: { id: string, label: string }) => ({ value: c.id, label: c.label }));
 
@@ -58,7 +58,7 @@ export const Condition = (props: { db: any, selectionData: any, currentView: (e:
                 setEditConditionState(false);
                 setTimeout(() => {
                     document.getElementById("condition-text-input").focus();
-                }, 100);
+                }, 1000);
                 break;
             case "edit":
                 setCreateConditionState(false);
@@ -74,19 +74,19 @@ export const Condition = (props: { db: any, selectionData: any, currentView: (e:
         }
     }
 
-    const view = (createConditionState || editConditionState) ?
-        <TextInput defaultValue={textCondition} invalidlist={allConditions.map((c: any) => c.label)} id={"condition-text-input"} placeholder="Enter a condition" onblur={handleConditionChange} />
-        :
-        !allConditions.length ? <Button onClick={handleButtonClick} style={{ marginLeft: "5px", fontSize: "10px", height: "20px", lineHeight: "10px" }}>Create...</Button>
-            :
-            <Select id="condition-selection" defaultValue={selectCondition} options={options} onChange={handleSelectChange} />
-
+    const view = !allConditions.length && disabled? <div/> 
+    :
+    (createConditionState || editConditionState) ? <TextInput defaultValue={textCondition} invalidlist={allConditions.map((c: any) => c.label)} id={"condition-text-input"} placeholder="Enter a condition" onblur={handleConditionChange} /> 
+    :
+    !allConditions.length ? <Button onClick={handleButtonClick} style={{ marginLeft: "5px", fontSize: "10px", height: "20px", lineHeight: "10px" }}>Create...</Button> 
+    :
+    <Select id="condition-selection" defaultValue={selectCondition} options={options} onChange={handleSelectChange} />;
 
     return (
 
         <div style={{ width: "100%", display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "flex-start", paddingBottom: "10px" }}>
             {view}
-            {allConditions.length && <LeftMenu marginLeft={"-20px"} onClick={handleMenu} options={["create", "edit", "delete"]} trigger={<IconButton><IconEllipsis32 /></IconButton>} />}
+            {(allConditions.length && !disabled) ? <LeftMenu marginLeft={"-20px"} onClick={handleMenu} options={["create", "edit", "delete"]} trigger={<IconButton><IconEllipsis32 /></IconButton>} /> : <div/> }
            
         </div>
 

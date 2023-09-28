@@ -13,11 +13,11 @@ import { Select } from "../util/ui/select";
 
 
 
-const InspectorItem = (props: {title: string, selectionData: any, db: any, currentViewValue?: string, currentView?: (e:string)=>any}) => {
-    const { title, selectionData, db, currentView, currentViewValue } = props;
+const InspectorItem = (props: {title: string, selectionData: any, db: any, disabled?: boolean, currentViewValue?: string, currentView?: (e:string)=>any}) => {
+    const { title, selectionData, db, disabled, currentView, currentViewValue } = props;
     const [expanded, setExpanded] = useState(false);
     const clickHandler = () => setExpanded(!expanded);
-    const view = { "Condition": <Condition currentView={currentView} selectionData={selectionData} db={db} />, "General": <General selectionData={selectionData} db={db} />, "Notes": <Notes selectionData={selectionData} currentViewValue={currentViewValue} />, "Behaviors": <Behaviors/> }[title || "Template"]
+    const view = { "Condition": <Condition disabled={disabled} currentView={currentView} selectionData={selectionData} db={db} />, "General": <General selectionData={selectionData} db={db} />, "Notes": <Notes disabled={disabled} selectionData={selectionData} currentViewValue={currentViewValue} />, "Behaviors": <Behaviors /> }[title || "Template"]
     const badgeCount = { "Condition": selectionData.condition.length, "General": selectionData.tag.length, "Notes": 0, "Behaviors": 0 }[title || "Template"]
     return (
         <div className={`items-list-item ${title !== 'Notes' && "items-border-bottom"}`}>
@@ -109,10 +109,9 @@ export const Inspector = (props: {selectionData:any, db: any}) => {
     const {selectionData, db} = props;
     const label = selectionData?.label;
     const [conditionView, setConditionView] = useState("default");
-
-    //const linkedData = selectionData?.link? await controller({func: 'read', data: {model: 'selection', key: selectionData.link }}) : {}; 
     const sourceData =  selectionData?.link? selectionData.linkData : selectionData;
-
+    const componentIsLinked = Boolean(selectionData?.link);
+    console.log("COMPONENT IS LINKED:", componentIsLinked)
     return selectionData === undefined ? <NoSelectionView/> : selectionData.init === ''? <NotRegisteredView db={db} /> : (
         <div id="action-container">
             <div style={{ justifyContent: "space-between" }} className="action-container-content">
@@ -121,7 +120,7 @@ export const Inspector = (props: {selectionData:any, db: any}) => {
                 </div>
                 <div style={{ display: "flex" }}>
                     <div style={{ display: "flex", alignItems: "center"}}>
-                     {/* {linkedData && <div style={{ padding: "3px", borderRadius: "4px", backgroundColor: "rgba(256, 256, 256, 0.2)", marginLeft: "5px" }}>{selectionData.label}</div>} */}
+                     {componentIsLinked && <div style={{ padding: "3px", borderRadius: "4px", backgroundColor: "rgba(256, 256, 256, 0.2)", marginLeft: "5px" }}>{selectionData.linkData.label}</div>}
                     </div>
                     <LeftMenu marginLeft={"-15%"} onClick={(e) => console.log("TARGET:", e)} options={["delete?"]} trigger={<IconButton><IconEllipsis32 /></IconButton>} />
                 </div>
@@ -130,9 +129,9 @@ export const Inspector = (props: {selectionData:any, db: any}) => {
             <div className="action-container-subcontainer">
                 <div className="items-list">
                     <InspectorItem title="General" selectionData={sourceData} db={db} />
-                    <InspectorItem title="Condition" selectionData={sourceData} db={db} currentView={setConditionView}/>
-                    <InspectorItem title="Behaviors" selectionData={sourceData} db={db} />
-                    <InspectorItem title="Notes" selectionData={sourceData} db={db} currentViewValue={conditionView}/>
+                    <InspectorItem disabled={componentIsLinked} title="Condition" selectionData={sourceData} db={db} currentView={setConditionView}/>
+                    <InspectorItem disabled={componentIsLinked} title="Behaviors" selectionData={sourceData} db={db} />
+                    <InspectorItem disabled={componentIsLinked} title="Notes" selectionData={sourceData} db={db} currentViewValue={conditionView}/>
                 </div>
             </div>
         </div>
