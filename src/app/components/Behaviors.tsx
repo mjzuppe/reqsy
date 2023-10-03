@@ -1,123 +1,34 @@
-import React from "react";
-import {  Textbox, SegmentedControlOption, Dropdown, IconCode16 } from "figma-ui-kit";
+import React, {useState} from "react";
+import {  Textbox, SegmentedControlOption, Dropdown, IconCode16, TextboxAutocomplete, Button } from "figma-ui-kit";
+import { Select } from "../util/ui/select";
+
+const BehaviorRow = () => 
+ <div style={{display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
+    <TextboxAutocomplete value={null} options={[]} />
+    <Textbox variant="border" value="" />
+ </div>
+
+const BehaviorRows = () =>    <div style={{  width: "100%", display: "flex", flexDirection: "column", alignItems: "flex-start", paddingBottom: "10px"}}>
+<BehaviorRow/>
+</div>
+
+const CreateBehaviors = () => <div style={{  width: "100%", display: "flex", flexDirection: "row", alignItems: "flex-start", paddingBottom: "10px"}}>
+    <Button onClick={()=>{}} style={{ marginLeft: "5px", fontSize: "10px", height: "20px", lineHeight: "10px" }}>Use recommended</Button> 
+    <Button onClick={()=>{}} style={{ marginLeft: "5px", fontSize: "10px", height: "20px", lineHeight: "10px" }}>Create manually</Button> 
+</div>
+
+const SuggestBehavior = (props: {handleCancel: (any)=>any}) => <div style={{  width: "100%", display: "flex", flexDirection: "row", alignItems: "flex-start", paddingBottom: "10px"}}>
+<Select style={{width: "100px"}} id="behavior-element-type-select" defaultValue={null} placeholder="element or UI" options={[{label: "select", value: "select"}]}/>
+<Button  onClick={()=>{}} style={{ marginLeft: "5px", fontSize: "10px", height: "20px", lineHeight: "10px" }}>submit</Button> 
+<Button onClick={props.handleCancel} secondary style={{ marginLeft: "5px", fontSize: "10px", height: "20px", lineHeight: "10px" }}>cancel</Button> 
+</div>
 
 export const Behaviors = () => {
-    const HTMLoptions: Array<SegmentedControlOption> = [
-        { value: "show all" },
-        { value: "div" },
-        { value: "input" },
-        { value: "select" },
-        { value: "form" },
-        { value: "button" },
-        { value: "body" },
-        { value: "a" },
-        { value: "h1" },
-        { value: "h2" },
-        { value: "h3" },
-        { value: "h4" },
-        { value: "ul" },
-        { value: "li" },
-        { value: "p" },
-        { value: "code" },
-        { value: "span" },
-        { value: "time" },
-        { value: "area" },
-        { value: "canvas" },
-        { value: "audio" },
-        { value: "img" },
-        { value: "map" },
-        { value: "video" },
-        { value: "embed" },
-        { value: "iframe" },
-        { value: "object" },
-        { value: "svg" },
-        { value: "table" },
-        { value: "label" },
-        { value: "option" },
-        { value: "textarea" },
-    ]
+    const isNew = true;
+    const [selectBehaviorView, setSelectBehaviorView] = useState(false);
 
+    const view = isNew? (selectBehaviorView? <SuggestBehavior handleCancel={()=>setSelectBehaviorView(false)}/> : <div onClick={()=>setSelectBehaviorView(true)}><CreateBehaviors /></div>) : <BehaviorRows />;
 
-    const actionFields = [
-        { label: "On Load", icon: <IconCode16 /> },
-        { label: "On Hover" },
-        { label: "On Focus" },
-        { label: "On Blur" },
-        { label: "On Click" },
-        { label: "On Key Press" },
-    ]
-
-    const contentFields = [
-        { label: "Label Text" },
-        { label: "Alt Text" },
-        { label: "Title Text" },
-        { label: "Placeholder Text" },
-        { label: "Error Msg" },
-        { label: "Helper Msg" },
-        { label: "Tooltip Msg" },
-    ]
-
-    const dataFields = [
-        { label: "DB Value Ref" },
-        { label: "Default Value" },
-        { label: "Options" },
-        { label: "Validation Rules" },
-        { label: "Type" },
-        { label: "Href" },
-        { label: "New window" },
-    ]
-
-    return (
-
-        <div style={{ width: "100%" }}>
-            <div style={{display: "flex", alignItems: "center", justifyContent: "flex-start", width: "100%"}}>
-            <div style={{ width: "35%", marginLeft: "5px" }}>HTML Element</div>
-                {/* <div style={{marginLeft: "5px"}}><Dropdown options={HTMLoptions} value={"show all"} onChange={()=>{}}/></div> */}
-            </div>
-            <div className="items-border-bottom">
-                {dataFields.map((field, i) =>
-                    <div key={`ref-items${i}`} className="items-list-item ">
-                        <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", width: "100%" }} className="items-list-item">
-                            <div style={{ marginLeft: "5px", display: "flex", justifyContent: "flex-start", alignItems: "center", width: "100%" }}>
-                                <div style={{ width: "35%" }}>{field.label}</div>
-                                <Textbox onChange={()=>{}} placeholder="enter value" value={''} />
-                            </div>
-
-
-                        </div>
-                    </div>
-                )}
-            </div>
-
-            <div className="items-border-bottom">
-
-                {actionFields.map((field, i) =>
-                    <div key={`ref-items${i}`} className="items-list-item ">
-                        <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", width: "100%" }} className="items-list-item">
-                            <div style={{ marginLeft: "5px", display: "flex", justifyContent: "flex-start", alignItems: "center", width: "100%" }}>
-                                <div style={{ width: "35%", display: "flex" }}>{field.label}<div style={{marginLeft: "5px"}}> {field.icon || ""}</div></div>
-                                <Textbox onChange={()=>{}} placeholder="enter value" value={''} />
-                            </div>
-
-
-                        </div>
-                    </div>
-                )}
-            </div>
-
-            {contentFields.map((field, i) =>
-                <div key={`ref-items${i}`} className="items-list-item ">
-                    <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", width: "100%" }} className="items-list-item">
-                        <div style={{ marginLeft: "5px", display: "flex", justifyContent: "flex-start", alignItems: "center", width: "100%" }}>
-                            <div style={{ width: "35%" }}>{field.label}</div>
-                            <Textbox onChange={()=>{}} placeholder="enter value" value={''} />
-                        </div>
-
-
-                    </div>
-                </div>
-            )}
-        </div>
-
-    )
-}
+    return     <div key={`inspector-behavior}`} style={{  width: "100%", display: "flex", flexDirection: "column", alignItems: "flex-start", paddingBottom: "10px"}}>
+        {view}
+    </div>

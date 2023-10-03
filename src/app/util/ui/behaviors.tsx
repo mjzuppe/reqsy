@@ -1,20 +1,5 @@
 const CommonUI = [
-    {
-        category: "error",
-        parameters: [
-            "submit error",
-            "form field error",
-            "input error"
-        ]
-    },
-    {
-        category: "success",
-        parameters: [
-            "submit success",
-            "form field success",
-            "input success"
-        ]
-    },
+   
     {
         category: "tooltip",
         parameters: [
@@ -44,27 +29,7 @@ const CommonUI = [
             "max page numbers",
         ]
     },
-    {
-        category: "scrolling",
-        parameters: [
-            "infinite scroll",
-            "scrolling",
-            "on scroll",
-            "on scroll down",
-            "on scroll up",
-            "on scroll bottom",
-            "on scroll top",
-            "scroll top",
-            "scroll bottom",
-            "scroll down",
-            "scroll up",
-            "scroll to",
-            "scroll to top",
-            "scroll to bottom",
-            "scroll to id",
-            "scroll to element",
-        ],
-    },
+   
     {
         category: "spinner",
         parameter: [
@@ -126,18 +91,6 @@ const CommonUI = [
             "default value",
             "null value"
         ]
-    }
-]
-
-const commonActions = [
-    {
-        category: "validate",
-        parameters:
-            [
-                "validate form",
-                "validate field",
-                "validate input",
-            ]
     },
     {
         category: "file",
@@ -150,9 +103,6 @@ const commonActions = [
         ],
     
     },
-    {
-
-    }
 ]
 
 const EventHandlers = [
@@ -180,6 +130,64 @@ const EventHandlers = [
     "onDragStart",
     "onDragOver",
     "onDrop"
+]
+
+const AdditionalEvents = [
+    {
+        category: "scrolling",
+        parameters: [
+            "infinite scroll",
+            "scrolling",
+            "on scroll",
+            "on scroll down",
+            "on scroll up",
+            "on scroll bottom",
+            "on scroll top",
+            "scroll top",
+            "scroll bottom",
+            "scroll down",
+            "scroll up",
+            "scroll to",
+            "scroll to top",
+            "scroll to bottom",
+            "scroll to id",
+            "scroll to element",
+        ],
+    },
+    {
+        category: "handle error",
+        parameters: [
+            "submit error",
+            "form field error",
+            "input error"
+        ]
+    },
+    {
+        category: "handle success",
+        parameters: [
+            "submit success",
+            "form field success",
+            "input success"
+        ]
+    },
+    {
+        category: "handle mention",
+        parameters: [
+            "trigger",
+            "suggestions",
+            "source",
+        ]
+    },
+    {
+        category: "validate",
+        parameters:
+            [
+                "validate form",
+                "validate field",
+                "validate input",
+            ]
+    },
+
 ]
 
 const HTMLElements = [
