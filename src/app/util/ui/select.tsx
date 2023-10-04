@@ -9,10 +9,11 @@ interface SelectInput extends DetailedHTMLProps<React.InputHTMLAttributes<HTMLSe
 
 const Select = (props: SelectInput) => {
     const { id, options, defaultValue, placeholder, ...rest } = props;
+    console.log("PLACEHOLDER", placeholder, defaultValue || null)
     return (
         <div className="select">
-            <select {...rest} placeholder={placeholder} defaultValue={defaultValue || null} id={id}>
-               {placeholder && <option value={null} disabled>{placeholder}</option>}
+            <select {...rest} defaultValue={defaultValue || null} id={id}>
+               {placeholder && <option value={null} disabled>{placeholder}</option> }
                 {options.map((o: { value: any, label: string }, i) => <option key={`type-${i}`} value={o.value}>{o.label}</option>)}
             </select>
         </div>)

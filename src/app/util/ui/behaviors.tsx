@@ -1,5 +1,5 @@
 const CommonUI = [
-   
+
     {
         category: "tooltip",
         parameters: [
@@ -32,7 +32,7 @@ const CommonUI = [
    
     {
         category: "spinner",
-        parameter: [
+        parameters: [
             "start spinner",
             "stop spinner",
             "spinner",
@@ -40,7 +40,7 @@ const CommonUI = [
     },
     {
         category: "progress",
-        parameter: [
+        parameters: [
             "start progress",
             "stop progress",
             "progress message title",
@@ -267,3 +267,5 @@ const HTMLElements = [
         parameters: ["src", "type", "width", "height"],
     }
 ]
+
+export { CommonUI, EventHandlers, AdditionalEvents, HTMLElements}
