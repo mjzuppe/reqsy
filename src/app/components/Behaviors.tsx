@@ -4,6 +4,8 @@ import { Select } from "../util/ui/select";
 import { CommonUI, EventHandlers, AdditionalEvents, HTMLElements } from "../util/ui/behaviors";
 import { PlusMinusToggle } from "../util/ui/plusminus";
 import { LeftMenu } from "../util/ui/left-menu";
+import { InputMention } from "../util/ui/input-mention";
+
 
 const elementCategory = [...CommonUI, ...HTMLElements].map((e: any) => ({ label: e.category, value: e.category })).sort((a, b) => a.label.localeCompare(b.label));
 const allParametersSet = new Set();
@@ -15,12 +17,12 @@ const BehaviorRow = () => {
     const [param, setParam] = useState("");
     const [value, setValue] = useState("");
     const clickHandlerDelete = () => { }; // TODO complete
-    return (<div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
-        <TextboxAutocomplete filter variant="underline" placeholder="Enter parameter" value={param} onInput={(e) => setParam(e.currentTarget.value)} options={allParametersOptions} />
-        <Textbox placeholder="Enter value" variant="underline" value={value} onInput={(e) => setValue(e.currentTarget.value)} />
+    return (<div style={{ width: "100%", display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
+        <div style={{width: "45%"}}><TextboxAutocomplete filter variant="underline" placeholder="Enter parameter" value={param} onInput={(e) => setParam(e.currentTarget.value)} options={allParametersOptions} /></div>
+        <InputMention style={{ width: "45%", height: "20px" }} placeholder="Enter value" />
         <div style={{ display: "flex", justifyContent: "flex-end" }}>
-                                <LeftMenu danger marginLeft={"-28px"} onClick={() => clickHandlerDelete} options={["delete?"]} trigger={<IconButton><IconEllipsis32 /></IconButton>} />
-                            </div>
+            <LeftMenu danger marginLeft={"-28px"} onClick={() => clickHandlerDelete} options={["delete?"]} trigger={<IconButton><IconEllipsis32 /></IconButton>} />
+        </div>
     </div>)
 }
 
@@ -28,7 +30,7 @@ const BehaviorRows = () => {
     const [newBehaviorRow, setNewBehaviorRow] = useState(false);
     const handleNewBehaviorRow = (v: boolean) => setNewBehaviorRow(!newBehaviorRow);
     return (
-        <div style={{width: "100%"}}>
+        <div style={{ width: "100%" }}>
             <div style={{ display: "flex", justifyContent: "flex-end" }}>
                 <PlusMinusToggle value={!newBehaviorRow} onClick={handleNewBehaviorRow} />
             </div>
@@ -57,7 +59,9 @@ const SuggestBehavior = (props: { handleCancel: (any) => any }) => <div style={{
     <Button onClick={props.handleCancel} secondary style={{ marginLeft: "5px", fontSize: "10px", height: "20px", lineHeight: "10px" }}>cancel</Button>
 </div>
 
-export const Behaviors = () => {
+export const Behaviors = (props: { db: any, selectionData: any }) => {
+    const { db, selectionData } = props;
+    console.log("DB", db.variable)
 
     const [selectBehaviorView, setSelectBehaviorView] = useState(false);
     const [displayRows, setDisplayRows] = useState(false); // TODO determine value based on if param is populated
