@@ -148,6 +148,10 @@
     position: absolute;
 }
 
+.left-menu .active {
+    background-color: #0d99ff;
+}
+
 .left-menu-option {
     padding: 10px;
   }
@@ -211,4 +215,8 @@
     background: transparent;
     font-size: 1em;
     padding: 5px;
+}
+
+.input-mention {
+
 }

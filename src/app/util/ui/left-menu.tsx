@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-export const LeftMenu = (props:any) => {
+export const LeftMenu = (props: any) => {
     const { options, trigger, marginLeft, marginTop, danger } = props;
     const [expanded, setExpanded] = useState(false);
     const expandHandler = () => setExpanded(!expanded);
@@ -15,9 +15,9 @@ export const LeftMenu = (props:any) => {
             {expanded &&
                 <div>
                     <div className="left-menu-listener" onClick={expandHandler} />
-                <div style={{marginLeft, marginTop: marginTop || ""}} className="left-menu">
+                    <div style={{ marginLeft, marginTop: marginTop || "" }} className="left-menu">
                         {options.map((option, i) =>
-                                <div id={option} onClick={clickHandler} key={i} className={`left-menu-option${danger? "-warning" : ""}`}>
+                            <div id={option} onClick={clickHandler} key={i} className={`left-menu-option${danger ? "-warning" : ""}`}>
                                 {option}
                             </div>
                         )
