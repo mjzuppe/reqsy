@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 
 
-const parseTags = (text: string) => !text ? "" : text.split(" ").map((chunk: string) => chunk[0] === "@" ? <span style={{ marginLeft: "5px", marginRight: "5px", color: "#ACDFFF" }}>{chunk}</span> : chunk);
+const parseTags = (text: string) => !text ? "" : text.split(" ").map((chunk: string) => chunk[0] === "@" ? <span style={{ marginLeft: "5px", marginRight: "5px", color: "#ACDFFF" }}>{chunk}</span> : <span>{chunk}</span>);
 
 const getCurrentChunk = (text: string, ref: any) => {
     const cursorPosition = window.getSelection().anchorOffset;
@@ -62,14 +62,25 @@ const InputMention = (props: { defaultValue?: string, placeholder?: string, styl
                 const newContent = e.currentTarget.textContent.replace(currentDropdownChunk, " @" + newChunk);
                 setValue(newContent);
                 setOpenDropdown(false);
+                handleRender(e);
+                 setTimeout(() => {
+                    var el = document.getElementById("editable")
+                    var range = document.createRange()
+                    var sel = window.getSelection()
+                    console.log("EL", el.childNodes)
+                    range.setStart(el.childNodes[el.childNodes.length - 1], 0)
+                    range.collapse(true)
+                    
+                    sel.removeAllRanges()
+                    sel.addRange(range)
+                    
+                }, 200);
+
 
                 // TODO NEED TO SET CURSOR POSITION AFTER RENDER
                 // const cursorPosition = window.getSelection().anchorOffset;
-                // handleRender(e);
-                // setTimeout(() => {
-                //     inputRef.current.setSelectionRange(3, 3)
-                //     inputRef.current.focus();
-                // }, 200);
+                
+               
         
 
          
@@ -91,7 +102,7 @@ const InputMention = (props: { defaultValue?: string, placeholder?: string, styl
     return (
         <div style={{ display: "grid", placeItems: "flex-start", gridTemplateAreas: "inner-div" }}>
             {displayPlaceholder ? <div style={{ padding: "1px", width: "130px", gridArea: "inner-div", color: "rgba(255, 255, 255, 0.4)" }}>{placeholder}</div> : ""}
-            <div id={"editable"} ref={inputRef} onKeyDown={handleKeyDown} onInput={handleInput} style={{ padding: "1px", width: "130px", gridArea: "inner-div", border: "1px solid red" }} className="input-mention" onBlur={handleBlur} key={key} contentEditable>{parseTags(children)}</div>
+            <div id={"editable"} ref={inputRef} onKeyDown={handleKeyDown} onInput={handleInput} style={{ padding: "1px", width: "130px", gridArea: "inner-div", border: "1px solid red" }} className="input-mention" onBlur={handleBlur} key={key} contentEditable>{parseTags(children)}<span>{" "}</span></div>
             {
                 openDropdown &&
                 <div style={{ marginTop: "25px", width: "130px" }} className="left-menu">
