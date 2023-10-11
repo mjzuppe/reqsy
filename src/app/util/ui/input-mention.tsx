@@ -1,7 +1,16 @@
 import React, { useRef, useState } from 'react';
 
 
-const parseTags = (text: string) => !text ? "" : text.split(" ").map((chunk: string) => chunk[0] === "@" ? <span style={{ marginLeft: "5px", marginRight: "5px", color: "#ACDFFF" }}>{chunk}</span> : <span>{chunk}</span>);
+const parseTags = (text: string) => {
+    if (!text) return ""; 
+    let r = [];
+    const chunks = text.split(" ").map((chunk: string) => chunk[0] === "@" ? <span style={{ marginLeft: "5px", marginRight: "5px", color: "#ACDFFF" }}>{chunk}</span> : <span>{chunk}</span>)
+    chunks.forEach((chunk, i) => {
+        r.push(chunk);
+        if (i < chunks.length - 1) r.push(<span>{" "}</span>)
+    })
+    return r;
+}
 
 const getCurrentChunk = (text: string, ref: any) => {
     const cursorPosition = window.getSelection().anchorOffset;
@@ -102,7 +111,7 @@ const InputMention = (props: { defaultValue?: string, placeholder?: string, styl
     return (
         <div style={{ display: "grid", placeItems: "flex-start", gridTemplateAreas: "inner-div" }}>
             {displayPlaceholder ? <div style={{ padding: "1px", width: "130px", gridArea: "inner-div", color: "rgba(255, 255, 255, 0.4)" }}>{placeholder}</div> : ""}
-            <div id={"editable"} ref={inputRef} onKeyDown={handleKeyDown} onInput={handleInput} style={{ padding: "1px", width: "130px", gridArea: "inner-div", border: "1px solid red" }} className="input-mention" onBlur={handleBlur} key={key} contentEditable>{parseTags(children)}<span>{" "}</span></div>
+            <div id={"editable"} ref={inputRef} onKeyDown={handleKeyDown} onInput={handleInput} style={{ padding: "1px", width: "130px", gridArea: "inner-div", border: "1px solid red" }} className="input-mention" onBlur={handleBlur} key={key} contentEditable>{parseTags(children)}</div>
             {
                 openDropdown &&
                 <div style={{ marginTop: "25px", width: "130px" }} className="left-menu">
