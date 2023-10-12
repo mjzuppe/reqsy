@@ -3,17 +3,18 @@ import React, { useRef, useState } from 'react';
 
 const parseTags = (text: string) => {
     if (!text) return ""; 
+    const chunks = text.split(" ").map((chunk: string, i: number) => chunk[0] === "@" ? <span style={{color: "#ACDFFF" }}>{chunk}</span> : <span >{chunk}</span>)
     let r = [];
-    const chunks = text.split(" ").map((chunk: string) => chunk[0] === "@" ? <span style={{ marginLeft: "5px", marginRight: "5px", color: "#ACDFFF" }}>{chunk}</span> : <span>{chunk}</span>)
     chunks.forEach((chunk, i) => {
         r.push(chunk);
-        if (i < chunks.length - 1) r.push(<span>{" "}</span>)
+        r.push(<span>{" "}</span>); // required to add space and reset style
     })
     return r;
 }
 
-const getCurrentChunk = (text: string, ref: any) => {
-    const cursorPosition = window.getSelection().anchorOffset;
+const getCurrentChunk = () => {
+    const cursorPosition:number = window.getSelection().anchorOffset;
+    const text = window.getSelection().anchorNode.textContent;
     // "@tag" || "this is a @tag" or "a @tag is not @tag2"
     const isEmpty = !Boolean(text.split("")[cursorPosition - 1].trim());
     const currentChunk = isEmpty ? "" : text.slice(0, cursorPosition).split(" ").pop();
@@ -34,17 +35,15 @@ const InputMention = (props: { defaultValue?: string, placeholder?: string, styl
     const [currentDropdownChunk, setCurrentDropdownChunk] = useState("");
     const [dropdownSelected, setDropdownSelected] = useState(0);
     const dropdownRef = useRef(null);
-    const options = [" abadoo", "option2", "option3"];
+    const options = ["abadoo", "option2", "option3"];
     const filterOptions = (options: string[], filter: string) => options.filter((option) => option.includes(filter));
-
-
-    const children = value;
 
     const handleRender = (e: any) => setKey(key + 1);
     const handleBlur = (e: any) => {
         setValue(e.currentTarget.textContent);
         handleRender(e);
     }
+    
 
     const handleInput = (e: any) => {
         // Handle display of placeholder
@@ -52,15 +51,25 @@ const InputMention = (props: { defaultValue?: string, placeholder?: string, styl
         else if (!e.currentTarget.textContent) setDisplayPlaceholder(true);
 
         // Handle display of dropdown
-        const currentChunk = getCurrentChunk(e.currentTarget.textContent, inputRef);
+        const currentChunk = getCurrentChunk();
+        console.log("CURRENT CHUNK", currentChunk);
         setCurrentDropdownChunk(currentChunk);
+        //console.log("CURRENT CHUNK", currentChunk); // TODO FROM HERE, after tag is entered and space pressed, dropdown should close but the dropdown still detects a current chunk
         if (Boolean(currentChunk && currentChunk[0] === "@")) {
             setOpenDropdown(true);
             setDropdownSelected(0);
         }
         else (setOpenDropdown(false));
+
+        // Handle format of input of start of new chunk
+        if (currentChunk && currentChunk.length === 1) {
+            inputRef.current.blur();
+            refocus();
+            // await wait(100, () => inputRef.current.blur());
+            // await wait(1000, () => refocus());
+        }
     };
-    const handleKeyDown = (e: any) => {
+    const handleKeyDown =  async (e: any) => {
         // allow delete no matter what
         if (e.keyCode === 8) return;
         // prevent enter from creating a new line, but allow dropdown actions
@@ -72,28 +81,14 @@ const InputMention = (props: { defaultValue?: string, placeholder?: string, styl
                 setValue(newContent);
                 setOpenDropdown(false);
                 handleRender(e);
-                 setTimeout(() => {
-                    var el = document.getElementById("editable")
-                    var range = document.createRange()
-                    var sel = window.getSelection()
-                    console.log("EL", el.childNodes)
-                    range.setStart(el.childNodes[el.childNodes.length - 1], 0)
-                    range.collapse(true)
-                    
-                    sel.removeAllRanges()
-                    sel.addRange(range)
-                    
-                }, 200);
-
-
-                // TODO NEED TO SET CURSOR POSITION AFTER RENDER
-                // const cursorPosition = window.getSelection().anchorOffset;
-                
-               
-        
+                refocus();
 
          
             }
+        }
+        // if space is pressed, close dropdown
+        if (e.keyCode === 32) {
+            setOpenDropdown(false);
         }
         // prevent tab from creating a new tab
         if (e.keyCode === 9) e.preventDefault();
@@ -108,10 +103,23 @@ const InputMention = (props: { defaultValue?: string, placeholder?: string, styl
         }
     }
 
+    const refocus = () => {
+        setTimeout(() => {
+            var el = document.getElementById("editable")
+            var range = document.createRange()
+            var sel = window.getSelection()
+            range.setStart(el.childNodes[el.childNodes.length - 1], 1)
+            range.collapse(true)
+            sel.removeAllRanges()
+            sel.addRange(range)
+        }, 5);
+    }
+ 
+    console.log("TAGS", parseTags(value))
     return (
         <div style={{ display: "grid", placeItems: "flex-start", gridTemplateAreas: "inner-div" }}>
             {displayPlaceholder ? <div style={{ padding: "1px", width: "130px", gridArea: "inner-div", color: "rgba(255, 255, 255, 0.4)" }}>{placeholder}</div> : ""}
-            <div id={"editable"} ref={inputRef} onKeyDown={handleKeyDown} onInput={handleInput} style={{ padding: "1px", width: "130px", gridArea: "inner-div", border: "1px solid red" }} className="input-mention" onBlur={handleBlur} key={key} contentEditable>{parseTags(children)}</div>
+            <div id={"editable"} ref={inputRef} onKeyDown={handleKeyDown} onInput={handleInput} style={{ padding: "1px", width: "130px", gridArea: "inner-div" }} className="input-mention" onBlur={handleBlur} key={key} contentEditable>{parseTags(value)}</div>
             {
                 openDropdown &&
                 <div style={{ marginTop: "25px", width: "130px" }} className="left-menu">
