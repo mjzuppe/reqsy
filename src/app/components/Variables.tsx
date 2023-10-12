@@ -39,7 +39,7 @@ export const Variables = (props) => {
         if (!["label", "type", "description"].includes(param)) throw new Error('invalid parameter');
         let mutatedData = {};
         mutatedData[param] = e.target.value.trim();
-        const payload = newVariableOpen ? { type: "string", description: "", ...mutatedData } : { ...variableObject[variableId], ...mutatedData }
+        const payload = newVariableOpen ? { type: "string", ...mutatedData } : { ...variableObject[variableId], ...mutatedData }
         await controller({ func: "write", data: { model: "variable", key: variableId, value: payload } })
         await setNewVariableOpen(false);
     };
@@ -102,7 +102,7 @@ export const Variables = (props) => {
                                         </select>
                                     </div>
                                     <div>
-                                        <TextInput invalidlist={[]} placeholder="validation/notes" style={{ marginLeft: "2px", width: "160px" }} maxLength={32} onblur={clickHandlerNewOrUpdate} defaultValue={""} id={`variable-items-${variableId}-description`} />
+                                        <TextInput invalidlist={[]} placeholder="validation/notes" style={{ marginLeft: "2px", width: "160px" }} maxLength={32} onblur={clickHandlerNewOrUpdate} defaultValue={variableData.description} id={`variable-items-${variableId}-description`} />
                                     </div>
                                     <div style={{ display: "flex", justifyContent: "flex-end" }}>
                                         <LeftMenu danger marginLeft={"-28px"} onClick={() => clickHandlerDelete(variableId)} options={["delete?"]} trigger={<IconButton><IconEllipsis32 /></IconButton>} />

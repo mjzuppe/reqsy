@@ -5,6 +5,7 @@ import { CommonUI, EventHandlers, AdditionalEvents, HTMLElements } from "../util
 import { PlusMinusToggle } from "../util/ui/plusminus";
 import { LeftMenu } from "../util/ui/left-menu";
 import { InputMention } from "../util/ui/input-mention";
+import { controller } from "../functions/utils";
 
 
 const elementCategory = [...CommonUI, ...HTMLElements].map((e: any) => ({ label: e.category, value: e.category })).sort((a, b) => a.label.localeCompare(b.label));
@@ -13,30 +14,34 @@ const allParametersSet = new Set();
 EventHandlers.forEach((e: any) => allParametersSet.add(e));
 const allParametersOptions = Array.from(allParametersSet).map((p: any) => ({ value: p, label: p })).sort((a, b) => a.label.localeCompare(b.label));
 
-const BehaviorRow = () => {
-    const [param, setParam] = useState("");
-    const [value, setValue] = useState("");
+const BehaviorRow = (props: {handleUpdate: (e:any) => any, behavior?: {key: string, value: string}}) => {
+    const { handleUpdate, behavior } = props;
+    const [param, setParam] = useState(behavior?.key || "");
+    const [value, setValue] = useState(behavior?.value || "");
+
     const clickHandlerDelete = () => { }; // TODO complete
     return (<div style={{ width: "100%", display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
-        <div style={{width: "45%"}}><TextboxAutocomplete filter variant="underline" placeholder="Enter parameter" value={param} onInput={(e) => setParam(e.currentTarget.value)} options={allParametersOptions} /></div>
-        <InputMention style={{ width: "45%", height: "20px" }} placeholder="Enter value" />
+        <div style={{width: "45%"}}><TextboxAutocomplete onBlur={()=>handleUpdate({key: param, value})} filter variant="underline" placeholder="Enter parameter" value={param} onInput={(e) => setParam(e.currentTarget.value)} options={allParametersOptions} /></div>
+        <InputMention defaultValue={value} onInput={(e:string)=>setValue(e)} onBlur={()=>handleUpdate({key: param, value})} style={{ width: "45%", height: "20px" }} placeholder="Enter value" />
         <div style={{ display: "flex", justifyContent: "flex-end" }}>
             <LeftMenu danger marginLeft={"-28px"} onClick={() => clickHandlerDelete} options={["delete?"]} trigger={<IconButton><IconEllipsis32 /></IconButton>} />
         </div>
     </div>)
 }
 
-const BehaviorRows = () => {
+const BehaviorRows = (props: {updateBehavior: (any) => any, isNew, behaviors}) => {
+    const { updateBehavior, isNew, behaviors } = props;
     const [newBehaviorRow, setNewBehaviorRow] = useState(false);
     const handleNewBehaviorRow = (v: boolean) => setNewBehaviorRow(!newBehaviorRow);
+
     return (
         <div style={{ width: "100%" }}>
             <div style={{ display: "flex", justifyContent: "flex-end" }}>
                 <PlusMinusToggle value={!newBehaviorRow} onClick={handleNewBehaviorRow} />
             </div>
             <div style={{ width: "100%", display: "flex", flexDirection: "column", alignItems: "flex-start", paddingBottom: "10px" }}>
-                {newBehaviorRow && <BehaviorRow />}
-                <BehaviorRow />
+                {newBehaviorRow && <BehaviorRow handleUpdate={updateBehavior} />}
+                {behaviors.map((b: any) => <BehaviorRow behavior={b} handleUpdate={updateBehavior} />)}
             </div>
         </div>
     )
@@ -59,18 +64,27 @@ const SuggestBehavior = (props: { handleCancel: (any) => any }) => <div style={{
     <Button onClick={props.handleCancel} secondary style={{ marginLeft: "5px", fontSize: "10px", height: "20px", lineHeight: "10px" }}>cancel</Button>
 </div>
 
-export const Behaviors = (props: { db: any, selectionData: any }) => {
-    const { db, selectionData } = props;
-    console.log("DB", db.variable)
+export const Behaviors = (props: { db: any, selectionData: any, currentViewValue: string, disabled: boolean }) => {
+    const { db, selectionData, currentViewValue, disabled } = props;
+    const currentViewData = currentViewValue || "default";
+    const conditionId = selectionData.condition.length? selectionData.condition.filter((c:any)=>c.label === currentViewData)[0].id : "default";
+    const isNew = selectionData.behavior.filter((n:any) => n.id === conditionId).length === 0;
+    const behaviors = selectionData.behavior.filter((n: any) => n.id === conditionId)[0]?.value || [];
 
     const [selectBehaviorView, setSelectBehaviorView] = useState(false);
-    const [displayRows, setDisplayRows] = useState(false); // TODO determine value based on if param is populated
+    const [displayRows, setDisplayRows] = useState(Boolean(behaviors.length)); // TODO determine value based on if param is populated
 
     const handleCreateClick = (v: boolean) => {
         if (v) setSelectBehaviorView(v);
         else setDisplayRows(true);
     };
-    const view = displayRows ? <BehaviorRows /> :
+
+    const handleUpdateBehavior = async (e: any) => {
+        const payload = isNew? [{id: conditionId, value: [e]}] : [{id: conditionId, value: [e]}, ...selectionData.behavior.filter((n:any) => n.id !== conditionId)];
+        await controller({ func: "write", data: { model: "selection", key: "behavior", value: payload } })
+    }
+
+    const view = displayRows ? <BehaviorRows updateBehavior={handleUpdateBehavior} isNew={isNew} behaviors={behaviors} /> :
         selectBehaviorView ? <SuggestBehavior handleCancel={() => setSelectBehaviorView(false)} /> :
             <CreateBehaviors handleClick={handleCreateClick} />
 

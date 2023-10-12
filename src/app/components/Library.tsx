@@ -28,7 +28,7 @@ export const Library = (props: { db: any }) => {
                 <div className="items-list">
                     {
                         libraryKeys.map((key:any) => {
-                            const {label, tags, location, type} = library[key];
+                            const {label, tag, location, type} = library[key];
                             return(
                                 <div key={`library-item-${key}`} className="items-list-item items-border-bottom">
                         <div className="items-list-item-alwaysdisplay">
@@ -54,7 +54,7 @@ export const Library = (props: { db: any }) => {
                                 <div className="flex-center" title="frame location" style={{ padding: "0 10px 0 10px" }}><IconLayerFrame16 /><p>{location || "null"}</p></div>
                                 <LeftMenu marginLeft={"-7%"} onClick={(e) => console.log("TARGET:", e)} options={["edit", "share", "delete"]} trigger={<IconButton><IconEllipsis32 /></IconButton>} />
                             </div>
-                            <div title="associated tags" style={{ width: "100%", padding: "0 10px 0 10px" }}><div className="flex-center"> <TagIcon16 /><p style={{ paddingLeft: 2 }}>{String(tags)}</p></div>  </div>
+                            <div title="associated tags" style={{ width: "100%", padding: "0 10px 0 10px" }}><div className="flex-center"> <TagIcon16 /><p style={{ paddingLeft: 2 }}>{String(tag)}</p></div>  </div>
                         </div>
                     </div>
                             )

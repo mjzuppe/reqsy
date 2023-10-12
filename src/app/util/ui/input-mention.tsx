@@ -21,8 +21,8 @@ const getCurrentChunk = () => {
     return currentChunk
 }
 
-const InputMention = (props: { defaultValue?: string, placeholder?: string, style?: any }) => {
-    const { defaultValue, placeholder, ...rest } = props;
+const InputMention = (props: { onBlur: (e:any)=>any, onInput: (e:any)=>any, defaultValue?: string, placeholder?: string, style?: any }) => {
+    const { onBlur, onInput, defaultValue, placeholder, ...rest } = props;
 
     // Input box
     const [value, setValue] = useState(defaultValue || null);
@@ -40,34 +40,34 @@ const InputMention = (props: { defaultValue?: string, placeholder?: string, styl
 
     const handleRender = (e: any) => setKey(key + 1);
     const handleBlur = (e: any) => {
+        onBlur(e);
         setValue(e.currentTarget.textContent);
         handleRender(e);
+        
     }
     
 
     const handleInput = (e: any) => {
+        onInput(e.currentTarget.textContent);
+        
         // Handle display of placeholder
         if (e.currentTarget.textContent) setDisplayPlaceholder(false);
         else if (!e.currentTarget.textContent) setDisplayPlaceholder(true);
 
         // Handle display of dropdown
         const currentChunk = getCurrentChunk();
-        console.log("CURRENT CHUNK", currentChunk);
         setCurrentDropdownChunk(currentChunk);
-        //console.log("CURRENT CHUNK", currentChunk); // TODO FROM HERE, after tag is entered and space pressed, dropdown should close but the dropdown still detects a current chunk
         if (Boolean(currentChunk && currentChunk[0] === "@")) {
             setOpenDropdown(true);
             setDropdownSelected(0);
         }
         else (setOpenDropdown(false));
 
-        // Handle format of input of start of new chunk
-        if (currentChunk && currentChunk.length === 1) {
-            inputRef.current.blur();
-            refocus();
-            // await wait(100, () => inputRef.current.blur());
-            // await wait(1000, () => refocus());
-        }
+        // Refocus if previous chunk is tag and new chunk length is 1
+        // if (currentChunk && currentChunk.length === 1) {
+        //     inputRef.current.blur();
+        //     refocus();
+        // }
     };
     const handleKeyDown =  async (e: any) => {
         // allow delete no matter what
@@ -114,8 +114,7 @@ const InputMention = (props: { defaultValue?: string, placeholder?: string, styl
             sel.addRange(range)
         }, 5);
     }
- 
-    console.log("TAGS", parseTags(value))
+
     return (
         <div style={{ display: "grid", placeItems: "flex-start", gridTemplateAreas: "inner-div" }}>
             {displayPlaceholder ? <div style={{ padding: "1px", width: "130px", gridArea: "inner-div", color: "rgba(255, 255, 255, 0.4)" }}>{placeholder}</div> : ""}
