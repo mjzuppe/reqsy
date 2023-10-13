@@ -19,7 +19,7 @@ export const Library = (props: { db: any }) => {
     return (
         <div id="action-container">
             <div className="action-container-content">
-                <p><strong>Library.</strong> Do more things like this.</p>
+                <p><strong>Library.</strong> Manage registered elements.</p>
             </div>
             <div className="action-container-search">
                 <SearchTextbox value={""} placeholder="search names" />

@@ -14,7 +14,7 @@ export const Settings = () => {
     return (
         <div id="action-container">
             <div style={{padding: "15px"}} className="action-container-subnav items-border-bottom">
-                <Submenu onClick={submenuClickHandler} options={["Account", 'API', 'Support']}/>
+                <Submenu onClick={submenuClickHandler} options={["Account", 'Support']}/>
             </div>
             <div className="action-container-subcontainer"> 
                 {view}

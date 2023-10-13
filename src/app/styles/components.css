@@ -20,8 +20,9 @@
 #footer-container {
     border-top: 1px solid rgba(255, 255, 255, 0.4);
     display: flex;
-    justify-content: flex-start;
+    justify-content: space-between;
     align-content: center;
+    align-items: center;
     padding: 10px;
     height: 35px;
 }
