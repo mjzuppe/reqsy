@@ -1,10 +1,26 @@
 import React, { useRef, useState } from 'react';
 
+const DetailCard = (props: { text: string, type: string, description: string }) => {
+    const { text, type, description } = props;
+    const [hover, setHover] = useState(false);
+    return (
+        <span onMouseEnter={()=>setHover(true)} onMouseLeave={()=>setHover(false)} style={{ color: "#ACDFFF" }}>
+            {text}
+            {/* <div className={`detail-card${!hover?  " hide": ""}`}> // TODO FIX
+                <div>{type || "undefined"}</div>
+                <div>{description || "undefined"}</div>
+            </div> */}
+        </span>
 
+    )
+}
 const parseTags = (text: string, validOptions: any[]) => {
     if (!text) return "";
-    const isValid = (chunk: string):boolean => validOptions.map((o: any) => o.label).includes(chunk.split("@")[1]);
-    const chunks = text.split(" ").map((chunk: string, i: number) => (chunk[0] === "@" && isValid(chunk)) ? <span style={{ color: "#ACDFFF" }}>{chunk}</span> : <span >{chunk}</span>)
+    const chunkData = (label:string) => {
+        return label.split("@")[1], validOptions.filter((o: any) => o.label === label.split("@")[1])[0]
+    };
+    const isValid = (chunk: string): boolean => validOptions.map((o: any) => o.label).includes(chunk.split("@")[1]);
+    const chunks = text.split(" ").map((chunk: string, i: number) => (chunk[0] === "@" && isValid(chunk)) ? <DetailCard text={chunk} type={chunkData(chunk).type || ""} description={chunkData(chunk).description || ""} /> : <span >{chunk}</span>)
     let r = [];
     chunks.forEach((chunk, i) => {
         r.push(chunk);
@@ -42,7 +58,7 @@ const InputMention = (props: { options: any[], onBlur: (e: any) => any, onInput:
     const handleRender = (e: any) => setKey(key + 1);
     const handleBlur = (e: any) => {
         onBlur(e);
-        setValue(e.currentTarget.textContent);
+        setValue(e.currentTarget.innerText); // innerText to prevent DetailCard text from disrupting the value
         handleRender(e);
 
     }
@@ -117,7 +133,7 @@ const InputMention = (props: { options: any[], onBlur: (e: any) => any, onInput:
     }
 
     return (
-        <div style={{display: "flex", flexDirection: "column"}}>
+        <div style={{ display: "flex", flexDirection: "column" }}>
             <div style={{ display: "grid", placeItems: "flex-start", gridTemplateAreas: "inner-div" }}>
                 {displayPlaceholder ? <div style={{ padding: "1px", width: "130px", gridArea: "inner-div", color: "rgba(255, 255, 255, 0.4)" }}>{placeholder}</div> : ""}
                 <div id={"editable"} ref={inputRef} onKeyDown={handleKeyDown} onInput={handleInput} style={{ padding: "1px", width: "130px", gridArea: "inner-div" }} className="input-mention" onBlur={handleBlur} key={key} contentEditable>{parseTags(value, options)}</div>
@@ -125,16 +141,16 @@ const InputMention = (props: { options: any[], onBlur: (e: any) => any, onInput:
             {
                 openDropdown &&
                 <div className="menu-container"><div>
-                    
-                        <div className="menu">
-                            {filterOptions(optionsLabels, currentDropdownChunk.split("@")[1]).map((option, i) =>
-                                <div id={option} onClick={() => { }} key={i} className={`menu-option ${i === (dropdownSelected - 1) ? "active" : ""}`}>
-                                    {option}
-                                </div>
-                            )
-                            }
-                        </div>
-                        <div className="menu-listener" onClick={() => setOpenDropdown(false)}>
+
+                    <div className="menu">
+                        {filterOptions(optionsLabels, currentDropdownChunk.split("@")[1]).map((option, i) =>
+                            <div id={option} onClick={() => { }} key={i} className={`menu-option ${i === (dropdownSelected - 1) ? "active" : ""}`}>
+                                {option}
+                            </div>
+                        )
+                        }
+                    </div>
+                    <div className="menu-listener" onClick={() => setOpenDropdown(false)}>
                     </div>
                 </div>
                 </div>
