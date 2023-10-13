@@ -19,6 +19,7 @@ function App() {
   const [actionView, setActionView] = useState<string>('inspector');
   const [db, setDb] = useState<any>(undefined);
   const [selectionData, setSelectionData] = useState<any>(undefined);
+
   React.useEffect(() => {
     controller({func: 'init', data: {}});
     window.onmessage = async (event) => {
@@ -27,13 +28,13 @@ function App() {
       else if (event.data.pluginMessage.echo) console.log(event.data.pluginMessage.echo); // FOR TESTING
       else if ('selection' in event.data.pluginMessage) {
         setSelectionData(event.data.pluginMessage.selection);
-        setLastUpdated(Date.now()); // Required to force re-render
+        //setLastUpdated(Date.now()); // Required to force re-render
       }
       else if (event.data?.pluginMessage && event.data.pluginMessage.state) {
         const {state} = event.data.pluginMessage;
         if (state.root) await setDb(()=> (state.root));
         else if (state.model) await setDb((prevState:any)=>({...prevState, ...state.model}));
-        setLastUpdated(Date.now()); // Required to force re-render
+        //setLastUpdated(Date.now()); // Required to force re-render
       }
     };
 
