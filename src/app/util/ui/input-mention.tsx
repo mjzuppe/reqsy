@@ -2,8 +2,8 @@ import React, { useRef, useState } from 'react';
 
 
 const parseTags = (text: string) => {
-    if (!text) return ""; 
-    const chunks = text.split(" ").map((chunk: string, i: number) => chunk[0] === "@" ? <span style={{color: "#ACDFFF" }}>{chunk}</span> : <span >{chunk}</span>)
+    if (!text) return "";
+    const chunks = text.split(" ").map((chunk: string, i: number) => chunk[0] === "@" ? <span style={{ color: "#ACDFFF" }}>{chunk}</span> : <span >{chunk}</span>)
     let r = [];
     chunks.forEach((chunk, i) => {
         r.push(chunk);
@@ -13,7 +13,7 @@ const parseTags = (text: string) => {
 }
 
 const getCurrentChunk = () => {
-    const cursorPosition:number = window.getSelection().anchorOffset;
+    const cursorPosition: number = window.getSelection().anchorOffset;
     const text = window.getSelection().anchorNode.textContent;
     // "@tag" || "this is a @tag" or "a @tag is not @tag2"
     const isEmpty = !Boolean(text.split("")[cursorPosition - 1].trim());
@@ -21,7 +21,7 @@ const getCurrentChunk = () => {
     return currentChunk
 }
 
-const InputMention = (props: { onBlur: (e:any)=>any, onInput: (e:any)=>any, defaultValue?: string, placeholder?: string, style?: any }) => {
+const InputMention = (props: { onBlur: (e: any) => any, onInput: (e: any) => any, defaultValue?: string, placeholder?: string, style?: any }) => {
     const { onBlur, onInput, defaultValue, placeholder, ...rest } = props;
 
     // Input box
@@ -43,13 +43,13 @@ const InputMention = (props: { onBlur: (e:any)=>any, onInput: (e:any)=>any, defa
         onBlur(e);
         setValue(e.currentTarget.textContent);
         handleRender(e);
-        
+
     }
-    
+
 
     const handleInput = (e: any) => {
         onInput(e.currentTarget.textContent);
-        
+
         // Handle display of placeholder
         if (e.currentTarget.textContent) setDisplayPlaceholder(false);
         else if (!e.currentTarget.textContent) setDisplayPlaceholder(true);
@@ -69,7 +69,7 @@ const InputMention = (props: { onBlur: (e:any)=>any, onInput: (e:any)=>any, defa
         //     refocus();
         // }
     };
-    const handleKeyDown =  async (e: any) => {
+    const handleKeyDown = async (e: any) => {
         // allow delete no matter what
         if (e.keyCode === 8) return;
         // prevent enter from creating a new line, but allow dropdown actions
@@ -83,7 +83,7 @@ const InputMention = (props: { onBlur: (e:any)=>any, onInput: (e:any)=>any, defa
                 handleRender(e);
                 refocus();
 
-         
+
             }
         }
         // if space is pressed, close dropdown
@@ -116,19 +116,27 @@ const InputMention = (props: { onBlur: (e:any)=>any, onInput: (e:any)=>any, defa
     }
 
     return (
-        <div style={{ display: "grid", placeItems: "flex-start", gridTemplateAreas: "inner-div" }}>
-            {displayPlaceholder ? <div style={{ padding: "1px", width: "130px", gridArea: "inner-div", color: "rgba(255, 255, 255, 0.4)" }}>{placeholder}</div> : ""}
-            <div id={"editable"} ref={inputRef} onKeyDown={handleKeyDown} onInput={handleInput} style={{ padding: "1px", width: "130px", gridArea: "inner-div" }} className="input-mention" onBlur={handleBlur} key={key} contentEditable>{parseTags(value)}</div>
+        <div style={{display: "flex", flexDirection: "column"}}>
+            <div style={{ display: "grid", placeItems: "flex-start", gridTemplateAreas: "inner-div" }}>
+                {displayPlaceholder ? <div style={{ padding: "1px", width: "130px", gridArea: "inner-div", color: "rgba(255, 255, 255, 0.4)" }}>{placeholder}</div> : ""}
+                <div id={"editable"} ref={inputRef} onKeyDown={handleKeyDown} onInput={handleInput} style={{ padding: "1px", width: "130px", gridArea: "inner-div" }} className="input-mention" onBlur={handleBlur} key={key} contentEditable>{parseTags(value)}</div>
+            </div>
             {
                 openDropdown &&
-                <div style={{ marginTop: "25px", width: "130px" }} className="left-menu">
-                {filterOptions(options, currentDropdownChunk.split("@")[1]).map((option, i) =>
-                    <div id={option} onClick={() => { }} key={i} className={`left-menu-option ${i === (dropdownSelected - 1)? "active" : ""}`}>
-                        {option}
+                <div className="menu-container"><div>
+                    
+                        <div className="menu">
+                            {filterOptions(options, currentDropdownChunk.split("@")[1]).map((option, i) =>
+                                <div id={option} onClick={() => { }} key={i} className={`menu-option ${i === (dropdownSelected - 1) ? "active" : ""}`}>
+                                    {option}
+                                </div>
+                            )
+                            }
+                        </div>
+                        <div className="menu-listener" onClick={() => setOpenDropdown(false)}>
                     </div>
-                )
-                }
-            </div>
+                </div>
+                </div>
             }
         </div>
 

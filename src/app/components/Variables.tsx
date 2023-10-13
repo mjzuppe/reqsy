@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 // components
 import { IconButton, IconEllipsis32 } from "figma-ui-kit";
-import { LeftMenu } from "../util/ui/left-menu";
+import { Menu } from "../util/ui/menu";
 import { PlusMinusToggle } from "../util/ui/plusminus";
 import { TextInput } from "../util/ui/text-input";
 // data
@@ -105,7 +105,7 @@ export const Variables = (props) => {
                                         <TextInput invalidlist={[]} placeholder="validation/notes" style={{ marginLeft: "2px", width: "160px" }} maxLength={32} onblur={clickHandlerNewOrUpdate} defaultValue={variableData.description} id={`variable-items-${variableId}-description`} />
                                     </div>
                                     <div style={{ display: "flex", justifyContent: "flex-end" }}>
-                                        <LeftMenu danger marginLeft={"-28px"} onClick={() => clickHandlerDelete(variableId)} options={["delete?"]} trigger={<IconButton><IconEllipsis32 /></IconButton>} />
+                                        <Menu danger marginLeft={"-28px"} onClick={() => clickHandlerDelete(variableId)} options={["delete?"]} trigger={<IconButton><IconEllipsis32 /></IconButton>} />
                                     </div>
                                 </div>
                             </div>

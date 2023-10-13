@@ -3,7 +3,7 @@ import { Textbox, SegmentedControlOption, Dropdown, IconCode16, IconButton, Icon
 import { Select } from "../util/ui/select";
 import { CommonUI, EventHandlers, AdditionalEvents, HTMLElements } from "../util/ui/behaviors";
 import { PlusMinusToggle } from "../util/ui/plusminus";
-import { LeftMenu } from "../util/ui/left-menu";
+import { Menu } from "../util/ui/menu";
 import { InputMention } from "../util/ui/input-mention";
 import { controller } from "../functions/utils";
 
@@ -24,7 +24,7 @@ const BehaviorRow = (props: {handleUpdate: (e:any) => any, behavior?: {key: stri
         <div style={{width: "45%"}}><TextboxAutocomplete onBlur={()=>handleUpdate({key: param, value})} filter variant="underline" placeholder="Enter parameter" value={param} onInput={(e) => setParam(e.currentTarget.value)} options={allParametersOptions} /></div>
         <InputMention defaultValue={value} onInput={(e:string)=>setValue(e)} onBlur={()=>handleUpdate({key: param, value})} style={{ width: "45%", height: "20px" }} placeholder="Enter value" />
         <div style={{ display: "flex", justifyContent: "flex-end" }}>
-            <LeftMenu danger marginLeft={"-28px"} onClick={() => clickHandlerDelete} options={["delete?"]} trigger={<IconButton><IconEllipsis32 /></IconButton>} />
+            <Menu danger marginLeft={"-28px"} onClick={() => clickHandlerDelete} options={["delete?"]} trigger={<IconButton><IconEllipsis32 /></IconButton>} />
         </div>
     </div>)
 }

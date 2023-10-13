@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
 import { TextboxAutocomplete, TextboxAutocompleteOption, IconEllipsis32, IconButton, Button } from "figma-ui-kit";
-import { LeftMenu } from "../util/ui/left-menu";
+import { Menu } from "../util/ui/menu";
 import { TextInput } from "../util/ui/text-input";
 import { Select } from "../util/ui/select";
 import { controller, generateReqsyId } from "../functions/utils";
@@ -86,7 +86,7 @@ export const Condition = (props: { db: any, disabled?: boolean, selectionData: a
 
         <div style={{ width: "100%", display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "flex-start", paddingBottom: "10px" }}>
             {view}
-            {(allConditions.length && !disabled) ? <LeftMenu marginLeft={"-20px"} onClick={handleMenu} options={["create", "edit", "delete"]} trigger={<IconButton><IconEllipsis32 /></IconButton>} /> : <div/> }
+            {(allConditions.length && !disabled) ? <Menu marginLeft={"-20px"} onClick={handleMenu} options={["create", "edit", "delete"]} trigger={<IconButton><IconEllipsis32 /></IconButton>} /> : <div/> }
            
         </div>
 

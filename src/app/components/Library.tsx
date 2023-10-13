@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { SearchTextbox, IconToggleButton, IconPlus32, IconMinus32, IconLayerComponent16, IconLayerFrame16, IconEllipsis32, IconButton } from "figma-ui-kit";
-import { LeftMenu } from "../util/ui/left-menu";
+import { Menu } from "../util/ui/menu";
 import { TagIcon16 } from "../util/ui/svg";
 import { getNodeById } from "../functions/ui";
 import { controller } from "../functions/utils";
@@ -52,7 +52,7 @@ export const Library = (props: { db: any }) => {
                             <div style={{ alignItems: "center", width: "100%", display: "flex", justifyContent: "space-between" }}>
                                 <div className="flex-center" title="source component" style={{ padding: "0 10px 0 10px" }}><IconLayerComponent16 /><p>{type || "null"}</p></div>
                                 <div className="flex-center" title="frame location" style={{ padding: "0 10px 0 10px" }}><IconLayerFrame16 /><p>{location || "null"}</p></div>
-                                <LeftMenu marginLeft={"-7%"} onClick={(e) => console.log("TARGET:", e)} options={["edit", "share", "delete"]} trigger={<IconButton><IconEllipsis32 /></IconButton>} />
+                                <Menu marginLeft={"-7%"} onClick={(e) => console.log("TARGET:", e)} options={["edit", "share", "delete"]} trigger={<IconButton><IconEllipsis32 /></IconButton>} />
                             </div>
                             <div title="associated tags" style={{ width: "100%", padding: "0 10px 0 10px" }}><div className="flex-center"> <TagIcon16 /><p style={{ paddingLeft: 2 }}>{String(tag)}</p></div>  </div>
                         </div>

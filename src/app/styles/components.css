@@ -122,12 +122,12 @@
     color: #ffffff;
 }
 
-.left-menu-container {
+.menu-container {
     display: flex;
     position: relative;
 }
 
-.left-menu-listener {
+.menu-listener {
     position:fixed;
     padding:0;
     margin:0;
@@ -138,7 +138,7 @@
     z-index: 200;
 }
 
-.left-menu {
+.menu {
     display: flex column;
     background-color: #000000;
     color: #fff;
@@ -148,23 +148,23 @@
     position: absolute;
 }
 
-.left-menu .active {
+.menu .active {
     background-color: #0d99ff;
 }
 
-.left-menu-option {
+.menu-option {
     padding: 10px;
   }
 
-.left-menu-option-warning {
+.menu-option-warning {
     padding: 10px;
 }
 
-.left-menu-option:hover {
+.menu-option:hover {
     background-color: #0d99ff;
 }
 
-.left-menu-option-warning:hover {
+.menu-option-warning:hover {
     background-color: #ff0d31;
 }
 

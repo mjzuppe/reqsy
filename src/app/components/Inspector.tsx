@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 // components
 import { IconPlus32, IconMinus32, IconToggleButton, IconButton, IconEllipsis32, IconLockLocked32, Button, Link } from "figma-ui-kit";
-import { LeftMenu } from "../util/ui/left-menu";
+import { Menu } from "../util/ui/menu";
 import { Condition } from "./Condition";
 import { General } from "./General";
 import { Notes } from "./Notes";
@@ -121,7 +121,7 @@ export const Inspector = (props: {selectionData:any, db: any}) => {
                     <div style={{ display: "flex", alignItems: "center"}}>
                      {componentIsLinked && <div style={{ padding: "3px", borderRadius: "4px", backgroundColor: "rgba(256, 256, 256, 0.2)", marginLeft: "5px" }}>{selectionData.linkData.label}</div>}
                     </div>
-                    <LeftMenu marginLeft={"-15%"} onClick={(e) => console.log("TARGET:", e)} options={["delete?"]} trigger={<IconButton><IconEllipsis32 /></IconButton>} />
+                    <Menu marginLeft={"-15%"} onClick={(e) => console.log("TARGET:", e)} options={["delete?"]} trigger={<IconButton><IconEllipsis32 /></IconButton>} />
                 </div>
             </div>
 
