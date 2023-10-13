@@ -21,8 +21,9 @@ const getCurrentChunk = () => {
     return currentChunk
 }
 
-const InputMention = (props: { onBlur: (e: any) => any, onInput: (e: any) => any, defaultValue?: string, placeholder?: string, style?: any }) => {
-    const { onBlur, onInput, defaultValue, placeholder, ...rest } = props;
+const InputMention = (props: { options: any[], onBlur: (e: any) => any, onInput: (e: any) => any, defaultValue?: string, placeholder?: string, style?: any }) => {
+    const { options, onBlur, onInput, defaultValue, placeholder, ...rest } = props;
+    const optionsLabels = options.map((o: any) => o.label);
 
     // Input box
     const [value, setValue] = useState(defaultValue || null);
@@ -35,7 +36,6 @@ const InputMention = (props: { onBlur: (e: any) => any, onInput: (e: any) => any
     const [currentDropdownChunk, setCurrentDropdownChunk] = useState("");
     const [dropdownSelected, setDropdownSelected] = useState(0);
     const dropdownRef = useRef(null);
-    const options = ["abadoo", "option2", "option3"];
     const filterOptions = (options: string[], filter: string) => options.filter((option) => option.includes(filter));
 
     const handleRender = (e: any) => setKey(key + 1);
@@ -76,7 +76,7 @@ const InputMention = (props: { onBlur: (e: any) => any, onInput: (e: any) => any
         if (e.keyCode === 13) {
             e.preventDefault();
             if (openDropdown) {
-                const newChunk = filterOptions(options, currentDropdownChunk.split("@")[1])[dropdownSelected - 1];
+                const newChunk = filterOptions(optionsLabels, currentDropdownChunk.split("@")[1])[dropdownSelected - 1];
                 const newContent = e.currentTarget.textContent.replace(currentDropdownChunk, " @" + newChunk);
                 setValue(newContent);
                 setOpenDropdown(false);
@@ -99,7 +99,7 @@ const InputMention = (props: { onBlur: (e: any) => any, onInput: (e: any) => any
             e.preventDefault();
             const direction = e.keyCode === 38 ? -1 : 1;
             const newDropdownSelected = (dropdownSelected + direction);
-            if (newDropdownSelected > 0 && newDropdownSelected <= filterOptions(options, currentDropdownChunk.split("@")[1]).length) setDropdownSelected(newDropdownSelected);
+            if (newDropdownSelected > 0 && newDropdownSelected <= filterOptions(optionsLabels, currentDropdownChunk.split("@")[1]).length) setDropdownSelected(newDropdownSelected);
         }
     }
 
@@ -126,7 +126,7 @@ const InputMention = (props: { onBlur: (e: any) => any, onInput: (e: any) => any
                 <div className="menu-container"><div>
                     
                         <div className="menu">
-                            {filterOptions(options, currentDropdownChunk.split("@")[1]).map((option, i) =>
+                            {filterOptions(optionsLabels, currentDropdownChunk.split("@")[1]).map((option, i) =>
                                 <div id={option} onClick={() => { }} key={i} className={`menu-option ${i === (dropdownSelected - 1) ? "active" : ""}`}>
                                     {option}
                                 </div>

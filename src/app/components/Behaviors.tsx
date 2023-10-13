@@ -14,23 +14,24 @@ const allParametersSet = new Set();
 EventHandlers.forEach((e: any) => allParametersSet.add(e));
 const allParametersOptions = Array.from(allParametersSet).map((p: any) => ({ value: p, label: p })).sort((a, b) => a.label.localeCompare(b.label));
 
-const BehaviorRow = (props: {handleUpdate: (e:any) => any, behavior?: {key: string, value: string}}) => {
-    const { handleUpdate, behavior } = props;
+const BehaviorRow = (props: {db:any, handleUpdate: (e:any) => any, behavior?: {key: string, value: string}}) => {
+    const { db, handleUpdate, behavior } = props;
     const [param, setParam] = useState(behavior?.key || "");
     const [value, setValue] = useState(behavior?.value || "");
+    const variables = Object.keys(db.variable).map((id:any)=> ({id, ...db.variable[id] }));
 
     const clickHandlerDelete = () => { }; // TODO complete
     return (<div style={{ width: "100%", display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
         <div style={{width: "45%"}}><TextboxAutocomplete onBlur={()=>handleUpdate({key: param, value})} filter variant="underline" placeholder="Enter parameter" value={param} onInput={(e) => setParam(e.currentTarget.value)} options={allParametersOptions} /></div>
-        <InputMention defaultValue={value} onInput={(e:string)=>setValue(e)} onBlur={()=>handleUpdate({key: param, value})} style={{ width: "45%", height: "20px" }} placeholder="Enter value" />
+        <InputMention options={variables} defaultValue={value} onInput={(e:string)=>setValue(e)} onBlur={()=>handleUpdate({key: param, value})} style={{ width: "45%", height: "20px" }} placeholder="Enter value" />
         <div style={{ display: "flex", justifyContent: "flex-end" }}>
             <Menu danger marginLeft={"-28px"} onClick={() => clickHandlerDelete} options={["delete?"]} trigger={<IconButton><IconEllipsis32 /></IconButton>} />
         </div>
     </div>)
 }
 
-const BehaviorRows = (props: {updateBehavior: (any) => any, isNew, behaviors}) => {
-    const { updateBehavior, isNew, behaviors } = props;
+const BehaviorRows = (props: {db:any, updateBehavior: (any) => any, isNew, behaviors}) => {
+    const { db, updateBehavior, isNew, behaviors } = props;
     const [newBehaviorRow, setNewBehaviorRow] = useState(false);
     const handleNewBehaviorRow = (v: boolean) => setNewBehaviorRow(!newBehaviorRow);
 
@@ -40,8 +41,8 @@ const BehaviorRows = (props: {updateBehavior: (any) => any, isNew, behaviors}) =
                 <PlusMinusToggle value={!newBehaviorRow} onClick={handleNewBehaviorRow} />
             </div>
             <div style={{ width: "100%", display: "flex", flexDirection: "column", alignItems: "flex-start", paddingBottom: "10px" }}>
-                {newBehaviorRow && <BehaviorRow handleUpdate={updateBehavior} />}
-                {behaviors.map((b: any) => <BehaviorRow behavior={b} handleUpdate={updateBehavior} />)}
+                {newBehaviorRow && <BehaviorRow db={db} handleUpdate={updateBehavior} />}
+                {behaviors.map((b: any) => <BehaviorRow db={db} behavior={b} handleUpdate={updateBehavior} />)}
             </div>
         </div>
     )
@@ -84,7 +85,7 @@ export const Behaviors = (props: { db: any, selectionData: any, currentViewValue
         await controller({ func: "write", data: { model: "selection", key: "behavior", value: payload } })
     }
 
-    const view = displayRows ? <BehaviorRows updateBehavior={handleUpdateBehavior} isNew={isNew} behaviors={behaviors} /> :
+    const view = displayRows ? <BehaviorRows db={db} updateBehavior={handleUpdateBehavior} isNew={isNew} behaviors={behaviors} /> :
         selectBehaviorView ? <SuggestBehavior handleCancel={() => setSelectBehaviorView(false)} /> :
             <CreateBehaviors handleClick={handleCreateClick} />
 
