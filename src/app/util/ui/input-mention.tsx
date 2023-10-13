@@ -4,12 +4,12 @@ const DetailCard = (props: { text: string, type: string, description: string }) 
     const { text, type, description } = props;
     const [hover, setHover] = useState(false);
     return (
-        <span onMouseEnter={()=>setHover(true)} onMouseLeave={()=>setHover(false)} style={{ color: "#ACDFFF" }}>
+        <span onMouseOver={()=>setHover(true)} onMouseLeave={()=>setHover(false)} style={{ color: "#ACDFFF" }}>
             {text}
-            {/* <div className={`detail-card${!hover?  " hide": ""}`}> // TODO FIX
+            <div style={{display: !hover ? "none" : "flex"}} className="detail-card"> 
                 <div>{type || "undefined"}</div>
                 <div>{description || "undefined"}</div>
-            </div> */}
+            </div>
         </span>
 
     )
