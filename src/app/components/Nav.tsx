@@ -3,7 +3,7 @@ import React, {useState} from "react";
 import { IconToggleButton, IconLibrary32, IconInfo32, IconAdjust32,IconLinkLinked32 } from "figma-ui-kit";
 
 export const Nav = (props) => {
-    const [currentView, nextView] = useState<string>('inspector');
+    const [currentView, nextView] = useState<string>(props.currentView);
     const setView = (v) => {
         const view = v.target.id;
         props.setView(view);

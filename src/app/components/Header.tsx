@@ -4,7 +4,7 @@ import { Nav } from './Nav';
 export const Header = (props) => {
     return (
         <div id="header-container">
-                <Nav setView={props.setView} />
+                <Nav currentView={props.currentView} setView={props.setView} />
         </div>
     )
 }
