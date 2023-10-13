@@ -1,9 +1,10 @@
 import React, { useRef, useState } from 'react';
 
 
-const parseTags = (text: string) => {
+const parseTags = (text: string, validOptions: any[]) => {
     if (!text) return "";
-    const chunks = text.split(" ").map((chunk: string, i: number) => chunk[0] === "@" ? <span style={{ color: "#ACDFFF" }}>{chunk}</span> : <span >{chunk}</span>)
+    const isValid = (chunk: string):boolean => validOptions.map((o: any) => o.label).includes(chunk.split("@")[1]);
+    const chunks = text.split(" ").map((chunk: string, i: number) => (chunk[0] === "@" && isValid(chunk)) ? <span style={{ color: "#ACDFFF" }}>{chunk}</span> : <span >{chunk}</span>)
     let r = [];
     chunks.forEach((chunk, i) => {
         r.push(chunk);
@@ -119,7 +120,7 @@ const InputMention = (props: { options: any[], onBlur: (e: any) => any, onInput:
         <div style={{display: "flex", flexDirection: "column"}}>
             <div style={{ display: "grid", placeItems: "flex-start", gridTemplateAreas: "inner-div" }}>
                 {displayPlaceholder ? <div style={{ padding: "1px", width: "130px", gridArea: "inner-div", color: "rgba(255, 255, 255, 0.4)" }}>{placeholder}</div> : ""}
-                <div id={"editable"} ref={inputRef} onKeyDown={handleKeyDown} onInput={handleInput} style={{ padding: "1px", width: "130px", gridArea: "inner-div" }} className="input-mention" onBlur={handleBlur} key={key} contentEditable>{parseTags(value)}</div>
+                <div id={"editable"} ref={inputRef} onKeyDown={handleKeyDown} onInput={handleInput} style={{ padding: "1px", width: "130px", gridArea: "inner-div" }} className="input-mention" onBlur={handleBlur} key={key} contentEditable>{parseTags(value, options)}</div>
             </div>
             {
                 openDropdown &&
