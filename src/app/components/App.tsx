@@ -48,7 +48,7 @@ function App() {
   return (
     <div key={lastUpdated} id="primary-container" className="figma-dark">
       <Header currentView={actionView} setView={setActionView}/>
-      <Action selectionData={selectionData} db={db} currentView={actionView} />
+      <Action selectionData={selectionData} db={db} currentView={actionView} user={user} />
       <Footer user={user} db={db}/>
     </div>
   );

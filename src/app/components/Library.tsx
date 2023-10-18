@@ -4,8 +4,8 @@ import { Menu } from "../util/ui/menu";
 import { TagIcon16 } from "../util/ui/svg";
 import { controller } from "../functions/utils";
 
-export const Library = (props: { db: any }) => {
-    const { db } = props;
+export const Library = (props: { db: any, readOnly: boolean }) => {
+    const { db, readOnly } = props;
     const [expanded, setExpanded] = useState([]);
     const clickHandlerAdd = (i) => setExpanded([...expanded, i]);
     const clickHandlerRemove = (i) => setExpanded(expanded.filter((e) => e !== i));
@@ -55,7 +55,7 @@ export const Library = (props: { db: any }) => {
                                         <div style={{ alignItems: "center", width: "100%", display: "flex", justifyContent: "space-between" }}>
                                             <div className="flex-center" title="source component" style={{ padding: "0 10px 0 10px" }}><IconLayerComponent16 /><p>{type || "null"}</p></div>
                                             <div className="flex-center" title="frame location" style={{ padding: "0 10px 0 10px" }}><IconLayerFrame16 /><p>{location || "null"}</p></div>
-                                            <Menu marginLeft={"-7%"} onClick={(e) => console.log("TARGET:", e)} options={["edit", "share", "delete"]} trigger={<IconButton><IconEllipsis32 /></IconButton>} />
+                                            <Menu marginLeft={"-7%"} onClick={(e) => console.log("TARGET:", e)} options={readOnly? [ "share"]:["edit", "share", "delete"]} trigger={<IconButton><IconEllipsis32 /></IconButton>} />
                                         </div>
                                         <div title="associated tags" style={{ width: "100%", padding: "0 10px 0 10px" }}><div className="flex-center"> <TagIcon16 />{tag.map((t:string, i: number) => <p style={{ padding: "4px", backgroundColor: "#606060",marginLeft: i === 0? "2px" : "10px", borderRadius: "2px" }}>{tagLabel(t)}</p>)}</div>  </div>
                                     </div>
