@@ -66,23 +66,33 @@ figma.ui.onmessage = async ({ func, data }) => {
       }
       else {
         const u:any = await readUser(figma);
-        console.log("USER", u);
+        figma.ui.postMessage({ user: u });
         const r:any = await readRoot(figma);
         let payload:any = r;
         // Get user record
-        const registeredUser = await fetch(`http://localhost:54321/functions/v1/api/auth`, {
+        let registeredUser:any = await fetch(`http://localhost:54321/functions/v1/api/auth`, {
           headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${process.env.SUPABASE_ANON_KEY}`,
           },
           method: 'POST',
-          body: JSON.stringify({ email: u.email })
+          body: JSON.stringify({ id_figma: u.id })
         });
-        registeredUser.json().then((r:any) => console.log("REGISTERED", u.email, r));
-        // TODO Handle no data?
+        registeredUser = await registeredUser.json();
+              // TODO Handle no data?
+
+        const { id, id_figma, trial_end, status } = registeredUser;
+        const userState = () => {
+          const trial = new Date(trial_end);
+          console.log("REGISTERD", registeredUser)
+          if (registeredUser.ls && registeredUser.ls.status === 'active') return "pro";
+          else if (registeredUser.ls && registeredUser.ls.status !== 'active') return "pro-expired";
+          else if ((trial.valueOf() - Date.now()) < 0) return "trial-expired";
+          else return "trial";
+        }
 
         if (r.user && r.user[u.id] === undefined) {
-          payload.user = { ...r.user, [u.id]: {name: u.name, photoUrl: u.photoUrl, color: u.color} };
+          payload.user = { ...r.user, [u.id]: {id, id_figma, trial_end, status: userState()} };
         }
         figma.ui.postMessage({ state: { root: payload } });
       }

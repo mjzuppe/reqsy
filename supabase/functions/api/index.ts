@@ -86,6 +86,7 @@ const route = async (req: { pathname: string, method: string, body: any, search:
       // new user
       if (!user.id) {
         const ts = new Date;
+        ts.setDate(ts.getDate() + 7);
         const trial_end = ts.toISOString();
         const pg = await connection();
         await pg.queryArray(`INSERT INTO users (id_figma, trial_end) VALUES ('${body.id_figma}', '${trial_end}');`);

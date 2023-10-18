@@ -19,6 +19,7 @@ function App() {
   const [actionView, setActionView] = useState<string>('inspector');
   const [db, setDb] = useState<any>(undefined);
   const [selectionData, setSelectionData] = useState<any>(undefined);
+  const [user, setUser] = useState<any>(undefined);
 
   React.useEffect(() => {
     controller({func: 'init', data: {}});
@@ -36,6 +37,9 @@ function App() {
         else if (state.model) await setDb((prevState:any)=>({...prevState, ...state.model}));
         //setLastUpdated(Date.now()); // Required to force re-render
       }
+      else if ('user' in event.data?.pluginMessage) {
+        setUser(event.data.pluginMessage.user);
+      }
     };
 
 
@@ -45,7 +49,7 @@ function App() {
     <div key={lastUpdated} id="primary-container" className="figma-dark">
       <Header currentView={actionView} setView={setActionView}/>
       <Action selectionData={selectionData} db={db} currentView={actionView} />
-      <Footer/>
+      <Footer user={user} db={db}/>
     </div>
   );
 }
