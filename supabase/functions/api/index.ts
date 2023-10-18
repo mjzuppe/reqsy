@@ -4,9 +4,10 @@ import { QueryArrayResult, QueryResult } from "https://deno.land/x/postgres@v0.1
 // Follow this setup guide to integrate the Deno language server with your editor:
 // https://deno.land/manual/getting_started/setup_your_environment
 // This enables autocomplete, go to definition, etc.
+
 type LemonSqueezy = {
-  id: string;
-  license_key: string;
+  id?: string;
+  license_key?: string;
   status: string;
   expires_at?: string;
 }
@@ -74,8 +75,6 @@ const getUser = async (email: string) => {
   return { id, email_figma, trial_end, ls_id, license_key, expires_at, email_ls };
 }
 
-const tempLicense = "9C210491-E577-4EB7-8F3A-A3A4859DC1C6"
-
   switch (pathname) {
     case "/api/auth": {
       if (!body.email) {
@@ -102,8 +101,8 @@ const tempLicense = "9C210491-E577-4EB7-8F3A-A3A4859DC1C6"
         if (license_key) {
           const license_key_data = await lsValidateKey(license_key);
           if (license_key_data?.license_key) {
-            const { id, key, status, expires_at } = license_key_data.license_key;
-            payload = {...payload, ls: {id, license_key: key, status, expires_at}}
+            const { status } = license_key_data.license_key;
+            payload = {...payload, ls: {status}}
           }
         }
         payload = {...payload, pathname, email_figma, trial_end, id };
