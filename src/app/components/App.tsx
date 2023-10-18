@@ -19,7 +19,6 @@ function App() {
   const [actionView, setActionView] = useState<string>('inspector');
   const [db, setDb] = useState<any>(undefined);
   const [selectionData, setSelectionData] = useState<any>(undefined);
-  console.log("ENV TEST", process.env.TESTVALUE);
 
   React.useEffect(() => {
     controller({func: 'init', data: {}});

@@ -66,9 +66,21 @@ figma.ui.onmessage = async ({ func, data }) => {
       }
       else {
         const u:any = await readUser(figma);
+        console.log("USER", u);
         const r:any = await readRoot(figma);
         let payload:any = r;
-        // TODO Check Admin Auth Status
+        // Get user record
+        const registeredUser = await fetch(`http://localhost:54321/functions/v1/api/auth`, {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${process.env.SUPABASE_ANON_KEY}`,
+          },
+          method: 'POST',
+          body: JSON.stringify({ email: u.email })
+        });
+        registeredUser.json().then((r:any) => console.log("REGISTERED", u.email, r));
+        // TODO Handle no data?
+
         if (r.user && r.user[u.id] === undefined) {
           payload.user = { ...r.user, [u.id]: {name: u.name, photoUrl: u.photoUrl, color: u.color} };
         }
