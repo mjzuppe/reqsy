@@ -8,6 +8,7 @@ type LemonSqueezy = {
   id: string;
   license_key: string;
   status: string;
+  expires_at?: string;
 }
 
 type Payload = {
@@ -34,56 +35,98 @@ const lsValidateKey = async (key: string) => {
     headers: {
       // "Accept": "application/json",
       // "Content-Type": "application/x-www-form-urlencoded",
-      "Authorization": `Bearer ${env}` // todo add env
+      "Authorization": `Bearer ${Deno.env.get('LS_TOKEN')}` 
     },
     body: formData,
   });
-  console.log("R", r.json())
+  return r.json();
+}
+
+const lsActivateKey = async (key: string) => {
+  const formData = new FormData();
+  formData.append("license_key", key);
+  formData.append("instance_name", "primary");
+  const r = await fetch("https://api.lemonsqueezy.com/v1/licenses/activate", {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${Deno.env.get('LS_TOKEN')}` 
+    },
+    body: formData,
+});
+  return r.json();
 }
 
 const route = async (req: {pathname: string, method: string, body: any, search: string}) => {
   const { pathname, method, body } = req;
   let payload: Payload = { status: 200, pathname };
 
+const getUser = async (email: string) => {
+  const pg = await connection();
+  const user:QueryArrayResult = await pg.queryArray("SELECT * FROM users WHERE email_figma = $1", email); 
+  if (user.rows.length === 0) return {}; 
+  const id = typeof user.rows[0][0] === "bigint" ? user.rows[0][0].toString() : String(user.rows[0][0]);
+  const email_figma = String(user.rows[0][2]);
+  const trial_end = String(user.rows[0][1]);
+  const ls_id = String(user.rows[0][3]);
+  const license_key = String(user.rows[0][4]);
+  const expires_at = String(user.rows[0][5]);
+  const email_ls = String(user.rows[0][6]);
+  return { id, email_figma, trial_end, ls_id, license_key, expires_at, email_ls };
+}
+
+const tempLicense = "9C210491-E577-4EB7-8F3A-A3A4859DC1C6"
+
   switch (pathname) {
     case "/api/auth": {
-      const testvalidate = await lsValidateKey("9C210491-E577-4EB7-8F3A-A3A4859DC1C6");
-      console.log("TEST", testvalidate)
       if (!body.email) {
         payload = {...payload, status: 422, message: "Email is required", ...{pathname} };
         return payload;
       }
-      const pg = await connection();
-      let user:QueryArrayResult = await pg.queryArray("SELECT * FROM users WHERE email_figma = $1", body.email);  
-      if (user.rows.length === 0) {
+     
+      let user = await getUser(body.email);  
+      // new user
+      if (!user.id) {
         const ts = new Date;
         const trial_end = ts.toISOString();
+        const pg = await connection();
         await pg.queryArray(`INSERT INTO users (email_figma, trial_end) VALUES ('${body.email}', '${trial_end}');`);
-        user = await pg.queryArray("SELECT * FROM users WHERE email_figma = $1", body.email); 
-        const id = typeof user.rows[0][0] === "bigint" ? user.rows[0][0].toString() : String(user.rows[0][0]);
+        user = await getUser(body.email);
+        const { id, email_figma, license_key } = user;
         payload = {...payload, pathname, email_figma: body.email, trial_end, id };
         return payload;
       }
+      
+      // existing user
       else {
-        const id = typeof user.rows[0][0] === "bigint" ? user.rows[0][0].toString() : String(user.rows[0][0]);
-        const email_figma = String(user.rows[0][2]);
-        const trial_end = String(user.rows[0][1]);
-        const license_key = String(user.rows[0][4]);
-        const validateKey = () => 
-
-        payload = {...payload, pathname, id, email_figma, trial_end, id };
+        const { id, email_figma, license_key, trial_end } = user;
+        if (license_key) {
+          const license_key_data = await lsValidateKey(license_key);
+          if (license_key_data?.license_key) {
+            const { id, key, status, expires_at } = license_key_data.license_key;
+            payload = {...payload, ls: {id, license_key: key, status, expires_at}}
+          }
+        }
+        payload = {...payload, pathname, email_figma, trial_end, id };
       }
-      
-
-      
       return payload;
-  
- 
-      break;
     }
     case "/api/activate": {
       // activate a license code
-      break;
+      if (!body.email || !body.license_key) {
+        payload = {...payload, status: 422, message: "email and license_key are required", ...{pathname} };
+        return payload;
+      }
+      const pg = await connection();
+      let user = await getUser(body.email);
+      if (!user) {
+        // TODO throw error
+      }
+      const { license_key, meta } = await lsActivateKey(body.license_key);
+      console.log("LICENSE KEY", license_key, meta);
+      await pg.queryArray(`UPDATE users SET ls_id = '${license_key.id}', ls_license_key = '${license_key.key}', expires_at = '${license_key.expires_at}', email_ls = '${meta.customer_email}' WHERE email_figma = '${body.email}';`); 
+      user = await getUser(body.email);
+      payload = {...payload, pathname, ...user };
+      return payload;
     }
     default: {
       break;
