@@ -12,7 +12,6 @@ const daysRemaining = (futureDate_ts: string) => {
 export const Footer = (props: { db: any, user: any }) => {
     const { db, user } = props;
     const me = db?.user?.[user?.id];
-    console.log(me);
     const view = () => {
         switch (me?.status || "trial-expired") {
             case "pro":

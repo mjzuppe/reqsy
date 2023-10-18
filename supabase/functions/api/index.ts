@@ -122,7 +122,6 @@ const route = async (req: { pathname: string, method: string, body: any, search:
         // TODO throw error
       }
       const { license_key, meta } = await lsActivateKey(body.license_key);
-      console.log("LICENSE KEY", license_key, meta);
       await pg.queryArray(`UPDATE users SET ls_id = '${license_key.id}', ls_license_key = '${license_key.key}', expires_at = '${license_key.expires_at}', email_ls = '${meta.customer_email}' WHERE id_figma = '${body.id_figma}';`);
       user = await getUser(body.id_figma);
       payload = { ...payload, pathname, ...user };

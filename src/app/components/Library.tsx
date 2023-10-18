@@ -12,7 +12,6 @@ export const Library = (props: { db: any }) => {
     const library = db?.library || {};
     const libraryKeys = Object.keys(library).filter((key: any) => library[key].active);
     const tagLabel = (id: any) => {
-        console.log("ID:", id, db.tag[id])
         return db.tag[id] ? db.tag[id].label : "null";
     }
     const handleSelect = (e) => {

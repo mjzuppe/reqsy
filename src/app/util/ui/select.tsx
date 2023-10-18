@@ -9,7 +9,6 @@ interface SelectInput extends DetailedHTMLProps<React.InputHTMLAttributes<HTMLSe
 
 const Select = (props: SelectInput) => {
     const { id, options, defaultValue, placeholder, ...rest } = props;
-    console.log("PLACEHOLDER", placeholder, defaultValue || null)
     return (
         <div className="select">
             <select {...rest} defaultValue={defaultValue || null} id={id}>
