@@ -13,11 +13,11 @@ import { Select } from "../util/ui/select";
 
 
 
-const InspectorItem = (props: {title: string, selectionData: any, db: any, disabled?: boolean, currentViewValue?: string, currentView?: (e:string)=>any}) => {
-    const { title, selectionData, db, disabled, currentView, currentViewValue } = props;
+const InspectorItem = (props: {title: string, selectionData: any, db: any, readOnly: boolean, disabled?: boolean, currentViewValue?: string, currentView?: (e:string)=>any}) => {
+    const { title, selectionData, db, disabled, currentView, currentViewValue, readOnly } = props;
     const [expanded, setExpanded] = useState(false);
     const clickHandler = () => setExpanded(!expanded);
-    const view = { "Condition": <Condition disabled={disabled} currentView={currentView} selectionData={selectionData} db={db} />, "General": <General selectionData={selectionData} db={db} />, "Notes": <Notes disabled={disabled} selectionData={selectionData} currentViewValue={currentViewValue} />, "Behaviors": <Behaviors db={db} selectionData={selectionData} currentViewValue={currentViewValue}/> }[title || "Template"]
+    const view = { "Condition": <Condition disabled={disabled} currentView={currentView} selectionData={selectionData} db={db} />, "General": <General selectionData={selectionData} db={db} />, "Notes": <Notes disabled={disabled} readOnly={readOnly} selectionData={selectionData} currentViewValue={currentViewValue} />, "Behaviors": <Behaviors db={db} selectionData={selectionData} currentViewValue={currentViewValue}/> }[title || "Template"]
     const badgeCount = { "Condition": selectionData.condition.length, "General": selectionData.tag.length, "Notes": selectionData.note.filter((n:any) => n.id === currentViewValue).length, "Behaviors": 0 }[title || "Template"]
     return (
         <div className={`items-list-item ${title !== 'Notes' && "items-border-bottom"}`}>
@@ -112,7 +112,6 @@ export const Inspector = (props: {selectionData:any, db: any, readOnly: boolean}
     const [conditionView, setConditionView] = useState("default");
     const sourceData =  selectionData?.link? selectionData.linkData : selectionData;
     const componentIsLinked = Boolean(selectionData?.link);
-    console.log("LOGIC TEST::", selectionData?.init === '', readOnly)
     return ((selectionData === undefined) || (selectionData.init === '' && readOnly)) ? <NoSelectionView/> : selectionData.init === ''? <NotRegisteredView db={db} /> : (
         <div id="action-container">
             <div style={{ justifyContent: "space-between" }} className="action-container-content">
@@ -129,10 +128,10 @@ export const Inspector = (props: {selectionData:any, db: any, readOnly: boolean}
 
             <div className="action-container-subcontainer">
                 <div className="items-list">
-                    <InspectorItem title="General" selectionData={sourceData} db={db} />
-                    <InspectorItem disabled={componentIsLinked} title="Condition" selectionData={sourceData} db={db} currentView={setConditionView}/>
-                    <InspectorItem disabled={componentIsLinked} title="Behaviors" selectionData={sourceData} db={db} />
-                    <InspectorItem disabled={componentIsLinked} title="Notes" selectionData={sourceData} db={db} currentViewValue={conditionView}/>
+                    <InspectorItem readOnly={readOnly} title="General" selectionData={sourceData} db={db} />
+                    <InspectorItem readOnly={readOnly} disabled={componentIsLinked} title="Condition" selectionData={sourceData} db={db} currentView={setConditionView}/>
+                    <InspectorItem readOnly={readOnly} disabled={componentIsLinked} title="Behaviors" selectionData={sourceData} db={db} />
+                    <InspectorItem readOnly={readOnly} disabled={componentIsLinked} title="Notes" selectionData={sourceData} db={db} currentViewValue={conditionView}/>
                 </div>
             </div>
         </div>
