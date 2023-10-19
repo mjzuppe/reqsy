@@ -6,10 +6,11 @@ import { Support} from "./Support";
 import { Account } from "./Account";
 import { API } from "./API";
 
-export const Settings = () => {
+export const Settings = (props: {user: any}) => {
+    const {user} = props;
     const [currentView, setCurrentView] = useState("Account");
     const submenuClickHandler = (e) => setCurrentView(e);
-    const view:any = {"Account": <Account />, "Support": <Support />, "API": <API/>}[currentView || "Account"];
+    const view:any = {"Account": <Account user={user} />, "Support": <Support user={user} />, "API": <API/>}[currentView || "Account"];
 
     return (
         <div id="action-container">
