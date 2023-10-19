@@ -20,7 +20,7 @@ function App() {
   const [db, setDb] = useState<any>(undefined);
   const [selectionData, setSelectionData] = useState<any>(undefined);
   const [user, setUser] = useState<any>(undefined);
-
+  
   React.useEffect(() => {
     controller({func: 'init', data: {}});
     window.onmessage = async (event) => {
@@ -44,7 +44,6 @@ function App() {
 
 
   }, []);
-
   return (
     <div key={lastUpdated} id="primary-container" className="figma-dark">
       <Header currentView={actionView} setView={setActionView}/>

@@ -104,7 +104,6 @@ const LinkToComponentView = (props: {db: any, setLinkView: (any) => any}) => {
 )
 }
 
-
 export const Inspector = (props: {selectionData:any, db: any}) => {
     const {selectionData, db} = props;
     const label = selectionData?.label;

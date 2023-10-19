@@ -54,6 +54,29 @@ figma.on("selectionchange", async () => {
 figma.ui.onmessage = async ({ func, data }) => {
   switch (func) {
     case 'init':
+
+    // TODO LOAD USER EMAIL
+    // const options = {
+    //   "method": "GET",
+    //   "headers": {
+    //     "Accept": "*/*",
+    //     "Accept-Encoding": "gzip, deflate, br",
+    //     "Accept-Language": "en-US,en;q=0.9",
+    //     "X-Figma-User-Id": "1128692394473232156", // id_figma
+    //     "Referer": "https://www.figma.com/file/CgXKtJouqytfreezP9BPOi/Untitled?type=design&node-id=0-1&mode=design&t=O2ZEhPMkEQkVWLCO-0",
+    //     "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36",
+    //     "Sec-Ch-Ua": "\"Chromium\";v=\"116\", \"Not)A;Brand\";v=\"24\", \"Google Chrome\";v=\"116\"",
+    //     "Sec-Ch-Ua-Mobile": "?0",
+    //     "Sec-Ch-Ua-Platform": "\"macOS\"",
+    //     "Sec-Fetch-Dest": "empty",
+    //     "Sec-Fetch-Mode": "cors",
+    //     "Sec-Fetch-Site": "same-origin",
+    //   }
+    // };
+
+    // const r = await fetch('https://www.figma.com/api/session/state', options).then(r => r.json());
+    // const userEmail = r?.meta?.users[0].email;
+
       if (data.model === 'selection') {
         const root = readRoot(figma);
         const r = await readSelection(figma);
