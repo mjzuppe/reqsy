@@ -41,9 +41,6 @@ function App() {
         setUser(event.data.pluginMessage.user);
       }
     };
-
-
-
   }, []);
   const handleKeydown = (e: any) => {
     // Feature flag at cmd + A

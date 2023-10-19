@@ -8,7 +8,7 @@ export const Action = (props: {currentView: string, db: any, selectionData: any,
     const {db, selectionData, user} = props;
     const {currentView} = props;
     const readOnly = user?.status?.includes("expired")? true : false;
-    const view:any = {"inspector": <Inspector db={db} selectionData={selectionData} />, "meta": <Meta data={db} />, "library": <Library db={db} readOnly={readOnly} />, "settings": <Settings/> }[currentView || "inspector"];
+    const view:any = {"inspector": <Inspector db={db} selectionData={selectionData} readOnly={readOnly} />, "meta": <Meta data={db} />, "library": <Library db={db} readOnly={readOnly} />, "settings": <Settings/> }[currentView || "inspector"];
 
     return (
         <div id="action-container">

@@ -63,6 +63,8 @@ const NotRegisteredView = (props: {db: any}) => {
 }
 
 const RegisterOrLinkView = (props: {db: any, setLinkView: (any)=>any}) => {
+    const {db} = props;
+    const libraryIsEmpty = db.library === undefined || Object.keys(db.library).length === 0;
     const handleLinkViewClick = () => props.setLinkView(true);
     const handleRegisterComponent = async () => {
         await controller({func: 'init', data: {model: 'selection'}});
@@ -70,8 +72,8 @@ const RegisterOrLinkView = (props: {db: any, setLinkView: (any)=>any}) => {
     return(<div id="action-container">
     <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", height: "100%", width: "100%"}} className="action-container-content">
         <div style={{fontWeight: "bold", fontSize: "1.5em", padding: "5px"}}>No data to display</div>
-        <div style={{padding: "5px"}}><Button onClick={handleRegisterComponent} style={{width: "180px"}}>Register as new component</Button></div>
-        <div style={{padding: "5px"}}><Button onClick={handleLinkViewClick} style={{width: "180px"}}>Link to library component</Button></div>
+        <div style={{padding: "5px"}}><Button onClick={handleRegisterComponent} style={{width: "180px"}}>Register as new element</Button></div>
+        {!libraryIsEmpty && <div style={{padding: "5px"}}><Button onClick={handleLinkViewClick} style={{width: "180px"}}>Link to library element</Button></div>}
     </div>
 </div>
 )
@@ -90,7 +92,7 @@ const LinkToComponentView = (props: {db: any, setLinkView: (any) => any}) => {
 
     return(<div id="action-container">
     <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", height: "100%", width: "100%"}} className="action-container-content">
-        <div style={{fontWeight: "bold", fontSize: "1.5em", padding: "5px"}}>Link To Library Component</div>
+        <div style={{fontWeight: "bold", fontSize: "1.5em", padding: "5px"}}>Link To Library Element</div>
 
         <div style={{display: "flex", flexDirection: "column", alignItems: "center", marginTop: "10px"}}>
             <Select defaultValue={Object.keys(db.library)[0]} id={"inspector-link-choose-origin"} options={options} />
@@ -104,13 +106,14 @@ const LinkToComponentView = (props: {db: any, setLinkView: (any) => any}) => {
 )
 }
 
-export const Inspector = (props: {selectionData:any, db: any}) => {
-    const {selectionData, db} = props;
+export const Inspector = (props: {selectionData:any, db: any, readOnly: boolean}) => {
+    const {selectionData, db, readOnly} = props;
     const label = selectionData?.label;
     const [conditionView, setConditionView] = useState("default");
     const sourceData =  selectionData?.link? selectionData.linkData : selectionData;
     const componentIsLinked = Boolean(selectionData?.link);
-    return selectionData === undefined ? <NoSelectionView/> : selectionData.init === ''? <NotRegisteredView db={db} /> : (
+    console.log("LOGIC TEST::", selectionData?.init === '', readOnly)
+    return ((selectionData === undefined) || (selectionData.init === '' && readOnly)) ? <NoSelectionView/> : selectionData.init === ''? <NotRegisteredView db={db} /> : (
         <div id="action-container">
             <div style={{ justifyContent: "space-between" }} className="action-container-content">
                 <div style={{ fontWeight: "bold", fontSize: "1.3em", display: "flex", alignItems: "center" }}>{label || ""}{conditionView === "default"? "" : ` / ${conditionView}`}

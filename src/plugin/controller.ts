@@ -66,7 +66,6 @@ figma.ui.onmessage = async ({ func, data }) => {
       }
       else {
         const u: any = await readUser(figma);
-        figma.ui.postMessage({ user: u });
         const r: any = await readRoot(figma);
         let payload: any = r;
         // Get user record
@@ -94,6 +93,7 @@ figma.ui.onmessage = async ({ func, data }) => {
           payload.user = { ...r.user, [u.id]: { id, id_figma, trial_end, status: userState() } };
         }
         figma.ui.postMessage({ state: { root: payload } });
+        figma.ui.postMessage({ user: payload.user[u.id] });
       }
       break;
     case 'get':
