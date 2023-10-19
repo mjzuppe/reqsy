@@ -22,18 +22,18 @@ figma.on("documentchange", async (event: any) => {
   if (removed) {
     for (const component of removed) {
       if (library[component.id] !== undefined) {
-        await writeRootModel(figma, 'library', component.id, {...library[component.id], active:false});
+        await writeRootModel(figma, 'library', component.id, { ...library[component.id], active: false });
       }
     }
-    await reloadRoot({model: 'library'});
+    await reloadRoot({ model: 'library' });
   }
   else if (created) {
     for (const component of created) {
       if (library[component.id] !== undefined) {
-        await writeRootModel(figma, 'library', component.id, {...library[component.id], active:true});
+        await writeRootModel(figma, 'library', component.id, { ...library[component.id], active: true });
       }
     }
-    await reloadRoot({model: 'library'});
+    await reloadRoot({ model: 'library' });
   }
 
 })
@@ -54,29 +54,6 @@ figma.on("selectionchange", async () => {
 figma.ui.onmessage = async ({ func, data }) => {
   switch (func) {
     case 'init':
-
-    // TODO LOAD USER EMAIL
-    // const options = {
-    //   "method": "GET",
-    //   "headers": {
-    //     "Accept": "*/*",
-    //     "Accept-Encoding": "gzip, deflate, br",
-    //     "Accept-Language": "en-US,en;q=0.9",
-    //     "X-Figma-User-Id": "1128692394473232156", // id_figma
-    //     "Referer": "https://www.figma.com/file/CgXKtJouqytfreezP9BPOi/Untitled?type=design&node-id=0-1&mode=design&t=O2ZEhPMkEQkVWLCO-0",
-    //     "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36",
-    //     "Sec-Ch-Ua": "\"Chromium\";v=\"116\", \"Not)A;Brand\";v=\"24\", \"Google Chrome\";v=\"116\"",
-    //     "Sec-Ch-Ua-Mobile": "?0",
-    //     "Sec-Ch-Ua-Platform": "\"macOS\"",
-    //     "Sec-Fetch-Dest": "empty",
-    //     "Sec-Fetch-Mode": "cors",
-    //     "Sec-Fetch-Site": "same-origin",
-    //   }
-    // };
-
-    // const r = await fetch('https://www.figma.com/api/session/state', options).then(r => r.json());
-    // const userEmail = r?.meta?.users[0].email;
-
       if (data.model === 'selection') {
         const root = readRoot(figma);
         const r = await readSelection(figma);
@@ -85,15 +62,15 @@ figma.ui.onmessage = async ({ func, data }) => {
         // const selectionName = await readSelectionName(figma);
         await initSelection(figma, id, name, type, parent, root);
         figma.ui.postMessage({ selection: r });
-        await reloadRoot({model: 'library'});
+        await reloadRoot({ model: 'library' });
       }
       else {
-        const u:any = await readUser(figma);
+        const u: any = await readUser(figma);
         figma.ui.postMessage({ user: u });
-        const r:any = await readRoot(figma);
-        let payload:any = r;
+        const r: any = await readRoot(figma);
+        let payload: any = r;
         // Get user record
-        let registeredUser:any = await fetch(`http://localhost:54321/functions/v1/api/auth`, {
+        let registeredUser: any = await fetch(`http://localhost:54321/functions/v1/api/auth`, {
           headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${process.env.SUPABASE_ANON_KEY}`,
@@ -102,7 +79,7 @@ figma.ui.onmessage = async ({ func, data }) => {
           body: JSON.stringify({ id_figma: u.id })
         });
         registeredUser = await registeredUser.json();
-              // TODO Handle no data?
+        // TODO Handle no data?
 
         const { id, id_figma, trial_end, status } = registeredUser;
         const userState = () => {
@@ -114,7 +91,7 @@ figma.ui.onmessage = async ({ func, data }) => {
         }
 
         if (r.user && r.user[u.id] === undefined) {
-          payload.user = { ...r.user, [u.id]: {id, id_figma, trial_end, status: userState()} };
+          payload.user = { ...r.user, [u.id]: { id, id_figma, trial_end, status: userState() } };
         }
         figma.ui.postMessage({ state: { root: payload } });
       }
@@ -134,11 +111,11 @@ figma.ui.onmessage = async ({ func, data }) => {
         const root = readRoot(figma);
         const selectionId = await readSelectionId(figma);
         const syncData = await readRootLibraryOne(figma, selectionId);
-        await writeSelection(figma, data.key, data.value, {id: selectionId, root, ...syncData});
+        await writeSelection(figma, data.key, data.value, { id: selectionId, root, ...syncData });
         const selectionMutated = await readSelection(figma);
         figma.ui.postMessage({ selection: selectionMutated });
         if (['label', 'tag'].includes(data.key)) {
-          await reloadRoot({model: 'library'});
+          await reloadRoot({ model: 'library' });
         }
       }
       else {
@@ -153,6 +130,33 @@ figma.ui.onmessage = async ({ func, data }) => {
       else {
         await deleteRootModel(figma, data.model, data.key);
         await reloadRoot(data);
+      }
+      break;
+    case 'test':
+      if (!data.id_figma) console.log("No id_figma");
+      const options = {
+        "method": "GET",
+        "headers": {
+          "Accept": "*/*",
+          "Accept-Encoding": "gzip, deflate, br",
+          "Accept-Language": "en-US,en;q=0.9",
+          "X-Figma-User-Id": data.id_figma,
+          "Sec-Ch-Ua": "\"Chromium\";v=\"116\", \"Not)A;Brand\";v=\"24\", \"Google Chrome\";v=\"116\"",
+          "Sec-Ch-Ua-Mobile": "?0",
+          "Sec-Ch-Ua-Platform": "\"macOS\"",
+          "Sec-Fetch-Dest": "empty",
+          "Sec-Fetch-Mode": "cors",
+          "Sec-Fetch-Site": "same-origin",
+        }
+      };
+      try {
+        let r:any = await fetch('https://www.figma.com/api/session/state', options);
+        r = r.json();
+        const userEmail = r?.meta?.users[0].email;
+        console.log("Testing user email", userEmail)
+      }
+      catch(e) {
+        console.log("Test failed:", e);
       }
       break;
     default:

@@ -19,7 +19,7 @@ function App() {
   const [actionView, setActionView] = useState<string>('inspector');
   const [db, setDb] = useState<any>(undefined);
   const [selectionData, setSelectionData] = useState<any>(undefined);
-  const [user, setUser] = useState<any>(undefined);
+  const [user, setUser] = useState<any>(undefined); // figma user data
   
   React.useEffect(() => {
     controller({func: 'init', data: {}});
@@ -43,9 +43,16 @@ function App() {
     };
 
 
+
   }, []);
+  const handleKeydown = (e: any) => {
+    // Feature flag at cmd + A
+    if(e.metaKey && e.which === 65) {
+      controller({func: 'test', data: {id_figma: user.id }});
+    }
+  }
   return (
-    <div key={lastUpdated} id="primary-container" className="figma-dark">
+    <div onKeyDown={handleKeydown} key={lastUpdated} id="primary-container" className="figma-dark">
       <Header currentView={actionView} setView={setActionView}/>
       <Action selectionData={selectionData} db={db} currentView={actionView} user={user} />
       <Footer user={user} db={db}/>

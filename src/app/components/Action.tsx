@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { KeyboardEvent } from 'react';
 import { Inspector } from './Inspector';
 import { Meta } from './Meta';
 import { Library } from './Library';
