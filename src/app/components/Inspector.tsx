@@ -17,7 +17,7 @@ const InspectorItem = (props: {title: string, selectionData: any, db: any, readO
     const { title, selectionData, db, disabled, currentView, currentViewValue, readOnly } = props;
     const [expanded, setExpanded] = useState(false);
     const clickHandler = () => setExpanded(!expanded);
-    const view = { "Condition": <Condition disabled={disabled} currentView={currentView} selectionData={selectionData} db={db} readOnly={readOnly} />, "General": <General selectionData={selectionData} db={db} readOnly={readOnly} />, "Notes": <Notes disabled={disabled} readOnly={readOnly} selectionData={selectionData} currentViewValue={currentViewValue} />, "Behaviors": <Behaviors db={db} selectionData={selectionData} currentViewValue={currentViewValue}/> }[title || "Template"]
+    const view = { "Condition": <Condition disabled={disabled} currentView={currentView} selectionData={selectionData} db={db} readOnly={readOnly} />, "General": <General selectionData={selectionData} db={db} readOnly={readOnly} />, "Notes": <Notes disabled={disabled} readOnly={readOnly} selectionData={selectionData} currentViewValue={currentViewValue} />, "Behaviors": <Behaviors disabled={disabled} readOnly={readOnly} db={db} selectionData={selectionData} currentViewValue={currentViewValue}/> }[title || "Template"]
     const badgeCount = { "Condition": selectionData.condition.length, "General": selectionData.tag.length, "Notes": selectionData.note.filter((n:any) => n.id === currentViewValue).length, "Behaviors": 0 }[title || "Template"]
     return (
         <div className={`items-list-item ${title !== 'Notes' && "items-border-bottom"}`}>

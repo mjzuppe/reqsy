@@ -38,8 +38,8 @@ const getCurrentChunk = () => {
     return currentChunk
 }
 
-const InputMention = (props: { options: any[], onBlur: (e: any) => any, onInput: (e: any) => any, defaultValue?: string, placeholder?: string, style?: any }) => {
-    const { options, onBlur, onInput, defaultValue, placeholder, ...rest } = props;
+const InputMention = (props: { options: any[], onBlur: (e: any) => any, onInput: (e: any) => any, disabled?: boolean, defaultValue?: string, placeholder?: string, style?: any }) => {
+    const { options, onBlur, onInput, defaultValue, placeholder, disabled, ...rest } = props;
     const optionsLabels = options.map((o: any) => o.label);
 
     // Input box
@@ -136,7 +136,7 @@ const InputMention = (props: { options: any[], onBlur: (e: any) => any, onInput:
         <div style={{ display: "flex", flexDirection: "column" }}>
             <div style={{ display: "grid", placeItems: "flex-start", gridTemplateAreas: "inner-div" }}>
                 {displayPlaceholder ? <div style={{ padding: "1px", width: "130px", gridArea: "inner-div", color: "rgba(255, 255, 255, 0.4)" }}>{placeholder}</div> : ""}
-                <div id={"editable"} ref={inputRef} onKeyDown={handleKeyDown} onInput={handleInput} style={{ padding: "1px", width: "130px", gridArea: "inner-div" }} className="input-mention" onBlur={handleBlur} key={key} contentEditable>{parseTags(value, options)}</div>
+                <div id={"editable"} ref={inputRef} onKeyDown={handleKeyDown} onInput={handleInput} style={{ padding: "1px", width: "130px", gridArea: "inner-div" }} className="input-mention" onBlur={handleBlur} key={key} contentEditable={!disabled}>{parseTags(value, options)}</div>
             </div>
             {
                 openDropdown &&

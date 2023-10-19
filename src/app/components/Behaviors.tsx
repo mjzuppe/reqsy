@@ -14,35 +14,36 @@ const allParametersSet = new Set();
 EventHandlers.forEach((e: any) => allParametersSet.add(e));
 const allParametersOptions = Array.from(allParametersSet).map((p: any) => ({ value: p, label: p })).sort((a, b) => a.label.localeCompare(b.label));
 
-const BehaviorRow = (props: {db:any, handleUpdate: (e:any) => any, behavior?: {key: string, value: string}}) => {
-    const { db, handleUpdate, behavior } = props;
+const BehaviorRow = (props: {db:any, disabled: boolean, readOnly: boolean, handleUpdate: (e:any) => any, behavior?: {key: string, value: string}}) => {
+    const { db, handleUpdate, behavior, disabled, readOnly } = props;
     const [param, setParam] = useState(behavior?.key || "");
     const [value, setValue] = useState(behavior?.value || "");
     const variables = Object.keys(db.variable).map((id:any)=> ({id, ...db.variable[id] }));
 
     const clickHandlerDelete = () => { }; // TODO complete
     return (<div style={{ width: "100%", display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
-        <div style={{width: "45%"}}><TextboxAutocomplete onBlur={()=>handleUpdate({key: param, value})} filter variant="underline" placeholder="Enter parameter" value={param} onInput={(e) => setParam(e.currentTarget.value)} options={allParametersOptions} /></div>
-        <InputMention options={variables} defaultValue={value} onInput={(e:string)=>setValue(e)} onBlur={()=>handleUpdate({key: param, value})} style={{ width: "45%", height: "20px" }} placeholder="Enter value" />
-        <div style={{ display: "flex", justifyContent: "flex-end" }}>
+        <div style={{width: "45%"}}><TextboxAutocomplete disabled={disabled || readOnly} onBlur={()=>handleUpdate({key: param, value})} filter variant="underline" placeholder="Enter parameter" value={param} onInput={(e) => setParam(e.currentTarget.value)} options={allParametersOptions} /></div>
+        <InputMention options={variables} defaultValue={value} onInput={(e:string)=>setValue(e)} onBlur={()=>handleUpdate({key: param, value})} style={{ width: "45%", height: "20px" }} placeholder="Enter value" disabled={disabled || readOnly} />
+        {(!readOnly && !disabled) && <div style={{ display: "flex", justifyContent: "flex-end" }}>
             <Menu danger marginLeft={"-28px"} onClick={() => clickHandlerDelete} options={["delete?"]} trigger={<IconButton><IconEllipsis32 /></IconButton>} />
-        </div>
+        </div>}
     </div>)
 }
 
-const BehaviorRows = (props: {db:any, updateBehavior: (any) => any, isNew, behaviors}) => {
-    const { db, updateBehavior, isNew, behaviors } = props;
+const BehaviorRows = (props: {db:any, disabled: boolean, readOnly: boolean, updateBehavior: (any) => any, isNew, behaviors}) => {
+    const { db, updateBehavior, isNew, behaviors, disabled, readOnly } = props;
     const [newBehaviorRow, setNewBehaviorRow] = useState(false);
     const handleNewBehaviorRow = (v: boolean) => setNewBehaviorRow(!newBehaviorRow);
 
     return (
         <div style={{ width: "100%" }}>
-            <div style={{ display: "flex", justifyContent: "flex-end" }}>
+            {(!disabled && !readOnly) && <div style={{ display: "flex", justifyContent: "flex-end" }}>
                 <PlusMinusToggle value={!newBehaviorRow} onClick={handleNewBehaviorRow} />
-            </div>
+            </div>}
             <div style={{ width: "100%", display: "flex", flexDirection: "column", alignItems: "flex-start", paddingBottom: "10px" }}>
-                {newBehaviorRow && <BehaviorRow db={db} handleUpdate={updateBehavior} />}
-                {behaviors.map((b: any) => <BehaviorRow db={db} behavior={b} handleUpdate={updateBehavior} />)}
+                {(!behaviors.length && (disabled || readOnly)) && <div style={{marginLeft: "5px"}}>No behaviors are set for this element.</div> }
+                {newBehaviorRow && <BehaviorRow db={db} handleUpdate={updateBehavior} disabled={disabled} readOnly={readOnly} />}
+                {behaviors.map((b: any) => <BehaviorRow db={db} behavior={b} handleUpdate={updateBehavior} disabled={disabled} readOnly={readOnly} />)}
             </div>
         </div>
     )
@@ -65,8 +66,8 @@ const SuggestBehavior = (props: { handleCancel: (any) => any }) => <div style={{
     <Button onClick={props.handleCancel} secondary style={{ marginLeft: "5px", fontSize: "10px", height: "20px", lineHeight: "10px" }}>cancel</Button>
 </div>
 
-export const Behaviors = (props: { db: any, selectionData: any, currentViewValue: string, disabled: boolean }) => {
-    const { db, selectionData, currentViewValue, disabled } = props;
+export const Behaviors = (props: { db: any, selectionData: any, currentViewValue: string, disabled: boolean, readOnly: boolean }) => {
+    const { db, selectionData, currentViewValue, disabled, readOnly } = props;
     const currentViewData = currentViewValue || "default";
     const conditionId = selectionData.condition.length? selectionData.condition.filter((c:any)=>c.label === currentViewData)[0].id : "default";
     const isNew = selectionData.behavior.filter((n:any) => n.id === conditionId).length === 0;
@@ -85,7 +86,7 @@ export const Behaviors = (props: { db: any, selectionData: any, currentViewValue
         await controller({ func: "write", data: { model: "selection", key: "behavior", value: payload } })
     }
 
-    const view = displayRows ? <BehaviorRows db={db} updateBehavior={handleUpdateBehavior} isNew={isNew} behaviors={behaviors} /> :
+    const view = (displayRows || disabled || readOnly) ? <BehaviorRows db={db} updateBehavior={handleUpdateBehavior} isNew={isNew} behaviors={behaviors} disabled={disabled} readOnly={readOnly} /> :
         selectBehaviorView ? <SuggestBehavior handleCancel={() => setSelectBehaviorView(false)} /> :
             <CreateBehaviors handleClick={handleCreateClick} />
 
