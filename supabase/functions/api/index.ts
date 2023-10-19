@@ -102,8 +102,8 @@ const route = async (req: { pathname: string, method: string, body: any, search:
         if (license_key) {
           const license_key_data = await lsValidateKey(license_key);
           if (license_key_data?.license_key) {
-            const { status } = license_key_data.license_key;
-            payload = { ...payload, ls: { status } }
+            const { status, expires_at } = license_key_data.license_key;
+            payload = { ...payload, ls: { status, expires_at } }
           }
         }
         payload = { ...payload, pathname, id_figma, trial_end, id };

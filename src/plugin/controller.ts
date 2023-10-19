@@ -59,7 +59,6 @@ figma.ui.onmessage = async ({ func, data }) => {
         const r = await readSelection(figma);
         const selectionData = await readSelectionData(figma);
         const { id, name, type, parent } = selectionData;
-        // const selectionName = await readSelectionName(figma);
         await initSelection(figma, id, name, type, parent, root);
         figma.ui.postMessage({ selection: r });
         await reloadRoot({ model: 'library' });
