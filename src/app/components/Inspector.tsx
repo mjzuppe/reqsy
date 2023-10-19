@@ -17,7 +17,7 @@ const InspectorItem = (props: {title: string, selectionData: any, db: any, readO
     const { title, selectionData, db, disabled, currentView, currentViewValue, readOnly } = props;
     const [expanded, setExpanded] = useState(false);
     const clickHandler = () => setExpanded(!expanded);
-    const view = { "Condition": <Condition disabled={disabled} currentView={currentView} selectionData={selectionData} db={db} />, "General": <General selectionData={selectionData} db={db} />, "Notes": <Notes disabled={disabled} readOnly={readOnly} selectionData={selectionData} currentViewValue={currentViewValue} />, "Behaviors": <Behaviors db={db} selectionData={selectionData} currentViewValue={currentViewValue}/> }[title || "Template"]
+    const view = { "Condition": <Condition disabled={disabled} currentView={currentView} selectionData={selectionData} db={db} />, "General": <General selectionData={selectionData} db={db} readOnly={readOnly} />, "Notes": <Notes disabled={disabled} readOnly={readOnly} selectionData={selectionData} currentViewValue={currentViewValue} />, "Behaviors": <Behaviors db={db} selectionData={selectionData} currentViewValue={currentViewValue}/> }[title || "Template"]
     const badgeCount = { "Condition": selectionData.condition.length, "General": selectionData.tag.length, "Notes": selectionData.note.filter((n:any) => n.id === currentViewValue).length, "Behaviors": 0 }[title || "Template"]
     return (
         <div className={`items-list-item ${title !== 'Notes' && "items-border-bottom"}`}>
@@ -122,7 +122,7 @@ export const Inspector = (props: {selectionData:any, db: any, readOnly: boolean}
                     <div style={{ display: "flex", alignItems: "center"}}>
                      {componentIsLinked && <div style={{ padding: "3px", borderRadius: "4px", backgroundColor: "rgba(256, 256, 256, 0.2)", marginLeft: "5px" }}>{selectionData.linkData.label}</div>}
                     </div>
-                    <Menu marginLeft={"-15%"} onClick={(e) => console.log("TARGET:", e)} options={["delete?"]} trigger={<IconButton><IconEllipsis32 /></IconButton>} />
+                    {!readOnly && <Menu marginLeft={"-15%"} onClick={(e) => console.log("TARGET:", e)} options={["delete?"]} trigger={<IconButton><IconEllipsis32 /></IconButton>} />}
                 </div>
             </div>
 

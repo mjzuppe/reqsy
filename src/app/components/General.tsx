@@ -7,8 +7,8 @@ import { TagIcon16 } from "../util/ui/svg";
 import { controller } from "../functions/utils";
 
 
-export const General = (props: { selectionData: any, db: any }) => {
-    const { selectionData, db } = props;
+export const General = (props: { selectionData: any, db: any, readOnly: boolean }) => {
+    const { selectionData, db, readOnly } = props;
     const tagsObject = db.tag || {};
     const libraryObject = db.library || {};
     const options: Array<TextboxAutocompleteOption> = Object.keys(tagsObject).map((key: string) => ({ value: key, label: tagsObject[key].label }))
@@ -35,14 +35,14 @@ export const General = (props: { selectionData: any, db: any }) => {
                 <div style={{ marginLeft: "3px", marginRight: "1px" }}>
                     <IconLayerText16 />
                 </div>
-                <TextInput invalidlist={invalidLabels(label)} onblur={handleLabelChange} defaultValue={label || ""} placeholder="enter a label" />
+                <TextInput disabled={readOnly} invalidlist={invalidLabels(label)} onblur={handleLabelChange} defaultValue={label || ""} placeholder="enter a label" />
             </div>
             <div style={{ display: "flex", flexDirection: "row", marginLeft: "5px", width: "100%" }}>
                 <div style={{ marginTop: "10px" }}><TagIcon16 /></div>
                 <Select unstyled
                     defaultValue={tag.length ? tag.map((t: string) => ({ value: t, label: tagsObject[t].label })) : []}
-                    isDisabled={currentTag.length > 2}
-                    placeholder="select tags"
+                    isDisabled={readOnly || (currentTag.length > 2)}
+                    placeholder={readOnly? "No tags are associated with this element." : "select tags"}
                     styles={{
                         clearIndicator(base, props) { return { ...base, display: "none" }; },
                         dropdownIndicator(base, props) { return { ...base, display: "none" }; },
