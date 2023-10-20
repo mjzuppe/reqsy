@@ -134,7 +134,7 @@ const route = async (req: { pathname: string, method: string, body: any, search:
         return payload;
       }
       const pg = await connection();
-      await pg.queryArray(`INSERT INTO support (email, category, text) VALUES ('${body.email}', '${body.category}', '${body.text}');`);
+      await pg.queryArray(`INSERT INTO support_ticket (email, category, text, user_id) VALUES ('${body.email}', '${body.category}', '${body.text}', '${body.user_id}');`);
       break;
     }
     default: {

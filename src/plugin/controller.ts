@@ -131,6 +131,18 @@ figma.ui.onmessage = async ({ func, data }) => {
         await reloadRoot(data);
       }
       break;
+    case 'support':
+      const { category, email, text } = data;
+      const u: any = await readUser(figma);
+      let supportCall: any = await fetch(`http://localhost:54321/functions/v1/api/support`, {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${process.env.SUPABASE_ANON_KEY}`,
+          },
+          method: 'POST',
+          body: JSON.stringify({ user_id: u.id, category, email, text })
+        });
+      break;
     case 'test':
       if (!data.id_figma) console.log("No id_figma");
       const options = {

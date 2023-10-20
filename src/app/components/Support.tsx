@@ -1,6 +1,7 @@
 import React, {useState} from "react";
 import { Select } from "../util/ui/select";
 import { Button } from "figma-ui-kit";
+import { controller } from "../functions/utils";
 
 export const Support = (props: { user: any }) => {
    const [category, setCategory] = useState("General");
@@ -18,7 +19,7 @@ export const Support = (props: { user: any }) => {
       if (message.length < 5) invalid = [...invalid, "message"];
       console.log("INVALID", invalid)
       if (invalid.length > 0) return setErrors(invalid);
-      // API FETCH
+      controller({func: "support", data: {category, email, text:message}})
       setComplete(true);
    }  
 
