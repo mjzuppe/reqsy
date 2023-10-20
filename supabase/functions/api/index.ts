@@ -129,6 +129,7 @@ const route = async (req: { pathname: string, method: string, body: any, search:
       return payload;
     }
     default: {
+      payload = { ...payload, status: 404, message: "Invalid route", ...{ pathname } };
       break;
     }
   }
