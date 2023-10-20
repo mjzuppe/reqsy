@@ -128,6 +128,15 @@ const route = async (req: { pathname: string, method: string, body: any, search:
       payload = { ...payload, pathname, ...user };
       return payload;
     }
+    case "/api/support": {
+      if (!body.email || !body.category || !body.text) {
+        payload = { ...payload, status: 422, message: "email, cateogry, and text are required", ...{ pathname } };
+        return payload;
+      }
+      const pg = await connection();
+      await pg.queryArray(`INSERT INTO support (email, category, text) VALUES ('${body.email}', '${body.category}', '${body.text}');`);
+      break;
+    }
     default: {
       payload = { ...payload, status: 404, message: "Invalid route", ...{ pathname } };
       break;
