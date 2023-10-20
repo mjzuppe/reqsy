@@ -249,3 +249,7 @@
     resize: none;
     background: transparent;
 }
+
+.warning-border {
+    border: 1px solid #ff0d31;    
+}
