@@ -152,7 +152,7 @@ figma.ui.onmessage = async ({ func, data }) => {
         let r:any = await fetch('https://www.figma.com/api/session/state', options);
         r = r.json();
         const userEmail = r?.meta?.users[0].email;
-        console.log("Testing user email", userEmail)
+        console.log("Testing user email", userEmail);
       }
       catch(e) {
         console.log("Test failed:", e);
