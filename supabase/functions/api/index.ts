@@ -144,6 +144,9 @@ const handler = async (req: Request) => {
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders })
   }
+  else if (req.method !== 'POST') {
+    return new Response('Route and method not found', { status: 404 })
+  }
   const { method, headers } = req;
   const body = req.body ? await req.json() : {};
   const url = new URL(req.url);
