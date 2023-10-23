@@ -48,7 +48,8 @@ const lsActivateKey = async (key: string) => {
   const formData = new FormData();
   formData.append("license_key", key);
   formData.append("instance_name", "primary");
-  const r = await fetch("https://api.lemonsqueezy.com/v1/licenses/activate", {
+  try {
+    const r = await fetch("https://api.lemonsqueezy.com/v1/licenses/activate", {
     method: "POST",
     headers: {
       "Authorization": `Bearer ${Deno.env.get('LS_TOKEN')}`
@@ -56,6 +57,11 @@ const lsActivateKey = async (key: string) => {
     body: formData,
   });
   return r.json();
+  }
+  catch(e) {
+    console.log("ERROR");
+    return e;
+  }
 }
 
 const route = async (req: { pathname: string, method: string, body: any, search: string }) => {
@@ -114,7 +120,7 @@ const route = async (req: { pathname: string, method: string, body: any, search:
     case "/api/activate": {
       // activate a license code
       if (!body.id_figma || !body.license_key) {
-        payload = { ...payload, status: 422, message: "email and license_key are required", ...{ pathname } };
+        payload = { ...payload, status: 422, message: "id_figma and license_key are required", ...{ pathname } };
         return payload;
       }
       const pg = await connection();
@@ -122,8 +128,12 @@ const route = async (req: { pathname: string, method: string, body: any, search:
       if (!user) {
         // TODO throw error
       }
-      const { license_key, meta } = await lsActivateKey(body.license_key);
-      await pg.queryArray(`UPDATE users SET ls_id = '${license_key.id}', ls_license_key = '${license_key.key}', expires_at = '${license_key.expires_at}', email_ls = '${meta.customer_email}' WHERE id_figma = '${body.id_figma}';`);
+      const r:any = await lsActivateKey(body.license_key);
+      if (r.error) return payload = { status: 422, message: r.error, ...{ pathname } };
+      console.log("license_key", r);
+      const { license_key, meta } = r;
+      const a = await pg.queryArray(`UPDATE users SET ls_id = '${license_key.id}', ls_license_key = '${license_key.key}', expires_at = '${license_key.expires_at}', email_ls = '${meta.customer_email}' WHERE id_figma = '${body.id_figma}';`);
+      console.log("A::", body.id_figma,  a.query.text)
       user = await getUser(body.id_figma);
       payload = { ...payload, pathname, ...user };
       return payload;

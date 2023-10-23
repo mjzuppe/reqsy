@@ -100,7 +100,6 @@ figma.ui.onmessage = async ({ func, data }) => {
         }
         
         figma.ui.postMessage({ state: { root: payload } });
-        figma.ui.postMessage({ user: registeredUser.error ? {...payload.user[u.id], status: null} : payload.user[u.id] });
       }
       break;
     case 'get':
@@ -108,10 +107,7 @@ figma.ui.onmessage = async ({ func, data }) => {
       else getNodeById(figma, data.key);
       break;
     case 'read':
-      // if (data.model === 'selection') {
-      //   if (!data.key) throw new Error('failure to select, key required');
-      //   return await readElementOne(figma, data.key);
-      // }
+      // TODO obsolete?
       break;
     case 'write':
       if (data.model === 'selection') {
@@ -141,20 +137,23 @@ figma.ui.onmessage = async ({ func, data }) => {
       break;
     case 'activate':
       const { license_key } = data;
-      const { id_figma } = await readUser(figma);
+      const { id } = await readUser(figma);
+      try {
       let activateCall: any = await fetch(`${process.env.API_URI}/functions/v1/api/activate`, {
           headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${process.env.SUPABASE_ANON_KEY}`,
           },
           method: 'POST',
-          body: JSON.stringify({ id_figma, license_key })
+          body: JSON.stringify({ id_figma: id, license_key })
         });
-        console.log("ACTIVATE CALL", activateCall);
-        if (false) await reloadRoot(data); // TODO UPDATE
-        else {
-          //handle error to return
-        }
+        await reloadRoot(data);
+      }
+      catch(e) {
+        return ({error: e.message});
+      }
+   
+        
       break;
     case 'support':
       const { category, email, text } = data;
