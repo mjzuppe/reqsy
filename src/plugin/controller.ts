@@ -84,7 +84,6 @@ figma.ui.onmessage = async ({ func, data }) => {
           console.log("Error fetching user", e);
           registeredUser = { error: e };
         }
-        // TODO Handle no data?
         if (!registeredUser.error) {
           const { id, id_figma, trial_end, status } = registeredUser;
           const userState = () => {
@@ -139,6 +138,23 @@ figma.ui.onmessage = async ({ func, data }) => {
         await deleteRootModel(figma, data.model, data.key);
         await reloadRoot(data);
       }
+      break;
+    case 'activate':
+      const { license_key } = data;
+      const { id_figma } = await readUser(figma);
+      let activateCall: any = await fetch(`http://localhost:54321/functions/v1/api/activate`, {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${process.env.SUPABASE_ANON_KEY}`,
+          },
+          method: 'POST',
+          body: JSON.stringify({ id_figma, license_key })
+        });
+        console.log("ACTIVATE CALL", activateCall);
+        if (false) await reloadRoot(data); // TODO UPDATE
+        else {
+          //handle error to return
+        }
       break;
     case 'support':
       const { category, email, text } = data;
