@@ -70,7 +70,7 @@ figma.ui.onmessage = async ({ func, data }) => {
         // Get user record
         let registeredUser: any = null;
         try {
-          registeredUser = await fetch(`http://localhost:54321/functions/v1/api/auth`, {
+          registeredUser = await fetch(`${process.env.API_URI}/functions/v1/api/auth`, {
             headers: {
               'Content-Type': 'application/json',
               'Authorization': `Bearer ${process.env.SUPABASE_ANON_KEY}`,
@@ -142,7 +142,7 @@ figma.ui.onmessage = async ({ func, data }) => {
     case 'activate':
       const { license_key } = data;
       const { id_figma } = await readUser(figma);
-      let activateCall: any = await fetch(`http://localhost:54321/functions/v1/api/activate`, {
+      let activateCall: any = await fetch(`${process.env.API_URI}/functions/v1/api/activate`, {
           headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${process.env.SUPABASE_ANON_KEY}`,
@@ -159,7 +159,7 @@ figma.ui.onmessage = async ({ func, data }) => {
     case 'support':
       const { category, email, text } = data;
       const u: any = await readUser(figma);
-      let supportCall: any = await fetch(`http://localhost:54321/functions/v1/api/support`, {
+      let supportCall: any = await fetch(`${process.env.API_URI}/functions/v1/api/support`, {
           headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${process.env.SUPABASE_ANON_KEY}`,
