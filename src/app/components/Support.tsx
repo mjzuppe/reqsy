@@ -11,13 +11,11 @@ export const Support = (props: { user: any }) => {
    const [errors, setErrors] = useState([] as string[]);
 
    const handleSubmit = () => {
-      console.log("SUBMIT", {category, email, message});
       const emailRegex = new RegExp(/^[^\s@]+@[^\s@]+\.[^\s@]+$/);
       let invalid = [];
       const validEmail = emailRegex.test(email);
       if (!validEmail) invalid = ["email"];
       if (message.length < 5) invalid = [...invalid, "message"];
-      console.log("INVALID", invalid)
       if (invalid.length > 0) return setErrors(invalid);
       controller({func: "support", data: {category, email, text:message}})
       setComplete(true);

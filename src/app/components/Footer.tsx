@@ -12,7 +12,11 @@ const daysRemaining = (futureDate_ts: string) => {
 export const Footer = (props: { db: any, user: any }) => {
     const { user } = props;
     const view = () => {
-        switch (user?.status || "trial-expired") {
+        switch (!user ? undefined : user.status || null) {
+            case undefined:
+                return <></>
+            case null:
+                return <> <Text><strong>Can't reach server.</strong> Check connection and try again.</Text></>
             case "pro":
                 return <> <Text>Account: <strong>Pro</strong></Text></>
             case "trial":

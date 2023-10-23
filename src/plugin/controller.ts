@@ -68,31 +68,40 @@ figma.ui.onmessage = async ({ func, data }) => {
         const r: any = await readRoot(figma);
         let payload: any = r;
         // Get user record
-        let registeredUser: any = await fetch(`http://localhost:54321/functions/v1/api/auth`, {
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${process.env.SUPABASE_ANON_KEY}`,
-          },
-          method: 'POST',
-          body: JSON.stringify({ id_figma: u.id })
-        });
-        registeredUser = await registeredUser.json();
+        let registeredUser: any = null;
+        try {
+          registeredUser = await fetch(`http://localhost:54321/functions/v1/api/auth`, {
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${process.env.SUPABASE_ANON_KEY}`,
+            },
+            method: 'POST',
+            body: JSON.stringify({ id_figma: u.id })
+          });
+          registeredUser = await registeredUser.json();
+        }
+        catch(e) {
+          console.log("Error fetching user", e);
+          registeredUser = { error: e };
+        }
         // TODO Handle no data?
-
-        const { id, id_figma, trial_end, status } = registeredUser;
-        const userState = () => {
-          const trial = new Date(trial_end);
-          if (registeredUser.ls && registeredUser.ls.status === 'active') return "pro";
-          else if (registeredUser.ls && registeredUser.ls.status !== 'active') return "pro-expired";
-          else if ((trial.valueOf() - Date.now()) < 0) return "trial-expired";
-          else return "trial";
+        if (!registeredUser.error) {
+          const { id, id_figma, trial_end, status } = registeredUser;
+          const userState = () => {
+            const trial = new Date(trial_end);
+            if (registeredUser.ls && registeredUser.ls.status === 'active') return "pro";
+            else if (registeredUser.ls && registeredUser.ls.status !== 'active') return "pro-expired";
+            else if ((trial.valueOf() - Date.now()) < 0) return "trial-expired";
+            else return "trial";
+          }
+  
+          if (r.user && r.user[u.id] === undefined) {
+            payload.user = { ...r.user, [u.id]: { id, id_figma, trial_end, status: userState() } };
+          }
         }
-
-        if (r.user && r.user[u.id] === undefined) {
-          payload.user = { ...r.user, [u.id]: { id, id_figma, trial_end, status: userState() } };
-        }
+        
         figma.ui.postMessage({ state: { root: payload } });
-        figma.ui.postMessage({ user: payload.user[u.id] });
+        figma.ui.postMessage({ user: registeredUser.error ? {...payload.user[u.id], status: null} : payload.user[u.id] });
       }
       break;
     case 'get':
