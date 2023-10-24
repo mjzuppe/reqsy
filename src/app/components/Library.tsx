@@ -19,6 +19,10 @@ export const Library = (props: { db: any, readOnly: boolean }) => {
         controller({ func: 'get', data: { key } });
     }
 
+    const handleDelete = async (i) => {
+        await controller({ func: 'delete', data: { model: 'library', key: libraryKeys[i] } });
+    }
+
     return (
         <div id="action-container">
             <div className="action-container-content">
@@ -55,7 +59,7 @@ export const Library = (props: { db: any, readOnly: boolean }) => {
                                         <div style={{ alignItems: "center", width: "100%", display: "flex", justifyContent: "space-between" }}>
                                             <div className="flex-center" title="source component" style={{ padding: "0 10px 0 10px" }}><IconLayerComponent16 /><p>{type || "null"}</p></div>
                                             <div className="flex-center" title="frame location" style={{ padding: "0 10px 0 10px" }}><IconLayerFrame16 /><p>{location || "null"}</p></div>
-                                            <Menu marginLeft={"-7%"} onClick={(e) => console.log("TARGET:", e)} options={readOnly? [ "share"]:["edit", "share", "delete"]} trigger={<IconButton><IconEllipsis32 /></IconButton>} />
+                                            {Boolean(!readOnly) && <Menu marginLeft={"-20px"} onClick={()=>handleDelete(i)} options={["delete"]} trigger={<IconButton><IconEllipsis32 /></IconButton>} />}
                                         </div>
                                         {Boolean(tag.length) && <div title="associated tags" style={{ width: "100%", padding: "0 10px 0 10px" }}><div className="flex-center"> <TagIcon16 />{tag.map((t:string, i: number) => <p style={{ padding: "4px", backgroundColor: "#606060",marginLeft: i === 0? "2px" : "10px", borderRadius: "2px" }}>{tagLabel(t)}</p>)}</div>  </div>}
                                     </div>
