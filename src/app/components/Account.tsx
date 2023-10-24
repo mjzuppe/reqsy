@@ -12,6 +12,7 @@ export const Account = (props: {user: any}) => {
     const handleSubmit = async (e:any) => {
         const { id_figma } = user;
         try {
+        setProcessing(true);
         let activateCall: any = await fetch(`${process.env.API_URI}/functions/v1/api/activate`, {
             headers: {
               'Content-Type': 'application/json',
@@ -26,6 +27,7 @@ export const Account = (props: {user: any}) => {
         catch(e) {
           setError(e.message);
         }
+        setProcessing(false);
         // TODO - handle reload after activation
        
     }

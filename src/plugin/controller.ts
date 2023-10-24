@@ -100,6 +100,7 @@ figma.ui.onmessage = async ({ func, data }) => {
         }
         
         figma.ui.postMessage({ state: { root: payload } });
+        figma.ui.postMessage({ user: payload.user[u.id] });
       }
       break;
     case 'get':
