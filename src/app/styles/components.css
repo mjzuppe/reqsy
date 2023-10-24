@@ -95,6 +95,16 @@
     font-weight: bold;
 }
 
+.library-label {
+    margin-left: 5px;
+    font-weight: bold;
+    
+}
+
+.library-label:hover {
+        color: #0d99ff;
+}
+
 .items-list-item-alwaysdisplay {
     width: 100%;
     display: flex;

@@ -39,7 +39,7 @@ export const Library = (props: { db: any, readOnly: boolean }) => {
                             return (
                                 <div key={`library-item-${key}`} className="items-list-item items-border-bottom">
                                     <div className="items-list-item-alwaysdisplay">
-                                        <div id={`library-item-key-${key}`} onClick={handleSelect} className="label">{label}</div>
+                                        <div id={`library-item-key-${key}`} onClick={handleSelect} className="library-label">{label}</div>
                                         {
                                             !expanded.includes(i) ?
                                                 <div>
