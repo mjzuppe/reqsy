@@ -1,5 +1,6 @@
 import React from 'react';
 import { Text, Button } from 'figma-ui-kit';
+import packageJson from '../../../package.json';
 
 const daysRemaining = (futureDate_ts: string) => {
     const endDate = new Date(futureDate_ts);
@@ -31,6 +32,7 @@ export const Footer = (props: { db: any, user: any }) => {
     return (
         <div id="footer-container">
            {view()}
+           {Boolean(user) && <Text style={{fontSize: ".8em"}}>V{packageJson.version}</Text>}
         </div>
     )
 }

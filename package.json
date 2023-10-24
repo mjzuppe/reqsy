@@ -1,7 +1,7 @@
 {
-  "name": "figreq",
-  "version": "0.5.0",
-  "description": "PRD and requirements documentation management for Figma",
+  "name": "reqsy",
+  "version": "1.0.0",
+  "description": "PRD and technical requirements documentation management for Figma",
   "license": "ISC",
   "scripts": {
     "build": "webpack --mode=production --target=es6",
