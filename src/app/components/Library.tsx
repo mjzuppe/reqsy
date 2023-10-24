@@ -7,10 +7,14 @@ import { controller } from "../functions/utils";
 export const Library = (props: { db: any, readOnly: boolean }) => {
     const { db, readOnly } = props;
     const [expanded, setExpanded] = useState([]);
+    const [search, setSearch] = useState("");
+
+    const handleSearch = (e) => setSearch(e.target.value);
     const clickHandlerAdd = (i) => setExpanded([...expanded, i]);
     const clickHandlerRemove = (i) => setExpanded(expanded.filter((e) => e !== i));
     const library = db?.library || {};
     const libraryKeys = Object.keys(library).filter((key: any) => library[key].active);
+    const libraryFiltered = search ? libraryKeys.filter((key: string) => library[key].label.toLowerCase().includes(search.toLowerCase())) : libraryKeys;
     const tagLabel = (id: any) => {
         return db.tag[id] ? db.tag[id].label : "null";
     }
@@ -29,12 +33,12 @@ export const Library = (props: { db: any, readOnly: boolean }) => {
                 <p><strong>Library.</strong> Manage registered elements.</p>
             </div>
             <div className="action-container-search">
-                <SearchTextbox value={""} placeholder="search names" />
+                <SearchTextbox onInput={handleSearch} value={search} clearOnEscapeKeyDown placeholder="search elements" />
             </div>
             <div className="action-container-subcontainer">
                 <div className="items-list">
                     {
-                        libraryKeys.map((key: any, i: number) => {
+                        libraryFiltered.map((key: any, i: number) => {
                             const { label, tag, location, type } = library[key];
                             return (
                                 <div key={`library-item-${key}`} className="items-list-item items-border-bottom">
