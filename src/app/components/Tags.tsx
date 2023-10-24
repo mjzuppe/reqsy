@@ -39,8 +39,8 @@ export const Tags = (props) => {
     const invalidTags = (current: string) => Object.values(tagsObject).map((tagData: any) => tagData.label).filter((tagLabel: string) => tagLabel !== current);
 
     return (
-        <>
-            <div style={{ display: "flex", justifyContent: "flex-end" }}>
+        <div style={{overflowX: "hidden" }}>
+            <div style={{ display: "flex", justifyContent: "flex-end"}}>
                 <PlusMinusToggle value={!newTagOpen} onClick={clickHandlerAdd} />
             </div>
             <div className="items-list">
@@ -69,6 +69,6 @@ export const Tags = (props) => {
                     </div>
                 )}
             </div>
-        </>
+        </div>
     )
 }

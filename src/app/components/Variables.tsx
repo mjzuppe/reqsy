@@ -49,7 +49,7 @@ export const Variables = (props) => {
     }
 
     return (
-        <>
+        <div style={{overflowX: "hidden" }}>
             <div style={{ display: "flex", justifyContent: "flex-end" }}>
                 <PlusMinusToggle value={!newVariableOpen} onClick={clickHandlerAdd} />
             </div>
@@ -114,6 +114,6 @@ export const Variables = (props) => {
                 }
                 )}
             </div>
-        </>
+        </div>
     )
 }
