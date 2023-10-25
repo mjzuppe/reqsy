@@ -86,6 +86,7 @@ figma.ui.onmessage = async ({ func, data }) => {
         }
         if (!registeredUser.error) {
           const { id, id_figma, trial_end, status } = registeredUser;
+
           const userState = () => {
             const trial = new Date(trial_end);
             if (registeredUser.ls && registeredUser.ls.status === 'active') return "pro";
