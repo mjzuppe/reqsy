@@ -20,13 +20,13 @@ export const Footer = (props: { db: any, user: any }) => {
             case null:
                 return <> <Text><strong>Can't reach server.</strong> Check connection and try again.</Text></>
             case "pro":
-                return <> <Text>Account: <strong>Pro</strong></Text></>
+                return <> <Text><strong>Pro</strong></Text></>
             case "trial":
-                return <> <Text>Account: <strong>Trial ({String(daysRemaining(user.trial_end))} days left)</strong></Text>{" "}<Button style={{ height: "16px", font: ".5em", lineHeight: "12px" }} secondary>Upgrade</Button> </>
+                return <> <Text><strong>Trial ({String(daysRemaining(user.trial_end))} days left)</strong></Text>{" "}<Button style={{ height: "16px", font: ".5em", lineHeight: "12px" }} secondary>Upgrade</Button> </>
             case "pro-expired":
-                return <> <Text>Account: <strong>Pro Expired (view only)</strong></Text>{" "}<a target='_blank' href={process.env.CHECKOUT_URI}><Button style={{ height: "16px", font: ".5em", lineHeight: "12px" }} secondary>Upgrade</Button></a> </>
+                return <> <Text><strong>Pro Expired (view only)</strong></Text>{" "}<a target='_blank' href={process.env.CHECKOUT_URI}><Button style={{ height: "16px", font: ".5em", lineHeight: "12px" }} secondary>Upgrade</Button></a> </>
             case "trial-expired":
-                return <> <Text>Account: <strong>Trial Expired (view only)</strong></Text>{" "}<a target='_blank' href={process.env.CHECKOUT_URI}><Button style={{ height: "16px", font: ".5em", lineHeight: "12px" }} secondary>Upgrade</Button></a> </>
+                return <> <Text><strong>Trial Expired (view only)</strong></Text>{" "}<a target='_blank' href={process.env.CHECKOUT_URI}><Button style={{ height: "16px", font: ".5em", lineHeight: "12px" }} secondary>Upgrade</Button></a> </>
         }
     }
     return (
