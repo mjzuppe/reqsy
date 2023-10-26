@@ -41,7 +41,7 @@ const BehaviorRows = (props: {db:any, disabled: boolean, readOnly: boolean, upda
                 <PlusMinusToggle value={!newBehaviorRow} onClick={handleNewBehaviorRow} />
             </div>}
             <div style={{ width: "100%", display: "flex", flexDirection: "column", alignItems: "flex-start", paddingBottom: "10px" }}>
-                {(!behaviors.length && (disabled || readOnly)) && <div style={{marginLeft: "5px"}}>No behaviors are set for this element.</div> }
+                {(!behaviors.length && (disabled || readOnly)) && <div style={{marginLeft: "10px"}}>No behaviors are set for this element.</div> }
                 {newBehaviorRow && <BehaviorRow db={db} handleUpdate={updateBehavior} disabled={disabled} readOnly={readOnly} />}
                 {behaviors.map((b: any) => <BehaviorRow db={db} behavior={b} handleUpdate={updateBehavior} disabled={disabled} readOnly={readOnly} />)}
             </div>

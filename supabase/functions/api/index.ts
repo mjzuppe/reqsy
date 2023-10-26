@@ -1,5 +1,6 @@
 import * as postgres from "https://deno.land/x/postgres@v0.14.2/mod.ts";
 import { QueryArrayResult, QueryResult } from "https://deno.land/x/postgres@v0.17.0/query/query.ts";
+import { load } from "https://deno.land/std@0.204.0/dotenv/mod.ts";
 
 // Follow this setup guide to integrate the Deno language server with your editor:
 // https://deno.land/manual/getting_started/setup_your_environment
@@ -9,7 +10,7 @@ type LemonSqueezy = {
   id?: string;
   license_key?: string;
   status: string;
-  expires_at?: string;
+  renews_at?: string;
 }
 
 type Payload = {
@@ -29,6 +30,17 @@ const connection = async (): Promise<postgres.PoolClient> => {
   return await pool.connect();
 }
 
+const lsRetrieveSubRenewal = async (ls_email: string) => {
+  console.log("EMAIL::", Deno.env.get('LS_TOKEN'),  ls_email.split("+").join("%2b"))
+  const r = await fetch(`https://api.lemonsqueezy.com/v1/subscriptions?filter[user_email]=${ls_email.split("+").join("%2b")}`, {
+    method: "GET",
+    headers: {
+      "Authorization": `Bearer ${Deno.env.get('LS_TOKEN')}`
+    },
+  });
+  return r.json();
+}
+
 const lsValidateKey = async (key: string) => {
   const formData = new FormData();
   formData.append("license_key", key);
@@ -45,6 +57,7 @@ const lsValidateKey = async (key: string) => {
 }
 
 const lsActivateKey = async (key: string) => {
+  console.log("TEST!!!::", `Bearer ${Deno.env.get('LS_TOKEN')}`)
   const formData = new FormData();
   formData.append("license_key", key);
   formData.append("instance_name", "primary");
@@ -77,9 +90,9 @@ const route = async (req: { pathname: string, method: string, body: any, search:
     const trial_end = String(user.rows[0][1]);
     const ls_id = String(user.rows[0][3]);
     const license_key = String(user.rows[0][4]);
-    const expires_at = String(user.rows[0][5]);
+    const renews_at = String(user.rows[0][5]);
     const email_ls = String(user.rows[0][6]);
-    return { id, id_figma, trial_end, ls_id, license_key, expires_at, email_ls };
+    return { id, id_figma, trial_end, ls_id, license_key, renews_at, email_ls };
   }
 
   switch (pathname) {
@@ -109,8 +122,8 @@ const route = async (req: { pathname: string, method: string, body: any, search:
         if (license_key) {
           const license_key_data = await lsValidateKey(license_key);
           if (license_key_data?.license_key) {
-            const { status, expires_at } = license_key_data.license_key;
-            payload = { ...payload, ls: { status, expires_at }, license_key }
+            const { status, renews_at } = license_key_data.license_key;
+            payload = { ...payload, ls: { status, renews_at }, license_key }
           }
         }
         payload = { ...payload, pathname, id_figma, trial_end, id };
@@ -130,9 +143,12 @@ const route = async (req: { pathname: string, method: string, body: any, search:
       }
       const r:any = await lsActivateKey(body.license_key);
       if (r.error) return payload = { status: 422, message: r.error, ...{ pathname } };
-      console.log("license_key", r);
+      console.log("R::", r) ;
       const { license_key, meta } = r;
-      const a = await pg.queryArray(`UPDATE users SET ls_id = '${license_key.id}', ls_license_key = '${license_key.key}', expires_at = '${license_key.expires_at}', email_ls = '${meta.customer_email}' WHERE id_figma = '${body.id_figma}';`);
+      const subscription:any = await lsRetrieveSubRenewal(meta.customer_email);
+      console.log("SUBSCRIPTION::", subscription) 
+      const renews_at:string = !subscription || subscription.data.length === 0? null : subscription?.data[subscription.data.length - 1]?.attributes?.renews_at;
+      const a = await pg.queryArray(`UPDATE users SET ls_license_key = '${license_key.key}', renews_at = '${renews_at}', email_ls = '${meta.customer_email}' WHERE id_figma = '${body.id_figma}';`);
       console.log("A::", body.id_figma,  a.query.text)
       user = await getUser(body.id_figma);
       payload = { ...payload, pathname, ...user };

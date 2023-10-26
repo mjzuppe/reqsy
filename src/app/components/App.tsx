@@ -38,7 +38,6 @@ function App() {
         //setLastUpdated(Date.now()); // Required to force re-render
       }
       else if ('user' in event.data?.pluginMessage) {
-        console.log("process.env.AUTH_OVERRIDE", process.env.AUTH_OVERRIDE)
         setUser(process.env.AUTH_OVERRIDE ? {...event.data.pluginMessage.user, status: process.env.AUTH_OVERRIDE} : event.data.pluginMessage.user);
       }
     };
