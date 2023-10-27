@@ -28,6 +28,8 @@ module.exports = (env, argv) => ({
       { test: /\.(png|jpg|gif|webp|svg)$/, loader: 'url-loader' },
       // To use the figma-ui-kit
       { test: /\.m?js/, resolve: { fullySpecified: false, }, }
+
+      
     ],
   },
 

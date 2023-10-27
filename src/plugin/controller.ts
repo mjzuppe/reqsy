@@ -89,7 +89,6 @@ figma.ui.onmessage = async ({ func, data }) => {
 
           const userState = () => {
             const trial = new Date(trial_end);
-            console.log("CURRENT STATUS::", registeredUser)
             if (registeredUser.ls && registeredUser.ls.status === 'active') return "pro";
             else if (registeredUser.ls && registeredUser.ls.status !== 'active') return "pro-expired";
             else if ((trial.valueOf() - Date.now()) < 0) return "trial-expired";
