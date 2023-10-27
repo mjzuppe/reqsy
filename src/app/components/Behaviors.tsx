@@ -23,7 +23,7 @@ const BehaviorRow = (props: {db:any, disabled: boolean, readOnly: boolean, handl
     const clickHandlerDelete = () => { }; // TODO complete
     return (<div style={{ width: "100%", display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
         <div style={{width: "45%"}}><TextboxAutocomplete disabled={disabled || readOnly} onBlur={()=>handleUpdate({key: param, value})} filter variant="underline" placeholder="Enter parameter" value={param} onInput={(e) => setParam(e.currentTarget.value)} options={allParametersOptions} /></div>
-        <InputMention options={variables} defaultValue={value} onInput={(e:string)=>setValue(e)} onBlur={()=>handleUpdate({key: param, value})} style={{ width: "45%", height: "20px" }} placeholder="Enter value" disabled={disabled || readOnly} />
+        <InputMention options={variables} defaultValue={value} onInput={(e:string)=>setValue(e)} onBlur={()=>handleUpdate({key: param, value})} style={{ width: "45%", height: "20px" }} placeholder="Enter value/@variable" disabled={disabled || readOnly} />
         {(!readOnly && !disabled) && <div style={{ display: "flex", justifyContent: "flex-end" }}>
             <Menu danger marginLeft={"-28px"} onClick={() => clickHandlerDelete} options={["delete?"]} trigger={<IconButton><IconEllipsis32 /></IconButton>} />
         </div>}
