@@ -46,7 +46,7 @@ figma.on("selectionchange", async () => {
   if (figma.currentPage.selection.length === 1) {
     const r = await readSelection(figma);
     // TODO if selection data not equal to library, then resync before proceeding
-    figma.ui.postMessage({ selection: r });
+    await figma.ui.postMessage({ selection: r });
   }
   else figma.ui.postMessage({ selection: undefined });
 })

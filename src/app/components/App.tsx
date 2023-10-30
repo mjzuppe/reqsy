@@ -29,7 +29,7 @@ function App() {
       else if (event.data.pluginMessage.echo) console.log(event.data.pluginMessage.echo); // FOR TESTING
       else if ('selection' in event.data.pluginMessage) {
         setSelectionData(event.data.pluginMessage.selection);
-        //setLastUpdated(Date.now()); // Required to force re-render
+        setLastUpdated(Date.now()); // Required to force re-render
       }
       else if (event.data?.pluginMessage && event.data.pluginMessage.state) {
         const {state} = event.data.pluginMessage;
