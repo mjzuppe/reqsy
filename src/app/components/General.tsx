@@ -30,7 +30,7 @@ export const General = (props: { selectionData: any, db: any, readOnly: boolean 
     };
 
     return (
-        <div style={{ width: "100%", display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "flex-start", paddingBottom: "10px" }}>
+        <div style={{ marginLeft: "10px", width: "100%", display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "flex-start", paddingBottom: "10px" }}>
             <div style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
                 <div style={{ marginLeft: "3px", marginRight: "1px" }}>
                     <IconLayerText16 />

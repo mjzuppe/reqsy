@@ -14,7 +14,7 @@ export const Notes = (props: {selectionData: any, currentViewValue: string, disa
     }
 
     return(
-        <div key={`inspector-note-${conditionId}`} style={{  width: "100%", display: "flex", flexDirection: "column", alignItems: "flex-start", paddingBottom: "10px"}}>
+        <div key={`inspector-note-${conditionId}`} style={{  marginLeft: "10px", width: "100%", display: "flex", flexDirection: "column", alignItems: "flex-start", paddingBottom: "10px"}}>
             <textarea disabled={disabled || readOnly} onBlur={handleNoteUpdate} defaultValue={note} maxLength={256} onKeyDown={(e)=>{if (e.key === 'Enter') e.preventDefault()}} placeholder={!(disabled || readOnly)? "input notes here..." : "No notes have been entered for this element."} className="notes" />
         </div>
     )
