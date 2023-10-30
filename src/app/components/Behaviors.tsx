@@ -19,15 +19,14 @@ const DetailCard = (props: { type: string, description: string }) =>
             <div style={{width: "100%"}}><span style={{fontWeight: "bold"}}>Data: </span><span style={{fontWeight: "normal"}}>{props.description}</span></div>
         </div>
 
-const BehaviorRow = (props: {db:any, disabled: boolean, readOnly: boolean, handleUpdate: (e:any) => any, behavior?: {key: string, value: string}}) => {
-    const { db, handleUpdate, behavior, disabled, readOnly } = props;
+const BehaviorRow = (props: {db:any, disabled: boolean, readOnly: boolean, handleUpdate: (e:any) => any, handleDelete?: (e:any) => any, behavior?: {key: string, value: string}}) => {
+    const { db, handleUpdate, handleDelete, behavior, disabled, readOnly } = props;
     const [param, setParam] = useState(behavior?.key || "");
     const [value, setValue] = useState(behavior?.value || "");
     const [showDetail, setShowDetail] = useState(false);
     const variables = Object.keys(db.variable).map((v:any)=>({value: db.variable[v].label}));
     const variableInUse = Object.keys(db.variable).filter((v:any)=>db.variable[v].label === value).map((v:any)=>({...db.variable[v]}));
 
-    const clickHandlerDelete = () => { }; // TODO complete
 
     return (<div style={{ width: "290px", display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginLeft: "5px", paddingRight: "0px"}}>
         
@@ -37,13 +36,13 @@ const BehaviorRow = (props: {db:any, disabled: boolean, readOnly: boolean, handl
             {(Boolean(variableInUse.length) && showDetail) && <DetailCard type={variableInUse[0].type} description={variableInUse[0].description}/>}
             <TextboxAutocomplete onMouseOver={()=>setShowDetail(true)} onMouseLeave={()=>setShowDetail(false)} style={{color: Boolean(variableInUse.length)? "#0d99ff":"initial"}} disabled={disabled || readOnly} onBlur={()=>handleUpdate({key: param, value})} filter variant="underline" placeholder="value/variable..." value={value} onInput={(e) => setValue(e.currentTarget.value)} options={variables} /></div>
         {(!readOnly && !disabled) &&
-           <Menu danger marginLeft={"-28px"} onClick={() => clickHandlerDelete} options={["delete?"]} trigger={<IconButton><IconEllipsis32 /></IconButton>} />
+           <Menu danger marginLeft={"-28px"} onClick={()=>handleDelete({key: behavior.key, value: behavior.value})} options={["delete?"]} trigger={<IconButton><IconEllipsis32 /></IconButton>} />
         }
     </div>)
 }
 
-const BehaviorRows = (props: {db:any, disabled: boolean, readOnly: boolean, updateBehavior: (any) => any, isNew, behaviors}) => {
-    const { db, updateBehavior, isNew, behaviors, disabled, readOnly } = props;
+const BehaviorRows = (props: {db:any, disabled: boolean, readOnly: boolean, updateBehavior: (any) => any, deleteBehavior: (any) => any, isNew, behaviors}) => {
+    const { db, updateBehavior, deleteBehavior, isNew, behaviors, disabled, readOnly } = props;
     const [newBehaviorRow, setNewBehaviorRow] = useState(false);
     const handleNewBehaviorRow = (v: boolean) => setNewBehaviorRow(!newBehaviorRow);
 
@@ -55,7 +54,7 @@ const BehaviorRows = (props: {db:any, disabled: boolean, readOnly: boolean, upda
             <div style={{ width: "100%", display: "flex", flexDirection: "column", alignItems: "flex-start", paddingBottom: "10px" }}>
                 {(!behaviors.length && (disabled || readOnly)) && <div style={{marginLeft: "10px"}}>No behaviors are set for this element.</div> }
                 {newBehaviorRow && <BehaviorRow db={db} handleUpdate={updateBehavior} disabled={disabled} readOnly={readOnly} />}
-                {behaviors.map((b: any) => <BehaviorRow db={db} behavior={b} handleUpdate={updateBehavior} disabled={disabled} readOnly={readOnly} />)}
+                {behaviors.map((b: any) => <BehaviorRow handleDelete={deleteBehavior} db={db} behavior={b} handleUpdate={updateBehavior} disabled={disabled} readOnly={readOnly} />)}
             </div>
         </div>
     )
@@ -98,7 +97,12 @@ export const Behaviors = (props: { db: any, selectionData: any, currentViewValue
         await controller({ func: "write", data: { model: "selection", key: "behavior", value: payload } })
     }
 
-    const view = (displayRows || disabled || readOnly) ? <BehaviorRows db={db} updateBehavior={handleUpdateBehavior} isNew={isNew} behaviors={behaviors} disabled={disabled} readOnly={readOnly} /> :
+    const handleDeleteBehavior = async (props: {key: string, value: string}) => {
+        const payload = [...behaviors.filter((b:any)=> b.key !== props.key && b.value !== props.value), ...selectionData.behavior.filter((n: any) => n.id !== conditionId)];
+        await controller({ func: "write", data: { model: "selection", key: "behavior", value: payload } })
+    }
+
+    const view = (displayRows || disabled || readOnly) ? <BehaviorRows deleteBehavior={handleDeleteBehavior} db={db} updateBehavior={handleUpdateBehavior} isNew={isNew} behaviors={behaviors} disabled={disabled} readOnly={readOnly} /> :
         selectBehaviorView ? <SuggestBehavior handleCancel={() => setSelectBehaviorView(false)} /> :
             <CreateBehaviors handleClick={handleCreateClick} />
 
