@@ -4,7 +4,6 @@ import { Select } from "../util/ui/select";
 import { CommonUI, EventHandlers, AdditionalEvents, HTMLElements } from "../util/ui/behaviors";
 import { PlusMinusToggle } from "../util/ui/plusminus";
 import { Menu } from "../util/ui/menu";
-import { InputMention } from "../util/ui/input-mention";
 import { controller } from "../functions/utils";
 
 
@@ -14,19 +13,32 @@ const allParametersSet = new Set();
 EventHandlers.forEach((e: any) => allParametersSet.add(e));
 const allParametersOptions = Array.from(allParametersSet).map((p: any) => ({ value: p, label: p })).sort((a, b) => a.label.localeCompare(b.label));
 
+const DetailCard = (props: { type: string, description: string }) => 
+<div className="detail-card" >
+            <div style={{width: "100%"}}><span style={{fontWeight: "bold"}}>Type: </span><span style={{fontWeight: "normal"}}>{props.type}</span></div>
+            <div style={{width: "100%"}}><span style={{fontWeight: "bold"}}>Data: </span><span style={{fontWeight: "normal"}}>{props.description}</span></div>
+        </div>
+
 const BehaviorRow = (props: {db:any, disabled: boolean, readOnly: boolean, handleUpdate: (e:any) => any, behavior?: {key: string, value: string}}) => {
     const { db, handleUpdate, behavior, disabled, readOnly } = props;
     const [param, setParam] = useState(behavior?.key || "");
     const [value, setValue] = useState(behavior?.value || "");
-    const variables = Object.keys(db.variable).map((id:any)=> ({id, ...db.variable[id] }));
+    const [showDetail, setShowDetail] = useState(false);
+    const variables = Object.keys(db.variable).map((v:any)=>({value: db.variable[v].label}));
+    const variableInUse = Object.keys(db.variable).filter((v:any)=>db.variable[v].label === value).map((v:any)=>({...db.variable[v]}));
 
     const clickHandlerDelete = () => { }; // TODO complete
-    return (<div style={{ width: "100%", display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
-        <div style={{width: "45%"}}><TextboxAutocomplete disabled={disabled || readOnly} onBlur={()=>handleUpdate({key: param, value})} filter variant="underline" placeholder="Enter parameter" value={param} onInput={(e) => setParam(e.currentTarget.value)} options={allParametersOptions} /></div>
-        <InputMention options={variables} defaultValue={value} onInput={(e:string)=>setValue(e)} onBlur={()=>handleUpdate({key: param, value})} style={{ width: "45%", height: "20px" }} placeholder="Enter value/@variable" disabled={disabled || readOnly} />
-        {(!readOnly && !disabled) && <div style={{ display: "flex", justifyContent: "flex-end" }}>
-            <Menu danger marginLeft={"-28px"} onClick={() => clickHandlerDelete} options={["delete?"]} trigger={<IconButton><IconEllipsis32 /></IconButton>} />
-        </div>}
+
+    return (<div style={{ width: "290px", display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginLeft: "5px", paddingRight: "0px"}}>
+        
+        <div style={{width: "120px"}}><TextboxAutocomplete disabled={disabled || readOnly} onBlur={()=>handleUpdate({key: param, value})} filter variant="underline" placeholder="parameter..." value={param} onInput={(e) => setParam(e.currentTarget.value)} options={allParametersOptions} /></div>
+        <div style={{width: "120px"}}>
+
+            {(Boolean(variableInUse.length) && showDetail) && <DetailCard type={variableInUse[0].type} description={variableInUse[0].description}/>}
+            <TextboxAutocomplete onMouseOver={()=>setShowDetail(true)} onMouseLeave={()=>setShowDetail(false)} style={{color: Boolean(variableInUse.length)? "#0d99ff":"initial"}} disabled={disabled || readOnly} onBlur={()=>handleUpdate({key: param, value})} filter variant="underline" placeholder="value/variable..." value={value} onInput={(e) => setValue(e.currentTarget.value)} options={variables} /></div>
+        {(!readOnly && !disabled) &&
+           <Menu danger marginLeft={"-28px"} onClick={() => clickHandlerDelete} options={["delete?"]} trigger={<IconButton><IconEllipsis32 /></IconButton>} />
+        }
     </div>)
 }
 
@@ -36,7 +48,7 @@ const BehaviorRows = (props: {db:any, disabled: boolean, readOnly: boolean, upda
     const handleNewBehaviorRow = (v: boolean) => setNewBehaviorRow(!newBehaviorRow);
 
     return (
-        <div style={{ width: "100%" }}>
+        <div style={{ width: "100%", paddingRight: "5px" }}>
             {(!disabled && !readOnly) && <div style={{ display: "flex", justifyContent: "flex-end" }}>
                 <PlusMinusToggle value={!newBehaviorRow} onClick={handleNewBehaviorRow} />
             </div>}
