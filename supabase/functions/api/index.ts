@@ -103,7 +103,7 @@ const route = async (req: { pathname: string, method: string, body: any, search:
     const email_ls = String(user.rows[0][5]);
     const renews_at = String(user.rows[0][6]);
 
-    return { id, id_figma, trial_end, license_key, renews_at, email_ls };
+    return { id, id_figma, trial_end, renews_at, email_ls, license_key };
   }
 
   switch (pathname) {
@@ -130,12 +130,12 @@ const route = async (req: { pathname: string, method: string, body: any, search:
       // existing user
       else {
         const { id, id_figma, license_key, trial_end } = user;
-        console.log("USER CHECK:", user)
         if (license_key) {
           const license_key_data = await lsValidateKey(license_key);
           if (license_key_data?.license_key) {
             const { status, renews_at } = license_key_data.license_key;
-            payload = { ...payload, ls: { status, renews_at }, license_key }
+            const license_key_last = license_key?.split("-").pop() ||"";
+            payload = { ...payload, ls: { status, renews_at }, license_key: license_key_last };
           }
         }
         payload = { ...payload, pathname, id_figma, trial_end, id };

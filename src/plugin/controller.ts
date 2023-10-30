@@ -85,8 +85,8 @@ figma.ui.onmessage = async ({ func, data }) => {
           registeredUser = { error: e };
         }
         if (!registeredUser.error) {
-          const { id, id_figma, trial_end, status } = registeredUser;
-
+          const { id, id_figma, trial_end, status, license_key } = registeredUser;
+          console.log("REGISTERED USER", registeredUser)
           const userState = () => {
             const trial = new Date(trial_end);
             if (registeredUser.ls && registeredUser.ls.status === 'active') return "pro";
@@ -95,9 +95,10 @@ figma.ui.onmessage = async ({ func, data }) => {
             else return "trial";
           }
   
-          if (r.user && r.user[u.id] === undefined) {
-            payload.user = { ...r.user, [u.id]: { id, id_figma, trial_end, status: userState() } };
-          }
+          // if (r.user && r.user[u.id] === undefined) { // TODO obsolete?
+
+            payload.user = { ...r.user, [u.id]: { id, id_figma, trial_end, status: userState(), license_key } };
+          // }
         }
         
         figma.ui.postMessage({ state: { root: payload } });

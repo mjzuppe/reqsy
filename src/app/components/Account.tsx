@@ -47,8 +47,8 @@ export const Account = (props: {user: any}) => {
             <div style={{width: "25%"}} className="label">{status.split("-").join(" ")}</div>
         </div>
        {Boolean(license_key) && <div style={{display: "flex", flexDirection: "row", width: "100%", padding: "15px"}}>
-            <div style={{width: "25%", fontWeight: "bold"}} className="label">Key</div>
-            <div style={{width: "75%"}} className="label">{license_key}</div>
+            <div style={{width: "25%", fontWeight: "bold"}} className="label">License</div>
+            <div style={{width: "75%"}} className="label">...{license_key}</div>
         </div>}
       
       
