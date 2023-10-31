@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 // components
 import { IconPlus32, IconMinus32, IconToggleButton, IconButton, IconEllipsis32, IconLockLocked32, Button, Link } from "figma-ui-kit";
 import { Menu } from "../util/ui/menu";
@@ -17,16 +17,20 @@ const InspectorItem = (props: { title: string, selectionData: any, db: any, read
     const { title, selectionData, db, disabled, currentView, currentViewValue, readOnly } = props;
     const [expanded, setExpanded] = useState(false);
     const clickHandler = () => setExpanded(!expanded);
-    const view = { "Condition": <Condition disabled={disabled} currentView={currentView} selectionData={selectionData} db={db} readOnly={readOnly} />, "General": <General selectionData={selectionData} db={db} readOnly={readOnly} />, "Notes": <Notes disabled={disabled} readOnly={readOnly} selectionData={selectionData} currentViewValue={currentViewValue} />, "Behaviors": <Behaviors disabled={disabled} readOnly={readOnly} db={db} selectionData={selectionData} currentViewValue={currentViewValue} /> }[title || "Template"]
+    const view = {
+        "Condition": <Condition disabled={disabled} currentView={currentView} selectionData={selectionData} db={db} readOnly={readOnly} />,
+        "General": <General selectionData={selectionData} db={db} readOnly={readOnly} />,
+        "Notes": <Notes disabled={disabled} readOnly={readOnly} selectionData={selectionData} currentViewValue={currentViewValue} />,
+        "Behaviors": <Behaviors disabled={disabled} readOnly={readOnly} db={db} selectionData={selectionData} currentViewValue={currentViewValue} />
+    }
+    [title || "Template"]
     const badgeCount = { "Condition": selectionData.condition.length, "General": selectionData.tag.length, "Notes": selectionData.note.filter((n: any) => n.id === currentViewValue).length, "Behaviors": selectionData.behavior.filter((n: any) => n.id === currentViewValue).length }[title || "Template"]
-    console.log("BADGET COUNT:", title, badgeCount )
     return (
         <div className={`items-list-item ${title !== 'Notes' && "items-border-bottom"}`}>
             <div className="items-list-item-alwaysdisplay">
                 <div style={{ display: "flex" }}><div className="label">{title}</div>
                     {badgeCount ? <div style={{ backgroundColor: "#0d99ff", borderRadius: "15px", padding: "0 5px 0 5px", marginLeft: "10px", textAlign: "center" }}>{badgeCount}</div> : <div />}
                 </div>
-
                 {
                     !expanded ?
                         <div>
@@ -107,17 +111,26 @@ const LinkToComponentView = (props: { db: any, setLinkView: (any) => any }) => {
     )
 }
 
-export const Inspector = (props: { selectionData: any, db: any, readOnly: boolean }) => {
-    const { selectionData, db, readOnly } = props;
+export const Inspector = (props: { selectionData: any, db: any, readOnly: boolean, updated: number }) => {
+    const { selectionData, db, readOnly, updated } = props;
     const label = selectionData?.label;
+    const [lastUpdated, setLastUpdated] = useState<number>(updated);
     const [conditionView, setConditionView] = useState("default");
     const sourceData = selectionData?.link ? selectionData.linkData : selectionData;
     const componentIsLinked = Boolean(selectionData?.link);
-    return ((selectionData === undefined) || (selectionData.init === '' && readOnly)) ? <NoSelectionView /> : selectionData.init === '' ? <NotRegisteredView db={db} /> : (
+
+    // This forces a re-render upon selection change since conditions are not updated
+    useEffect(() => {
+        setLastUpdated(updated);
+        setConditionView("default");
+    }, [updated, setLastUpdated, setConditionView]);
+
+
+    return ((selectionData === undefined) || (selectionData.init === '' && readOnly) || updated !== lastUpdated) ? <NoSelectionView /> : selectionData.init === '' ? <NotRegisteredView db={db} /> : (
         <div id="action-container">
             <div style={{ display: "flex", marginLeft: "10px", height: "40px", justifyContent: "space-between", }} >
-                <div style={{ display: "flex", flexDirection: "column", alignSelf: "center"}}>
-                    <div style={{ fontWeight: "bold", fontSize: "1.2em"}}>{label || ""}</div>
+                <div style={{ display: "flex", flexDirection: "column", alignSelf: "center" }}>
+                    <div style={{ fontWeight: "bold", fontSize: "1.2em" }}>{label || ""}</div>
                     {Boolean(conditionView && conditionView !== 'default') && <div style={{ fontWeight: "normal", fontSize: "0.8em" }}>{conditionView === "default" ? "" : `${conditionView}`}</div>}
                 </div>
                 {/* <IconLockLocked32/> */}
@@ -134,7 +147,7 @@ export const Inspector = (props: { selectionData: any, db: any, readOnly: boolea
                 <div className="items-list">
                     <InspectorItem readOnly={readOnly} title="General" selectionData={sourceData} db={db} />
                     <InspectorItem readOnly={readOnly} disabled={componentIsLinked} title="Condition" selectionData={sourceData} db={db} currentView={setConditionView} />
-                    <InspectorItem readOnly={readOnly} disabled={componentIsLinked} title="Behaviors" selectionData={sourceData} currentViewValue={conditionView}  db={db} />
+                    <InspectorItem readOnly={readOnly} disabled={componentIsLinked} title="Behaviors" selectionData={sourceData} currentViewValue={conditionView} db={db} />
                     <InspectorItem readOnly={readOnly} disabled={componentIsLinked} title="Notes" selectionData={sourceData} db={db} currentViewValue={conditionView} />
                 </div>
             </div>

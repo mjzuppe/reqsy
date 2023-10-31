@@ -29,7 +29,7 @@ function App() {
       else if (event.data.pluginMessage.echo) console.log(event.data.pluginMessage.echo); // FOR TESTING
       else if ('selection' in event.data.pluginMessage) {
         setSelectionData(event.data.pluginMessage.selection);
-        setLastUpdated(Date.now()); // Required to force re-render
+        setLastUpdated(Date.now()); // This is only passed to inspector to force re-render/reset conditions on selection change
       }
       else if (event.data?.pluginMessage && event.data.pluginMessage.state) {
         const {state} = event.data.pluginMessage;
@@ -50,9 +50,9 @@ function App() {
     }
   }
   return (
-    <div onKeyDown={handleKeydown} key={lastUpdated} id="primary-container" className="figma-dark">
+    <div onKeyDown={handleKeydown} id="primary-container" className="figma-dark">
       <Header currentView={actionView} setView={setActionView}/>
-      <Action selectionData={selectionData} db={db} currentView={actionView} user={user} />
+      <Action updated={lastUpdated} selectionData={selectionData} db={db} currentView={actionView} user={user} />
       <Footer user={user} db={db}/>
     </div>
   );
