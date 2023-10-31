@@ -117,14 +117,17 @@ export const Behaviors = (props: { db: any, selectionData: any, currentViewValue
         else {
             let currentBehaviors = selectionData.behavior.filter((n: any) => n.id === conditionId)[0].value;
             currentBehaviors.splice(e.index, 1, newRecord);
-            payload = [{ id: conditionId, value: currentBehaviors }];
+            payload = [{ id: conditionId, value: currentBehaviors }, ...selectionData.behavior.filter((n: any) => n.id !== conditionId)];
         }
 
         await controller({ func: "write", data: { model: "selection", key: "behavior", value: payload } })
     }
 
     const handleDeleteBehavior = async (props: { key: string, value: string, index: number }) => {
-        const payload = [...behaviors.filter((b: any) => b.key !== props.key && b.value !== props.value), ...selectionData.behavior.filter((n: any) => n.id !== conditionId)];
+        let currentBehaviors = selectionData.behavior.filter((n: any) => n.id === conditionId)[0].value;
+        currentBehaviors.splice(props.index, 1);
+        const payload = [{ id: conditionId, value: currentBehaviors }, ...selectionData.behavior.filter((n: any) => n.id !== conditionId)];
+
         await controller({ func: "write", data: { model: "selection", key: "behavior", value: payload } })
     }
 
