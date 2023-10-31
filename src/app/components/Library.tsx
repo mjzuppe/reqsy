@@ -20,7 +20,7 @@ export const Library = (props: { db: any, readOnly: boolean }) => {
     }
     const handleSelect = (e) => {
         const key = e.target.id.split("library-item-key-")[1];
-        controller({ func: 'get', data: { key } });
+        controller({ func: 'read', data: { key } });
     }
 
     const handleDelete = async (i) => {

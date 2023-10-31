@@ -30,7 +30,7 @@ const readSelection = async (figma: any) => { // TODO Obsolete
     let selection = {link: ""};
     selectionModels.forEach(model => { selection[model] = readSelectionModel(figma, model)});
     if (selection.link) selection["linkData"] = await readElementOne(figma, selection.link);
-    console.log("SELECTION::", selection);
+    if (process.env.VERBOSE_LOGS) console.log("SELECTION::", selection);
     return selection;
 }
 
@@ -47,7 +47,7 @@ const readRoot = (figma:any) => {
     let root = {};
     const models = ['account','init', 'user', 'library',  'tag', 'variable'];
     models.forEach(model => root[model] = readRootModel(figma, model));
-    console.log("ROOT::", root);
+    if (process.env.VERBOSE_LOGS) console.log("ROOT::", root);
     return root;
 };
 

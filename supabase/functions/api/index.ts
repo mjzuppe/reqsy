@@ -32,7 +32,6 @@ const connection = async (): Promise<postgres.PoolClient> => {
 
 
 const lsRetrieveSubRenewal = async (ls_email: string) => {
-  console.log("EMAIL::", Deno.env.get('LS_TOKEN'),  ls_email.split("+").join("%2b"))
   const r = await fetch(`https://api.lemonsqueezy.com/v1/subscriptions?filter[user_email]=${ls_email.split("+").join("%2b")}`, {
     method: "GET",
     headers: {
@@ -58,7 +57,6 @@ const lsValidateKey = async (key: string) => {
 }
 
 const lsActivateKey = async (key: string) => {
-  console.log("TEST!!!::", `Bearer ${Deno.env.get('LS_TOKEN')}`)
   const formData = new FormData();
   formData.append("license_key", key);
   formData.append("instance_name", "primary");

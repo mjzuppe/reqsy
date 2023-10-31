@@ -86,7 +86,6 @@ figma.ui.onmessage = async ({ func, data }) => {
         }
         if (!registeredUser.error) {
           const { id, id_figma, trial_end, status, license_key } = registeredUser;
-          console.log("REGISTERED USER", registeredUser)
           const userState = () => {
             const trial = new Date(trial_end);
             if (registeredUser.ls && registeredUser.ls.status === 'active') return "pro";
@@ -105,12 +104,9 @@ figma.ui.onmessage = async ({ func, data }) => {
         figma.ui.postMessage({ user: payload.user[u.id] });
       }
       break;
-    case 'get':
+    case 'read':
       if (!data.key) throw new Error('failure to select, key required');
       else getNodeById(figma, data.key);
-      break;
-    case 'read':
-      // TODO obsolete?
       break;
     case 'write':
       if (data.model === 'selection') {
