@@ -1,17 +1,20 @@
 import React, { useState } from "react";
 import { Textbox, SegmentedControlOption, Dropdown, IconCode16, IconButton, IconEllipsis32, TextboxAutocomplete, Button } from "figma-ui-kit";
 import { Select } from "../util/ui/select";
-import { CommonUI, EventHandlers, AdditionalEvents, HTMLElements } from "../util/ui/behaviors";
+// import { CommonUI, EventHandlers, AdditionalEvents, HTMLElements } from "../util/ui/behaviors";
 import { PlusMinusToggle } from "../util/ui/plusminus";
 import { Menu } from "../util/ui/menu";
 import { controller } from "../functions/utils";
+// Data
+import {commonBehaviors} from "../util/ui/common-behaviors";
 
 
-const elementCategory = [...CommonUI, ...HTMLElements].map((e: any) => ({ label: e.category, value: e.category })).sort((a, b) => a.label.localeCompare(b.label));
+const elementCategory = commonBehaviors.map((e: any) => ({ label: `<${e.element}/>`, value: e.element })).sort((a, b) => a.label.localeCompare(b.label));
 const allParametersSet = new Set();
-[...CommonUI, ...HTMLElements, ...AdditionalEvents].forEach((e: any) => e.parameters.forEach((p: any) => allParametersSet.add(p)));
-EventHandlers.forEach((e: any) => allParametersSet.add(e));
-const allParametersOptions = Array.from(allParametersSet).map((p: any) => ({ value: p, label: p })).sort((a, b) => a.label.localeCompare(b.label));
+commonBehaviors.map((b:any) => b.attributes?.forEach((e: any) => allParametersSet.add(e)));
+commonBehaviors.map((b:any) => b.eventHandlers?.forEach((e: any) => allParametersSet.add(e)));
+let allParametersOptions = Array.from(allParametersSet).map((e: any) => ({ value: e })).sort((a, b) => a.value.localeCompare(b.value));
+
 
 const ToolTip = (props: { type: string, description: string }) =>
     <div className="tool-tip" >
@@ -81,11 +84,16 @@ const CreateBehaviors = (props: { handleClick: (any) => any }) => {
 }
 
 
-const SuggestBehavior = (props: { handleCancel: (any) => any }) => <div style={{ width: "100%", display: "flex", flexDirection: "row", alignItems: "flex-start", paddingBottom: "10px" }}>
-    <Select style={{ width: "100px" }} id="behavior-element-type-select" defaultValue={null} placeholder="Type of element/UI" options={elementCategory} />
-    <Button onClick={() => { }} style={{ marginLeft: "5px", fontSize: "10px", height: "20px", lineHeight: "10px" }}>submit</Button>
+const SuggestBehavior = (props: { handleCancel: (any) => any, handleSubmit: (any) => any }) => {
+    const [select, setSelect] = useState("a");
+    return (
+        <div style={{ width: "100%", display: "flex", flexDirection: "row", alignItems: "flex-start", paddingBottom: "10px" }}>
+    <Select onChange={(e:any)=>setSelect(e.target.value)} style={{ width: "100px" }} id="behavior-element-type-select" defaultValue={"a"} placeholder="Type of element/UI" options={elementCategory} />
+    <Button onClick={()=>props.handleSubmit(select)} style={{ marginLeft: "5px", fontSize: "10px", height: "20px", lineHeight: "10px" }}>submit</Button>
     <Button onClick={props.handleCancel} secondary style={{ marginLeft: "5px", fontSize: "10px", height: "20px", lineHeight: "10px" }}>cancel</Button>
 </div>
+    )
+}
 
 export const Behaviors = (props: { db: any, selectionData: any, currentViewValue: string, disabled: boolean, readOnly: boolean }) => {
     const { db, selectionData, currentViewValue, disabled, readOnly } = props;
@@ -112,8 +120,17 @@ export const Behaviors = (props: { db: any, selectionData: any, currentViewValue
         await controller({ func: "write", data: { model: "selection", key: "behavior", value: payload } })
     }
 
+    const createBehaviorTemplate = async (elementType: string) => {
+        console.log("ELEMENT TYPE", elementType)
+        const params = commonBehaviors.filter((b: any) => b.element === elementType)[0];
+        const { attributes, eventHandlers } = params;
+        console.log("Attributes, events", attributes, eventHandlers)
+        const payload = [{id: conditionId, value: [...behaviors, ...attributes.map((a: any) => ({ key: a, value: "" })), ...eventHandlers.map((e: any) => ({ key: e, value: "" }))]}]
+        await controller({ func: "write", data: { model: "selection", key: "behavior", value: payload } });
+    }
+
     const view = (displayRows || disabled || readOnly) ? <BehaviorRows deleteBehavior={handleDeleteBehavior} db={db} updateBehavior={handleUpdateBehavior} isNew={isNew} behaviors={behaviors} disabled={disabled} readOnly={readOnly} /> :
-        selectBehaviorView ? <SuggestBehavior handleCancel={() => setSelectBehaviorView(false)} /> :
+        selectBehaviorView ? <SuggestBehavior handleSubmit={createBehaviorTemplate} handleCancel={() => setSelectBehaviorView(false)} /> :
             <CreateBehaviors handleClick={handleCreateClick} />
 
 
