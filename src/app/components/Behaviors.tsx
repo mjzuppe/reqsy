@@ -31,7 +31,7 @@ const BehaviorRow = (props: { db: any, disabled: boolean, readOnly: boolean, han
     return (<div style={{ width: "290px", display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "flex-end", marginLeft: "5px", paddingRight: "0px" }}>
 
         <div style={{ width: "120px" }}><TextboxAutocomplete disabled={disabled || readOnly} onBlur={() => handleUpdate({ key: param, value })} filter variant="underline" placeholder="parameter..." value={param} onInput={(e) => setParam(e.currentTarget.value)} options={allParametersOptions} /></div>
-        <div style={{ width: "120px", display: "flex", flexDirection: "column", justifyContent: "flex-end" }}>
+        <div style={{ width: "120px", display: "flex", flexDirection: "column", justifyContent: "flex-end", position: "relative" }}>
             
             {
             (Boolean(variableInUse.length) && showDetail) ? 
