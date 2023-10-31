@@ -56,12 +56,14 @@ figma.ui.onmessage = async ({ func, data }) => {
     case 'init':
       if (data.model === 'selection') {
         const root = readRoot(figma);
-        const r = await readSelection(figma);
+        const r_pre = await readSelection(figma);
         const selectionData = await readSelectionData(figma);
         const { id, name, type, parent } = selectionData;
         await initSelection(figma, id, name, type, parent, root);
-        figma.ui.postMessage({ selection: r });
+        figma.ui.postMessage({ selection: r_pre });
         await reloadRoot({ model: 'library' });
+        const r_post = await readSelection(figma);
+        await figma.ui.postMessage({ selection: r_post });
       }
       else {
         const u: any = await readUser(figma);
