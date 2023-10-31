@@ -54,7 +54,8 @@ export const commonBehaviors = [
     },
     {
         "element": "div",
-        "attributes": ["class", "id", "style"]
+        "attributes": ["class", "id", "style"],
+        "eventHandlers": ["onClick", "onMouseOver", "onMouseOut"]
     },
     {
         "element": "span",

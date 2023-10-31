@@ -22,8 +22,8 @@ const ToolTip = (props: { type: string, description: string }) =>
         <div style={{ width: "100%" }}><span style={{ fontWeight: "bold" }}>Notes/Validation: </span><span style={{ fontWeight: "normal" }}>{props.description}</span></div>
     </div>
 
-const BehaviorRow = (props: { db: any, disabled: boolean, readOnly: boolean, handleUpdate: (e: any) => any, handleDelete?: (e: any) => any, behavior?: { key: string, value: string } }) => {
-    const { db, handleUpdate, handleDelete, behavior, disabled, readOnly } = props;
+const BehaviorRow = (props: { db: any, disabled: boolean, readOnly: boolean, index: number, handleUpdate: (e: any) => any, handleDelete?: (e: any) => any, behavior?: { key: string, value: string } }) => {
+    const { db, handleUpdate, handleDelete, behavior, disabled, readOnly, index } = props;
     const [param, setParam] = useState(behavior?.key || "");
     const [value, setValue] = useState(behavior?.value || "");
     const [showDetail, setShowDetail] = useState(false);
@@ -33,23 +33,23 @@ const BehaviorRow = (props: { db: any, disabled: boolean, readOnly: boolean, han
 
     return (<div style={{ width: "290px", display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "flex-end", marginLeft: "5px", paddingRight: "0px" }}>
 
-        <div style={{ width: "120px" }}><TextboxAutocomplete disabled={disabled || readOnly} onBlur={() => handleUpdate({ key: param, value })} filter variant="underline" placeholder="parameter..." value={param} onInput={(e) => setParam(e.currentTarget.value)} options={allParametersOptions} /></div>
+        <div style={{ width: "120px" }}><TextboxAutocomplete disabled={disabled || readOnly} onBlur={() => handleUpdate({ key: param, value, index })} filter variant="underline" placeholder="parameter..." value={param} onInput={(e) => setParam(e.currentTarget.value)} options={allParametersOptions} /></div>
         <div style={{ width: "120px", display: "flex", flexDirection: "column", justifyContent: "flex-end", position: "relative" }}>
             
             {
             (Boolean(variableInUse.length) && showDetail) ? 
             <div style={{ width: "120px", height: "100px", margin: "0px", padding: "0px", position: "absolute", display: "flex", flexDirection: "column", justifyContent: "flex-end", }}>
                 <ToolTip type={variableInUse[0].type} description={variableInUse[0].description} />
-                <TextboxAutocomplete onMouseLeave={() => setShowDetail(false)} style={{ color: Boolean(variableInUse.length) ? "#0d99ff" : "initial" }} disabled={disabled || readOnly} onBlur={() => handleUpdate({ key: param, value })} filter variant="underline" placeholder="value/variable..." value={value} onInput={(e) => setValue(e.currentTarget.value)} options={variables} />
+                <TextboxAutocomplete onMouseLeave={() => setShowDetail(false)} style={{ color: Boolean(variableInUse.length) ? "#0d99ff" : "initial" }} disabled={disabled || readOnly} onBlur={() => handleUpdate({ key: param, value, index })} filter variant="underline" placeholder="value/variable..." value={value} onInput={(e) => setValue(e.currentTarget.value)} options={variables} />
             </div>
             : 
-            <TextboxAutocomplete onMouseOver={() => setShowDetail(true)} onMouseLeave={() => setShowDetail(false)} style={{ color: Boolean(variableInUse.length) ? "#0d99ff" : "initial" }} disabled={disabled || readOnly} onBlur={() => handleUpdate({ key: param, value })} filter variant="underline" placeholder="value/variable..." value={value} onInput={(e) => setValue(e.currentTarget.value)} options={variables} />
+            <TextboxAutocomplete onMouseOver={() => setShowDetail(true)} onMouseLeave={() => setShowDetail(false)} style={{ color: Boolean(variableInUse.length) ? "#0d99ff" : "initial" }} disabled={disabled || readOnly} onBlur={() => handleUpdate({ key: param, value, index })} filter variant="underline" placeholder="value/variable..." value={value} onInput={(e) => setValue(e.currentTarget.value)} options={variables} />
             }
            
         
         </div>
         {(!readOnly && !disabled) &&
-            <Menu danger marginLeft={"-28px"} onClick={() => handleDelete({ key: behavior.key, value: behavior.value })} options={["delete?"]} trigger={<IconButton><IconEllipsis32 /></IconButton>} />
+            <Menu danger marginLeft={"-28px"} onClick={() => handleDelete({ key: behavior.key, value: behavior.value, index })} options={["delete?"]} trigger={<IconButton><IconEllipsis32 /></IconButton>} />
         }
     </div>)
 }
@@ -66,8 +66,8 @@ const BehaviorRows = (props: { db: any, disabled: boolean, readOnly: boolean, up
             </div>}
             <div style={{ width: "100%", display: "flex", flexDirection: "column", alignItems: "flex-start", paddingBottom: "10px" }}>
                 {(!behaviors.length && (disabled || readOnly)) && <div style={{ marginLeft: "10px" }}>No behaviors are set for this element.</div>}
-                {newBehaviorRow && <BehaviorRow db={db} handleUpdate={updateBehavior} disabled={disabled} readOnly={readOnly} />}
-                {behaviors.map((b: any, i: number) => <BehaviorRow key={`behavior-row-${i}`} handleDelete={deleteBehavior} db={db} behavior={b} handleUpdate={updateBehavior} disabled={disabled} readOnly={readOnly} />)}
+                {newBehaviorRow && <BehaviorRow index={null} db={db} handleUpdate={updateBehavior} disabled={disabled} readOnly={readOnly} />}
+                {behaviors.map((b: any, i: number) => <BehaviorRow key={`behavior-row-${i}`} index={i} handleDelete={deleteBehavior} db={db} behavior={b} handleUpdate={updateBehavior} disabled={disabled} readOnly={readOnly} />)}
             </div>
         </div>
     )
@@ -111,21 +111,28 @@ export const Behaviors = (props: { db: any, selectionData: any, currentViewValue
     };
 
     const handleUpdateBehavior = async (e: any) => {
-        const payload = isNew ? [{ id: conditionId, value: [e] }] : [{ id: conditionId, value: [e] }, ...selectionData.behavior.filter((n: any) => n.id !== conditionId)];
+        const newRecord = {key: e.key, value: e.value};
+        let payload = [];
+        if (isNew) payload = [{ id: conditionId, value: [newRecord] }];
+        else {
+            let currentBehaviors = selectionData.behavior.filter((n: any) => n.id === conditionId)[0].value;
+            currentBehaviors.splice(e.index, 1, newRecord);
+            payload = [{ id: conditionId, value: currentBehaviors }];
+        }
+
         await controller({ func: "write", data: { model: "selection", key: "behavior", value: payload } })
     }
 
-    const handleDeleteBehavior = async (props: { key: string, value: string }) => {
+    const handleDeleteBehavior = async (props: { key: string, value: string, index: number }) => {
         const payload = [...behaviors.filter((b: any) => b.key !== props.key && b.value !== props.value), ...selectionData.behavior.filter((n: any) => n.id !== conditionId)];
         await controller({ func: "write", data: { model: "selection", key: "behavior", value: payload } })
     }
 
     const createBehaviorTemplate = async (elementType: string) => {
-        console.log("ELEMENT TYPE", elementType)
         const params = commonBehaviors.filter((b: any) => b.element === elementType)[0];
         const { attributes, eventHandlers } = params;
-        console.log("Attributes, events", attributes, eventHandlers)
-        const payload = [{id: conditionId, value: [...behaviors, ...attributes.map((a: any) => ({ key: a, value: "" })), ...eventHandlers.map((e: any) => ({ key: e, value: "" }))]}]
+        let templateValues = eventHandlers? eventHandlers.map((e: any) => ({ key: e, value: "" })) : [];
+        const payload = [{id: conditionId, value: [...templateValues, ...attributes.map((a: any) => ({ key: a, value: "" }))]}]
         await controller({ func: "write", data: { model: "selection", key: "behavior", value: payload } });
     }
 
