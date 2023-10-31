@@ -13,10 +13,13 @@ import { Select } from "../util/ui/select";
 
 
 
-const InspectorItem = (props: { title: string, selectionData: any, db: any, readOnly: boolean, disabled?: boolean, currentViewValue?: string, currentView?: (e: string) => any }) => {
-    const { title, selectionData, db, disabled, currentView, currentViewValue, readOnly } = props;
-    const [expanded, setExpanded] = useState(false);
-    const clickHandler = () => setExpanded(!expanded);
+const InspectorItem = (props: { title: string, selectionData: any, db: any, readOnly: boolean, expanded: boolean, handleExpanded: (e:any) => any, disabled?: boolean, currentViewValue?: string, currentView?: (e: string) => any }) => {
+    const { title, selectionData, db, disabled, currentView, currentViewValue, readOnly, handleExpanded } = props;
+    const [expanded, setExpanded] = useState(props.expanded);
+    const clickHandler = () => {
+        handleExpanded({title, expanded: !expanded});
+        setExpanded(!expanded);
+    }
     const view = {
         "Condition": <Condition disabled={disabled} currentView={currentView} selectionData={selectionData} db={db} readOnly={readOnly} />,
         "General": <General selectionData={selectionData} db={db} readOnly={readOnly} />,
@@ -116,6 +119,7 @@ export const Inspector = (props: { selectionData: any, db: any, readOnly: boolea
     const label = selectionData?.label;
     const [lastUpdated, setLastUpdated] = useState<number>(updated);
     const [conditionView, setConditionView] = useState("default");
+    const [expanded, setExpanded] = useState([]);
     const sourceData = selectionData?.link ? selectionData.linkData : selectionData;
     const componentIsLinked = Boolean(selectionData?.link);
 
@@ -125,6 +129,10 @@ export const Inspector = (props: { selectionData: any, db: any, readOnly: boolea
         setConditionView("default");
     }, [updated, setLastUpdated, setConditionView]);
 
+    const handleExpanded = (e: {title: string, expanded: boolean}) => {
+        if(e.expanded) setExpanded([...expanded, e.title]);
+        else setExpanded(expanded.filter((t:string)=>t!==e.title));
+    }
 
     return ((selectionData === undefined) || (selectionData.init === '' && readOnly) || updated !== lastUpdated) ? <NoSelectionView /> : selectionData.init === '' ? <NotRegisteredView db={db} /> : (
         <div id="action-container">
@@ -145,10 +153,10 @@ export const Inspector = (props: { selectionData: any, db: any, readOnly: boolea
 
             <div className="action-container-subcontainer">
                 <div className="items-list">
-                    <InspectorItem readOnly={readOnly} title="General" selectionData={sourceData} db={db} />
-                    <InspectorItem readOnly={readOnly} disabled={componentIsLinked} title="Condition" selectionData={sourceData} db={db} currentView={setConditionView} />
-                    <InspectorItem readOnly={readOnly} disabled={componentIsLinked} title="Behaviors" selectionData={sourceData} currentViewValue={conditionView} db={db} />
-                    <InspectorItem readOnly={readOnly} disabled={componentIsLinked} title="Notes" selectionData={sourceData} db={db} currentViewValue={conditionView} />
+                    <InspectorItem readOnly={readOnly} title="General" selectionData={sourceData} db={db} expanded={expanded.includes("General")} handleExpanded={handleExpanded} />
+                    <InspectorItem readOnly={readOnly} disabled={componentIsLinked} title="Condition" selectionData={sourceData} db={db} currentView={setConditionView} expanded={expanded.includes("Condition")} handleExpanded={handleExpanded}/>
+                    <InspectorItem readOnly={readOnly} disabled={componentIsLinked} title="Behaviors" selectionData={sourceData} currentViewValue={conditionView} db={db} expanded={expanded.includes("Behaviors")} handleExpanded={handleExpanded}/>
+                    <InspectorItem readOnly={readOnly} disabled={componentIsLinked} title="Notes" selectionData={sourceData} db={db} currentViewValue={conditionView} expanded={expanded.includes("Notes")} handleExpanded={handleExpanded}/>
                 </div>
             </div>
         </div>

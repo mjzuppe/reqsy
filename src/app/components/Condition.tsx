@@ -84,9 +84,9 @@ export const Condition = (props: { db: any, readOnly: boolean, disabled?: boolea
 
     return (
 
-        <div style={{ marginLeft: "5px", width: "100%", display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "flex-start", paddingBottom: "10px" }}>
+        <div style={{ marginLeft: "5px", marginRight: "5px", width: "100%", display: "flex", flexDirection: "row", justifyContent: "space-between",  alignItems: "center", paddingBottom: "10px" }}>
             {view}
-            {(allConditions.length && !disabled && !readOnly) ? <Menu marginLeft={"-20px"} onClick={handleMenu} options={["create", "edit", "delete"]} trigger={<IconButton><IconEllipsis32 /></IconButton>} /> : <div/> }
+            {(allConditions.length && !disabled && !readOnly) ? <div style={{marginRight: "5px"}}><Menu marginLeft={"-20px"} onClick={handleMenu} options={["create", "edit", "delete"]} trigger={<IconButton><IconEllipsis32 /></IconButton>} /></div> : <div/> }
            
         </div>
 
