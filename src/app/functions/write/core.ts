@@ -9,7 +9,7 @@ const writeSelection = async (figma:any, key:string, value: any, syncData?:{id:s
         let tag = key === "tag" ? value : syncData.tag;
         let link = key === "link" ? value : syncData.link;
         if (key === "label") {
-            const invalidLabels = Object.values(syncData.root.library).map((item:any) => item.label);
+            const invalidLabels = Object.values(syncData.root.library).filter((item:any) => item.active).map((item:any) => item.label);
             let index = 0;
             while (invalidLabels.includes(label)) {
                index += 1;

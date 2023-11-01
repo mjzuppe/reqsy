@@ -29,10 +29,18 @@ const readSelectionName = (figma:any) => {
 const readSelection = async (figma: any) => { // TODO Obsolete
     let selection = {link: ""};
     selectionModels.forEach(model => { selection[model] = readSelectionModel(figma, model)});
-    if (selection.link) selection["linkData"] = await readElementOne(figma, selection.link);
+    if (selection.link) {
+        try {
+            selection["linkData"] = await readElementOne(figma, selection.link);
+        }
+        catch {
+            selection.link = "";
+        }
+    }
     if (process.env.VERBOSE_LOGS) console.log("SELECTION::", selection);
     return selection;
 }
+
 
 const readElementOne = async (figma: any, id: string) => {
     const node = await figma.getNodeById(id);

@@ -89,8 +89,8 @@ const RegisterOrLinkView = (props: { db: any, setLinkView: (any) => any }) => {
 
 const LinkToComponentView = (props: { db: any, setLinkView: (any) => any }) => {
     const { db, setLinkView } = props;
-    const options = Object.keys(db.library).map((e: any) => ({ label: db.library[e].label, value: e }));
-
+    const options = Object.keys(db.library).filter((e:any)=>db.library[e].active).map((e: any) => ({ label: db.library[e].label, value: e }));
+    // TODO broken on link of library ACTIVE componenets.
     const handleLinkComponent = async () => {
         const e: any = document.getElementById("inspector-link-choose-origin");
         const selectedLabel = e.options[e.selectedIndex].value;
