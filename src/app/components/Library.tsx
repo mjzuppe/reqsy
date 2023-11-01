@@ -24,7 +24,12 @@ export const Library = (props: { db: any, readOnly: boolean }) => {
     }
 
     const handleDelete = async (i) => {
-        await controller({ func: 'delete', data: { model: 'library', key: libraryKeys[i] } });
+        const key = libraryKeys[i];
+        // Note: Delete may be called on item that is NOT selected
+        await controller({ func: 'delete', data: { model: 'library', key} });
+        await controller({ func: 'read', data: { key } });
+        await controller({ func: 'delete', data: { model: 'selection' } });
+        await controller({ func: 'read', data: { key } }); // Reload
     }
 
     return (

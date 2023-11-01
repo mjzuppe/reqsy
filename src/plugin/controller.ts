@@ -3,6 +3,7 @@ import { initSelection, writeRootModel, writeSelection } from "../app/functions/
 import { readSelection, readSelectionId } from "../app/functions/read";
 import { deleteSelection, deleteRootModel } from "../app/functions/delete";
 import { getNodeById } from "../app/functions/ui";
+import { deleteUnselected } from "../app/functions/delete/core";
 
 const reloadRoot = async (data: { model: string }) => {
   const r = await readRootModel(figma, data.model);
@@ -130,6 +131,11 @@ figma.ui.onmessage = async ({ func, data }) => {
     case 'delete':
       if (data.model === 'selection') {
         await deleteSelection(figma, data.key);
+        const selectionMutated = await readSelection(figma);
+        figma.ui.postMessage({ selection: selectionMutated });
+      }
+      else if (data.model === 'unselection') {
+        await deleteUnselected(figma, data.key);
       }
       else {
         await deleteRootModel(figma, data.model, data.key);

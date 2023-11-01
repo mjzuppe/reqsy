@@ -134,6 +134,12 @@ export const Inspector = (props: { selectionData: any, db: any, readOnly: boolea
         else setExpanded(expanded.filter((t:string)=>t!==e.title));
     }
 
+    const handleDelete = async (i) => {
+        await controller({ func: 'delete', data: { model: 'library', key: selectionData.id } });
+        await controller({ func: 'delete', data: { model: 'selection' } });
+        await controller({ func: 'read', data: { key:selectionData.id } });
+    }
+
     return ((selectionData === undefined) || (selectionData.init === '' && readOnly) || updated !== lastUpdated) ? <NoSelectionView /> : selectionData.init === '' ? <NotRegisteredView db={db} /> : (
         <div id="action-container">
             <div style={{ display: "flex", marginLeft: "10px", height: "40px", justifyContent: "space-between", }} >
@@ -147,7 +153,7 @@ export const Inspector = (props: { selectionData: any, db: any, readOnly: boolea
                     <div style={{ display: "flex", alignItems: "center" }}>
                         {componentIsLinked && <div style={{ padding: "3px", borderRadius: "4px", backgroundColor: "rgba(256, 256, 256, 0.2)", marginLeft: "5px" }}>{selectionData.linkData.label}</div>}
                     </div>
-                    {!readOnly && <Menu marginLeft={"-20px"} onClick={(e) => console.log("TARGET:", e)} options={["delete?"]} trigger={<IconButton><IconEllipsis32 /></IconButton>} />}
+                    {!readOnly && <Menu marginLeft={"-20px"} onClick={handleDelete} options={["delete?"]} trigger={<IconButton><IconEllipsis32 /></IconButton>} />}
                 </div>
             </div>
 
