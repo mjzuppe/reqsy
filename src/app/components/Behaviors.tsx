@@ -85,11 +85,11 @@ const CreateBehaviors = (props: { handleClick: (any) => any }) => {
 
 
 const SuggestBehavior = (props: { handleCancel: (any) => any, handleSubmit: (any) => any }) => {
-    const [select, setSelect] = useState("a");
+    const [select, setSelect] = useState(null);
     return (
         <div style={{ width: "100%", display: "flex", flexDirection: "row", alignItems: "flex-start", paddingBottom: "10px" }}>
-    <Select onChange={(e:any)=>setSelect(e.target.value)} style={{ width: "100px" }} id="behavior-element-type-select" defaultValue={"a"} placeholder="Type of element/UI" options={elementCategory} />
-    <Button onClick={()=>props.handleSubmit(select)} style={{ marginLeft: "5px", fontSize: "10px", height: "20px", lineHeight: "10px" }}>submit</Button>
+    <Select onChange={(e:any)=>setSelect(e.target.value)} style={{ width: "100px" }} id="behavior-element-type-select" defaultValue={null} placeholder="Choose type" options={elementCategory} />
+    <Button disabled={select === null} onClick={()=>props.handleSubmit(select)} style={{ marginLeft: "5px", fontSize: "10px", height: "20px", lineHeight: "10px" }}>submit</Button>
     <Button onClick={props.handleCancel} secondary style={{ marginLeft: "5px", fontSize: "10px", height: "20px", lineHeight: "10px" }}>cancel</Button>
 </div>
     )

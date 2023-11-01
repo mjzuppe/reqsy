@@ -12,7 +12,7 @@ const Select = (props: SelectInput) => {
     return (
         <div className="select">
             <select {...rest} defaultValue={defaultValue || null} id={id}>
-               {placeholder && <option value={null} disabled>{placeholder}</option> }
+               {placeholder && <option selected={defaultValue === null || defaultValue === undefined} value={null} disabled>{placeholder}</option> }
                 {options.map((o: { value: any, label: string }, i) => <option key={`type-${i}`} value={o.value}>{o.label}</option>)}
             </select>
         </div>)
