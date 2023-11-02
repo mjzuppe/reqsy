@@ -114,6 +114,7 @@ export const Behaviors = (props: { db: any, selectionData: any, currentViewValue
         const newRecord = {key: e.key, value: e.value};
         let payload = [];
         if (isNew) payload = [{ id: conditionId, value: [newRecord] }];
+        else if (e.index === null) payload = [{ id: conditionId, value: [newRecord, ...selectionData.behavior.filter((n: any) => n.id === conditionId)[0].value] }];
         else {
             let currentBehaviors = selectionData.behavior.filter((n: any) => n.id === conditionId)[0].value;
             currentBehaviors.splice(e.index, 1, newRecord);
