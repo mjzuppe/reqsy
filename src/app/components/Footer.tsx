@@ -21,7 +21,7 @@ export const Footer = (props: { db: any, user: any }) => {
             case "pro":
                 return <> <Text><strong>Pro</strong></Text></>
             case "trial":
-                return <> <Text><strong>Trial ({String(daysRemaining(user.trial_end))} days left)</strong></Text>{" "}<Button style={{ height: "16px", font: ".5em", lineHeight: "12px" }} secondary>Upgrade</Button> </>
+                return <> <Text><strong>Trial ({String(daysRemaining(user.trial_end))} days left)</strong></Text>{" "}<a target='_blank' href={process.env.CHECKOUT_URI}><Button style={{ height: "16px", font: ".5em", lineHeight: "12px" }} secondary>Upgrade</Button> </a></>
             case "pro-expired":
                 return <> <Text><strong>Pro Expired (view only)</strong></Text>{" "}<a target='_blank' href={process.env.CHECKOUT_URI}><Button style={{ height: "16px", font: ".5em", lineHeight: "12px" }} secondary>Upgrade</Button></a> </>
             case "trial-expired":

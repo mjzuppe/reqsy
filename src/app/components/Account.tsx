@@ -23,12 +23,14 @@ export const Account = (props: {user: any}) => {
           });
           const activateCallJson = await activateCall.json();
           if (activateCall.status !== 200) setError(activateCallJson.message.split("license_key").join("license key"));
+          setProcessing(false);
+          controller({func: 'init', data: {}});
         }
         catch(e) {
           setError(e.message);
+          setProcessing(false);
         }
-        setProcessing(false);
-        // TODO - handle reload after activation
+        
        
     }
 
