@@ -30,6 +30,8 @@ const connection = async (): Promise<postgres.PoolClient> => {
   return await pool.connect();
 }
 
+console.log("TESTING!!!::", Deno.env.get('LS_TOKEN'))
+
 
 const lsRetrieveSubRenewal = async (ls_email: string) => {
   const r = await fetch(`https://api.lemonsqueezy.com/v1/subscriptions?filter[user_email]=${ls_email.split("+").join("%2b")}`, {
