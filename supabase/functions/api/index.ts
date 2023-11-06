@@ -184,6 +184,7 @@ const corsHeaders = {
 }
 
 const handler = async (req: Request) => {
+  console.log("I see a request")
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders })
   }
