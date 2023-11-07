@@ -1,3 +1,3 @@
-import {validateRootInput } from "./writeRoot";
+import { validateRootInput } from './writeRoot';
 
-export {validateRootInput};
+export { validateRootInput };

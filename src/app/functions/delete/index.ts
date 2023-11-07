@@ -1,2 +1,2 @@
-import {deleteSelection, deleteRootModel} from "./core";
-export {deleteSelection, deleteRootModel };
+import { deleteSelection, deleteRootModel } from './core';
+export { deleteSelection, deleteRootModel };

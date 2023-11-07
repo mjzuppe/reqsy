@@ -4,8 +4,8 @@
   "description": "PRD and technical requirements documentation management for Figma",
   "license": "ISC",
   "scripts": {
-    "build": "webpack --mode=production --target=es6",
-    "build:watch": "webpack --mode=development --watch",
+    "build": "webpack --mode=production", 
+    "build:watch": "webpack --mode=production --watch",
     "prettier:format": "prettier --write '**/*.{js,jsx,ts,tsx,css,json}' "
   },
   "dependencies": {

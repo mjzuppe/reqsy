@@ -1,2 +1,2 @@
-import { getNodeById } from "./get";
-export {getNodeById}
+import { getNodeById } from './get';
+export { getNodeById };
