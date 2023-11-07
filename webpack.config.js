@@ -53,7 +53,7 @@ module.exports = (env, argv) => ({
             ? "'https://reqsy.lemonsqueezy.com/checkout'"
             : "'https://reqsy.lemonsqueezy.com/checkout/buy/63b790bc-c13e-4868-a830-526519061e3a'",
         AUTH_OVERRIDE: null, // "'trial-expired'", "'trial'", "'pro-expired'", "'pro'", null,
-        VERBOSE_LOGS: "'true'",
+        VERBOSE_LOGS: argv.mode === 'production'? false : "'true'",
       },
     }),
     new HtmlWebpackPlugin({
