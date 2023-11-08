@@ -173,30 +173,30 @@ figma.ui.onmessage = async ({ func, data }) => {
       });
       break;
     case 'test':
-      if (!data.id_figma) console.log('No id_figma');
-      const options = {
-        method: 'GET',
-        headers: {
-          Accept: '*/*',
-          'Accept-Encoding': 'gzip, deflate, br',
-          'Accept-Language': 'en-US,en;q=0.9',
-          'X-Figma-User-Id': data.id_figma,
-          'Sec-Ch-Ua': '"Chromium";v="116", "Not)A;Brand";v="24", "Google Chrome";v="116"',
-          'Sec-Ch-Ua-Mobile': '?0',
-          'Sec-Ch-Ua-Platform': '"macOS"',
-          'Sec-Fetch-Dest': 'empty',
-          'Sec-Fetch-Mode': 'cors',
-          'Sec-Fetch-Site': 'same-origin',
-        },
-      };
-      try {
-        let r: any = await fetch('https://www.figma.com/api/session/state', options);
-        r = r.json();
-        const userEmail = r?.meta?.users[0].email;
-        console.log('Testing user email', userEmail);
-      } catch (e) {
-        console.log('Test failed:', e);
-      }
+      // if (!data.id_figma) console.log('No id_figma');
+      // const options = {
+      //   method: 'GET',
+      //   headers: {
+      //     Accept: '*/*',
+      //     'Accept-Encoding': 'gzip, deflate, br',
+      //     'Accept-Language': 'en-US,en;q=0.9',
+      //     'X-Figma-User-Id': data.id_figma,
+      //     'Sec-Ch-Ua': '"Chromium";v="116", "Not)A;Brand";v="24", "Google Chrome";v="116"',
+      //     'Sec-Ch-Ua-Mobile': '?0',
+      //     'Sec-Ch-Ua-Platform': '"macOS"',
+      //     'Sec-Fetch-Dest': 'empty',
+      //     'Sec-Fetch-Mode': 'cors',
+      //     'Sec-Fetch-Site': 'same-origin',
+      //   },
+      // };
+      // try {
+      //   let r: any = await fetch('https://www.figma.com/api/session/state', options);
+      //   r = r.json();
+      //   const userEmail = r?.meta?.users[0].email;
+      //   console.log('Testing user email', userEmail);
+      // } catch (e) {
+      //   console.log('Test failed:', e);
+      // }
       break;
     default:
       throw new Error(`Unknown command ${func}`);
