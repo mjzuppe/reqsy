@@ -10,8 +10,9 @@
     "allowedDomains": [
       "https://*.supabase.co",
       "https://wsmspxdvmzfianweygzg.supabase.co",
-      "https://fontsgoogleapis.com"
+      "https://fonts.googleapis.com",
+      "https://fonts.gstatic.com"
     ],
-    "devAllowedDomains": ["http://localhost:54321", "https://fontsgoogleapis.com"]
+    "devAllowedDomains": ["http://localhost:54321"]
   }
 }

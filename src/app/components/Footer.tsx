@@ -35,7 +35,7 @@ export const Footer = (props: { db: any; user: any }) => {
           </>
         );
       case 'trial':
-        return (
+        return true? <></> : (
           <>
             {' '}
             <Text>
