@@ -55,6 +55,7 @@ module.exports = (env, argv) => ({
         AUTH_OVERRIDE: null, // "'trial-expired'", "'trial'", "'pro-expired'", "'pro'", null,
         VERBOSE_LOGS: argv.mode === 'production'? false : "'true'",
         MIXPANEL_TOKEN: "'b1cc621b0dcd6c91d823fe615695c464'",
+        
       },
     }),
     new HtmlWebpackPlugin({

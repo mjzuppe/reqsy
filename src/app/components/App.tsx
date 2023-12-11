@@ -25,7 +25,7 @@ function App() {
     window.onmessage = async (event) => {
       // Listen to data sent from the plugin controller
       if (!event.data?.pluginMessage) return;
-      else if (event.data.pluginMessage.echo) {
+      else if (event.data.pluginMessage.echo && process.env.VERBOSE_LOGS === 'production') {
         mixpanel.track('Create', { model: event.data.pluginMessage.echo.model });
       }
       else if ('selection' in event.data.pluginMessage) {
@@ -42,11 +42,13 @@ function App() {
             ? { ...event.data.pluginMessage.user, status: process.env.AUTH_OVERRIDE }
             : event.data.pluginMessage.user
         );
-        mixpanel.init(process.env.MIXPANEL_TOKEN, {
-          disable_cookie: true,
-          disable_persistence: true
-        });
-        // mixpanel.identify(event.data.pluginMessage.user.id);
+        if (process.env.VERBOSE_LOGS === 'production') {
+          mixpanel.init(process.env.MIXPANEL_TOKEN, {
+            disable_cookie: true,
+            disable_persistence: true
+          });
+          mixpanel.identify(event.data.pluginMessage.user.id);
+        }
       }
     };
   }, []);
