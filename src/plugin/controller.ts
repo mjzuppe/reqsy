@@ -61,6 +61,7 @@ figma.ui.onmessage = async ({ func, data }) => {
   switch (func) {
     case 'init':
       if (data.model === 'selection') {
+        figma.ui.postMessage({ echo: {model: 'selection'} });
         const root = readRoot(figma);
         const r_pre = await readSelection(figma);
         const selectionData = await readSelectionData(figma);

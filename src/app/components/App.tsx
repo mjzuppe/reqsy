@@ -1,7 +1,6 @@
-// from: https://github.com/nirsky/figma-plugin-react-template
-
 import React, { useState } from 'react';
 import { controller } from '../functions/utils';
+import * as mixpanel from 'mixpanel-figma';
 
 // import logo from '../assets/logo.svg';
 import '../styles/theme.css';
@@ -26,7 +25,9 @@ function App() {
     window.onmessage = async (event) => {
       // Listen to data sent from the plugin controller
       if (!event.data?.pluginMessage) return;
-      else if (event.data.pluginMessage.echo) console.log(event.data.pluginMessage.echo); // FOR TESTING
+      else if (event.data.pluginMessage.echo) {
+        mixpanel.track('Create', { model: event.data.pluginMessage.echo.model });
+      }
       else if ('selection' in event.data.pluginMessage) {
         setSelectionData(event.data.pluginMessage.selection);
         setLastUpdated(Date.now()); // This is only passed to inspector to force re-render/reset conditions on selection change
@@ -41,6 +42,11 @@ function App() {
             ? { ...event.data.pluginMessage.user, status: process.env.AUTH_OVERRIDE }
             : event.data.pluginMessage.user
         );
+        mixpanel.init(process.env.MIXPANEL_TOKEN, {
+          disable_cookie: true,
+          disable_persistence: true
+        });
+        // mixpanel.identify(event.data.pluginMessage.user.id);
       }
     };
   }, []);

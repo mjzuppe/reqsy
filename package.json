@@ -4,7 +4,7 @@
   "description": "PRD and technical requirements documentation management for Figma",
   "license": "ISC",
   "scripts": {
-    "build": "webpack --mode=production", 
+    "build": "webpack --mode=production",
     "build:watch": "webpack --mode=development --watch",
     "prettier:format": "prettier --write '**/*.{js,jsx,ts,tsx,css,json}' "
   },
@@ -12,6 +12,7 @@
     "@figma/plugin-typings": "^1.72.0",
     "figma-types": "^0.4.0",
     "figma-ui-kit": "^0.3.1",
+    "mixpanel-figma": "^2.0.4",
     "nanoid": "^4.0.2",
     "rc-menu": "^9.11.1",
     "react": "^18.2.0",
