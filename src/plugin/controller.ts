@@ -100,9 +100,6 @@ figma.ui.onmessage = async ({ func, data }) => {
             else if (trial.valueOf() - Date.now() < 0) return 'trial-expired';
             else return 'trial';
           };
-
-          // if (r.user && r.user[u.id] === undefined) { // TODO obsolete?
-
           payload.user = { ...r.user, [u.id]: { id, id_figma, trial_end, status: userState(), license_key } };
           // }
         }

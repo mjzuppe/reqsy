@@ -186,11 +186,13 @@
 
 .notes {
   padding-left: 5px;
-  width: 100%;
-  height: 100px;
+  width: 290px;
+  height: 200px;
   outline: none;
   resize: none;
   background: transparent;
+  overflow-y: auto;
+  scroll-behavior: smooth;
 }
 
 .text-input {

@@ -290,7 +290,7 @@ export const Inspector = (props: { selectionData: any; db: any; readOnly: boolea
             expanded={expanded.includes('General')}
             handleExpanded={handleExpanded}
           />
-          <InspectorItem
+          {/* <InspectorItem
             readOnly={readOnly}
             disabled={componentIsLinked}
             title="Condition"
@@ -309,7 +309,7 @@ export const Inspector = (props: { selectionData: any; db: any; readOnly: boolea
             db={db}
             expanded={expanded.includes('Behaviors')}
             handleExpanded={handleExpanded}
-          />
+          /> */}
           <InspectorItem
             readOnly={readOnly}
             disabled={componentIsLinked}
