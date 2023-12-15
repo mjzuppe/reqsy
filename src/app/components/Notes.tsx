@@ -13,7 +13,7 @@ const MDView = (props: { md: string, disabled: boolean, readOnly: boolean }) => 
       if (!React.isValidElement(child)) {
         return child;
       }
-      
+      // check for variables and display
       let props = {};
       if (child.type === 'a') {
         props = { target: '_blank', rel: 'noopener noreferrer' };
@@ -22,7 +22,7 @@ const MDView = (props: { md: string, disabled: boolean, readOnly: boolean }) => 
         props = { style: {marginTop: "10px", fontWeight: "700"} };
       }
       if (index === 0) {
-        props = { style: {marginTop: "0px"} };
+        props = {...props, style: {marginTop: "0px"} };
       }
 
       if ((child as ReactElement).props.children) {
@@ -85,7 +85,7 @@ export const Notes = (props: {
       const value = e.currentTarget.value;
       e.currentTarget.value = value.substring(0, start) + '\n' + value.substring(end);
       e.currentTarget.selectionStart = e.currentTarget.selectionEnd = start + 1;
-    } else if (e.key === 'Enter') {
+    } else if (e.key === 'Enter' || e.key === 'Escape') {
       e.currentTarget.blur();
     }
   }
