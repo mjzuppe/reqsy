@@ -68,9 +68,10 @@ const InspectorItem = (props: {
   const badgeCount = {
     Condition: selectionData.condition.length,
     General: selectionData.tag.length,
-    Notes: selectionData.note.filter((n: any) => n.id === currentViewValue).length,
+    Notes: selectionData.note.filter((n: any) => (n.id === currentViewValue) && (n.value !== "")).length,
     Behaviors: selectionData.behavior.filter((n: any) => n.id === currentViewValue).length,
   }[title || 'Template'];
+  console.log("NOTE", JSON.stringify(selectionData.note));
   return (
     <div className={`items-list-item ${title !== 'Notes' && 'items-border-bottom'}`}>
       <div className="items-list-item-alwaysdisplay">

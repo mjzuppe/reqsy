@@ -5,7 +5,7 @@ import { useRemark } from 'react-remark';
 const MDView = (props: { md: string, disabled: boolean, readOnly: boolean }) => {
   const [reactContent, setMarkdownSource] = useRemark();
   useEffect(() => {
-    setMarkdownSource(props.md || (!(props.disabled || props.readOnly) ? 'input notes here...' : 'No notes have been entered for this element.'));
+    setMarkdownSource(props.md || (!(props.disabled || props.readOnly) ? 'Click to create/edit text or markdown notes. \n \n Use SHIFT + ENTER for new line. \n \n Use @variable_label for variables.' : 'No notes have been entered for this element.'));
   }, []);
 
   const processNodes = (nodes) => {
@@ -113,7 +113,7 @@ export const Notes = (props: {
               defaultValue={note}
               maxLength={1000}
               onKeyDown={handleKeyDown}
-              placeholder={!(disabled || readOnly) ? 'input notes here...' : 'No notes have been entered for this element.'}
+              placeholder={!(disabled || readOnly) ? 'Enter notes...' : 'No notes have been entered for this element.'}
               className="notes"
             /></> :
           <div className="notes" onClick={(e: any) => handleFocus(e)}>
