@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { IconToggleButton, IconLibrary32, IconInfo32, IconAdjust32, IconLinkLinked32 } from 'figma-ui-kit';
+import { IconToggleButton, IconLibrary32, IconInfo32, IconAdjust32, IconList32 } from 'figma-ui-kit';
 
 export const Nav = (props) => {
   const [currentView, nextView] = useState<string>(props.currentView);
@@ -25,7 +25,8 @@ export const Nav = (props) => {
       </div>
       <div>
         <IconToggleButton id="meta" onClick={setView} value={currentView === 'meta'}>
-          <IconLinkLinked32 />
+          
+        <IconList32 />
           {/* <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg> */}
         </IconToggleButton>
       </div>

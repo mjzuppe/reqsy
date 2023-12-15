@@ -13,7 +13,7 @@ const MDView = (props: { md: string, disabled: boolean, readOnly: boolean }) => 
       if (!React.isValidElement(child)) {
         return child;
       }
-      // check for variables and display
+      // TODO: check for variables and display
       let props = {};
       if (child.type === 'a') {
         props = { target: '_blank', rel: 'noopener noreferrer' };

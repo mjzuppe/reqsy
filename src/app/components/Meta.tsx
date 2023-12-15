@@ -26,7 +26,7 @@ export const Meta = (props: { data: any }) => {
         </p>
       </div>
       <div className="action-container-subnav">
-        <Submenu onClick={submenuClickHandler} options={['Tags', 'Variables']} />
+        <Submenu onClick={submenuClickHandler} options={['Tags']} />
       </div>
       <div className="action-container-search">
         <SearchTextbox onInput={handleSearch} value={search} clearOnEscapeKeyDown placeholder="search names" />
