@@ -71,7 +71,7 @@ const InspectorItem = (props: {
     Notes: selectionData.note.filter((n: any) => (n.id === currentViewValue) && (n.value !== "")).length,
     Behaviors: selectionData.behavior.filter((n: any) => n.id === currentViewValue).length,
   }[title || 'Template'];
-  console.log("NOTE", JSON.stringify(selectionData.note));
+  // console.log("NOTE", JSON.stringify(selectionData.note));
   return (
     <div className={`items-list-item ${title !== 'Notes' && 'items-border-bottom'}`}>
       <div className="items-list-item-alwaysdisplay">
