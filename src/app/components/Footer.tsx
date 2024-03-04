@@ -26,14 +26,14 @@ export const Footer = (props: { db: any; user: any }) => {
           </>
         );
       case 'pro':
-        return (
-          <>
-            {' '}
-            <Text>
-              <strong>Pro</strong>
-            </Text>
-          </>
-        );
+        return (<></>);
+        //   <>
+        //     {' '}
+        //     <Text>
+        //       <strong>Pro</strong>
+        //     </Text>
+        //   </>
+        // );
       case 'trial':
         return true? <></> : (
           <>
