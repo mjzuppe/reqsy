@@ -41,19 +41,15 @@ export const Account = (props: { user: any }) => {
           {id_figma}
         </div>
       </div>
-      {/* <div style={{display: "flex", flexDirection: "row", width: "100%", padding: "15px"}}>
-            <div style={{width: "25%", fontWeight: "bold"}} className="label">Email</div>
-            <div style={{width: "25%"}} className="label">mark@aubry.ai</div>
-        </div> */}
-      <div style={{ display: 'flex', flexDirection: 'row', width: '100%', padding: '15px' }}>
+      {/* <div style={{ display: 'flex', flexDirection: 'row', width: '100%', padding: '15px' }}>
         <div style={{ width: '25%', fontWeight: 'bold' }} className="label">
           Status
         </div>
         <div style={{ width: '25%' }} className="label">
           {status.split('-').join(' ')}
         </div>
-      </div>
-      {Boolean(license_key) && (
+      </div> */}
+      {/* {Boolean(license_key) && (
         <div style={{ display: 'flex', flexDirection: 'row', width: '100%', padding: '15px' }}>
           <div style={{ width: '25%', fontWeight: 'bold' }} className="label">
             License
@@ -62,9 +58,9 @@ export const Account = (props: { user: any }) => {
             ...{license_key}
           </div>
         </div>
-      )}
+      )} */}
 
-      {Boolean(!license_key) && (
+      {/* {Boolean(!license_key) && (
         <div style={{ display: 'flex', flexDirection: 'column', width: '100%', padding: '15px' }}>
           <div style={{ width: '25%', fontWeight: 'bold' }} className="label">
             License Key
@@ -93,7 +89,7 @@ export const Account = (props: { user: any }) => {
             </Button>
           </div>
         </div>
-      )}
+      )} */}
     </div>
   );
 };
