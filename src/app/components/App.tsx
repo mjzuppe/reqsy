@@ -52,15 +52,8 @@ function App() {
       }
     };
   }, []);
-  const handleKeydown = (e: any) => {
-    // Feature flag at cmd + A
-    // if (e.metaKey && e.which === 65) {
-    //   console.log('Testing window.localStorage', window.localStorage);
-    //   controller({ func: 'test', data: { id_figma: user.id } });
-    // }
-  };
   return (
-    <div onKeyDown={handleKeydown} id="primary-container" className="figma-dark">
+    <div id="primary-container" className="figma-dark">
       <Header currentView={actionView} setView={setActionView} />
       <Action updated={lastUpdated} selectionData={selectionData} db={db} currentView={actionView} user={user} />
       <Footer user={user} db={db} />
